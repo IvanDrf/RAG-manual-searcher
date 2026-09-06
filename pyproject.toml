@@ -1,0 +1,22 @@
+[project]
+name = "rag-manual-searcher"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "begsta", email = "s.begdash@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "pdfplumber>=0.11.10",
+    "requests>=2.34.2",
+    "tqdm>=4.70.0",
+]
+
+[project.scripts]
+rag-manual-searcher = "rag_manual_searcher:main"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"
