@@ -3,20 +3,21 @@ name = "rag-manual-searcher"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-authors = [
-    { name = "begsta", email = "s.begdash@gmail.com" }
-]
+authors = [{ name = "begsta", email = "s.begdash@gmail.com" }]
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.19.2",
+    "asyncpg>=0.31.0",
     "beautifulsoup4>=4.15.0",
     "pdfplumber>=0.11.10",
-    "requests>=2.34.2",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy>=2.0.52",
     "tqdm>=4.70.0",
 ]
 
-[project.scripts]
-rag-manual-searcher = "rag_manual_searcher:main"
+[tool.ruff]
+line-length = 140
+exclude = ["alembic"]
 
-[build-system]
-requires = ["uv_build>=0.12.10,<0.13.0"]
-build-backend = "uv_build"
+[dependency-groups]
+dev = ["pre-commit>=4.6.2", "ruff>=0.16.6"]
