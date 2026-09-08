@@ -1775,7 +1775,6 @@ FUNKCII f(t), TO
 (cid:1)0
 = f0(t)~r0(f(t)), 4) (~r ,~r )0 = (~r 0,~r )+(~r ,~r 0),
 1 2 1 2 1 2
-5) PRI m = 3 : (~r ×~r )0 =~r 0 ×~r +~r ×~r 0.
 1 2 1 2 1 2
 dOKAZATELXSTWO \TIH FORMUL SLEDUET IZ OPREDELENIJ I TEOREMY 2.
 zADA^A 2. dOKAVITE FORMULU 4).
@@ -2130,7 +2129,6 @@ CIRUEMOJ WEKTORNOJ FUNKCIEJ ~r(t), W REGULQRNOJ TO^KE ~r(t ) ((cid:12)~r0(t )(ci
 0 0
 SLQETSQ PO FORMULE
 (cid:12) (cid:12)
-(cid:12)~r0(t )×~r00(t )(cid:12)
 0 0
 k = .
 (cid:12) (cid:12)3
@@ -2147,14 +2145,12 @@ OPREDELENIQ θ, GEOMETRI^ESKOGO SMYSLA PROIZWODNOJ, FORMULY tEJLORA DLQ ~r0(t)
 I SWOJSTW WEKTORNOGO PROIZWEDENIQ POLU^AEM
 (cid:12) (cid:12)
 (cid:0) (cid:1)
-(cid:12) (cid:12)~r0(t )×~r0(t) (cid:12) (cid:12) (cid:12) (cid:12) ~r0(t 0 )× ~r0(t 0 )+∆t ~r00(t 0 )+o(∆t) (cid:12) (cid:12)
 0
 sinθ = = =
 (cid:12) (cid:12)(cid:12) (cid:12) (cid:12) (cid:12)(cid:12) (cid:12)
 (cid:12)~r0(t )(cid:12)(cid:12)~r0(t)(cid:12) (cid:12)~r0(t )(cid:12)(cid:12)~r0(t)(cid:12)
 0 0
 (cid:12) (cid:12)
-(cid:12)~r0(t )×~r00(t )(cid:12)
 0 0
 = |∆t| +o(∆t).
 (cid:12) (cid:12)(cid:12) (cid:12)
@@ -2162,13 +2158,11 @@ sinθ = = =
 0
 oTS@DA, IZ PERWOGO ZAME^ATELXNOGO PREDELA I NEPRERYWNOSTI ~r0(t) SLEDUET
 (cid:12) (cid:12) ! (cid:12) (cid:12)
-θ θ sinθ (cid:12)~r0(t )×~r00(t )(cid:12) o(∆t) (cid:12)~r0(t )×~r00(t )(cid:12)
 0 0 0 0
 lim = lim lim = lim + = .
 ∆t→0 |∆t| ∆t→0 sinθ ∆t→0 |∆t| ∆t→0 (cid:12) (cid:12)~r0(t 0 ) (cid:12) (cid:12) (cid:12) (cid:12)~r0(t) (cid:12) (cid:12) |∆t| (cid:12) (cid:12)~r0(t 0 ) (cid:12) (cid:12) 2
 nAKONEC, IZ OPREDELENIQ KRIWIZNY I FORMULY DLQ DLINY KRIWOJ POLU^AEM
 (cid:12) (cid:12)
-θ θ |∆t| (cid:12)~r0(t )×~r00(t )(cid:12) 1
 0 0
 k = lim = lim lim = . .
 M→M0 L(M 0 ˘ M) ∆t→0 |∆t| ∆t→0 L(M 0 ˘ M) (cid:12) (cid:12)~r0(t 0 ) (cid:12) (cid:12) 2 (cid:12) (cid:12)~r0(t 0 ) (cid:12) (cid:12)
@@ -2186,7 +2180,6 @@ k(x) = .
 dOK–WO. s^ITAQ x PARAMETROM, PREDSTAWIM KRIWU@ y = f(x) WEKTORNOJ FUNK-
 CIEJ ~r(x) = x~i+f(x)~j. tOGDA ~r0(x) =~i+f0(x)~j, ~r00(x) = f00(x)~j,
 q
-(cid:12) (cid:12)~r0(x)×~r00(x) (cid:12) (cid:12) = (cid:12) (cid:12)f00(x)~i×~j (cid:12) (cid:12) = (cid:12) (cid:12)f00(x) (cid:12) (cid:12), (cid:12) (cid:12)~r0(x) (cid:12) (cid:12) = 1+ (cid:0) f0(x) (cid:1)2 ,
 I IZ TEOREMY 1 SLEDUET DANNAQ TEOREMA.
 12.2 cENTR KRIWIZNY. |WOL@TA I \WOLXWENTA
 pUSTX k — KRIWIZNA PLOSKOJ KRIWOJ γ W TO^KE M ∈ γ. wELI^INU R = 1/k,
