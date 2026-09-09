@@ -9,7 +9,7 @@ from src.api.utils import create_jwt_tokens, handle_errors, set_jwt_in_cookies
 from src.domain.models import UserORM
 from src.domain.rules import UserRole, decode_jwt, hash_password, is_passwords_are_same
 from src.domain.schemas import LoginUserSchema, RegisterUserSchema, UserInfoSchema
-from src.infrastructure.repository.postgresql.user_repo import add_user, find_user_by_username
+from src.infrastructure.repository.postgresql.user_repo import add_user, find_user_by_user_id, find_user_by_username
 
 auth_router = APIRouter(prefix="/api/v1/auth", tags=["authorization"])
 
@@ -77,7 +77,11 @@ async def get_user_info(access_token: Annotated[str, Cookie(alias="access-token"
 
 @auth_router.post("/refresh", status_code=status.HTTP_204_NO_CONTENT, description="Обнволение токенов по refresh токену")
 @handle_errors
-async def refresh_tokens(refresh_token: Annotated[str, Cookie(alias="refresh-token")], response: Response) -> None:
+async def refresh_tokens(
+    refresh_token: Annotated[str, Cookie(alias="refresh-token")], session: Annotated[AsyncSession, Depends(get_session)], response: Response
+) -> None:
+    """Сессия нужна, чтобы проверять не поменялась ли роль пользователя за время access токена"""
+
     if not refresh_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный refresh токен")
 
@@ -86,9 +90,16 @@ async def refresh_tokens(refresh_token: Annotated[str, Cookie(alias="refresh-tok
     if not user_id or not user_role:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный refresh токен")
 
+    u = await find_user_by_user_id(session, user_id)
+    if u is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="не удалось идентифицировать пользователя, обратитесь к администратору"
+        )
+
+    payload["user_role"] = u.user_role.value
+
     try:
         UUID(user_id)
-        UserRole(user_role)
     except ValueError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный данные в access токене")
 

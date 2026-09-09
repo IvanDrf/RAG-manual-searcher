@@ -23,3 +23,8 @@ class UserForAdminSchema(BaseModel):
     user_id: UUID
     username: str
     user_role: UserRole
+
+
+class ChangeUserRoleSchema(BaseModel):
+    username: str = Field(min_length=MIN_USERNAME_LENGTH, max_length=MAX_USERNAME_LENGTH)
+    user_role: UserRole
