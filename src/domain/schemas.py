@@ -17,3 +17,9 @@ class LoginUserSchema(RegisterUserSchema):
 class UserInfoSchema(BaseModel):
     user_id: UUID
     user_role: UserRole
+
+
+class UserForAdminSchema(BaseModel):
+    user_id: UUID
+    username: str
+    user_role: UserRole
