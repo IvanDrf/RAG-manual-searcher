@@ -47,4 +47,4 @@ class UserORM(BaseORM):
 
     username: Mapped[str] = mapped_column(VARCHAR(length=MAX_USERNAME_LENGTH), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(VARCHAR(length=2 * MAX_PASSWORD_LENGTH), nullable=False)
-    user_role: Mapped[UserRole] = mapped_column(SqlEnum, default=UserRole.USER, nullable=False)
+    user_role: Mapped[UserRole] = mapped_column(SqlEnum(UserRole, name="UserRoles"), default=UserRole.USER, nullable=False)
