@@ -2,7 +2,7 @@ from datetime import UTC, datetime, timedelta
 from enum import Enum
 from typing import Final
 
-from bcrypt import hashpw
+from bcrypt import checkpw, hashpw
 from jwt import InvalidTokenError, decode, encode
 
 from src.core.config import CONFIG
@@ -30,6 +30,10 @@ class UserRole(Enum):
 
 def hash_password(password: str) -> str:
     return hashpw(password.encode(), _PASSWORD_SALT).decode()
+
+
+def is_passwords_are_same(password: str, hashed_password: str) -> bool:
+    return checkpw(password.encode(), hashed_password.encode())
 
 
 class TokenType(Enum):

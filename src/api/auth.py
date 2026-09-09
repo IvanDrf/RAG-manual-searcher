@@ -5,10 +5,10 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dependencies import get_session
-from src.api.utils import handle_errors
+from src.api.utils import create_jwt_tokens, handle_errors, set_jwt_in_cookies
 from src.domain.models import UserORM
-from src.domain.rules import TokenType, UserRole, create_jwt, hash_password
-from src.domain.schemas import RegisterUserSchema
+from src.domain.rules import UserRole, hash_password, is_passwords_are_same
+from src.domain.schemas import LoginUserSchema, RegisterUserSchema
 from src.infrastructure.repository.postgresql.user_repo import add_user, find_user
 
 auth_router = APIRouter(prefix="/api/v1/auth", tags=["authorization"])
@@ -32,11 +32,18 @@ async def register_user(user: RegisterUserSchema, response: Response, session: A
     await add_user(session, user=u)
     await session.commit()
 
-    user_id = str(user_id)
-    payload = {"user_id": user_id, "user_role": UserRole.USER.value}
+    payload = {"user_id": str(user_id), "user_role": UserRole.USER.value}
+    access, refresh = create_jwt_tokens(payload)
+    set_jwt_in_cookies(response, *access, *refresh)
 
-    access_token, access_exp = create_jwt(payload=payload, token_type=TokenType.ACCESS)
-    refresh_token, refresh_exp = create_jwt(payload=payload, token_type=TokenType.REFRESH)
 
-    response.set_cookie("access-token", value=access_token, expires=access_exp, httponly=True, secure=True, samesite="lax")
-    response.set_cookie("refresh-token", value=refresh_token, expires=refresh_exp, httponly=True, secure=True, samesite="lax")
+@auth_router.post("/login", status_code=status.HTTP_204_NO_CONTENT, description="Логин пользователя")
+@handle_errors
+async def login_user(user: LoginUserSchema, response: Response, session: Annotated[AsyncSession, Depends(get_session)]) -> None:
+    u = await find_user(session, user.username)
+    if u is None or not is_passwords_are_same(password=user.password, hashed_password=u.hashed_password):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="неправильный логин или пароль")
+
+    payload = {"user_id": str(u.user_id), "user_role": u.user_role.value}
+    access, refresh = create_jwt_tokens(payload)
+    set_jwt_in_cookies(response, *access, *refresh)
