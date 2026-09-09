@@ -49,6 +49,6 @@ def create_jwt(payload: dict, *, token_type: TokenType) -> tuple[str, datetime]:
 
 def decode_jwt(token: str) -> dict:
     try:
-        return decode(jwt=token, key=_JWT_SECRET)
+        return decode(jwt=token, key=_JWT_SECRET, algorithms=["HS256"])
     except InvalidTokenError:
         raise ExternalError("невалидный jwt токен")

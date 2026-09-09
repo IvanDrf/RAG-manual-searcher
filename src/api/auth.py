@@ -73,3 +73,24 @@ async def get_user_info(access_token: Annotated[str, Cookie(alias="access-token"
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный данные в access токене")
 
     return UserInfoSchema(user_id=user_id, user_role=user_role)
+
+
+@auth_router.post("/refresh", status_code=status.HTTP_204_NO_CONTENT, description="Обнволение токенов по refresh токену")
+@handle_errors
+async def refresh_tokens(refresh_token: Annotated[str, Cookie(alias="refresh-token")], response: Response) -> None:
+    if not refresh_token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный refresh токен")
+
+    payload = decode_jwt(refresh_token)
+    user_id, user_role = payload.get("user_id"), payload.get("user_role")
+    if not user_id or not user_role:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный refresh токен")
+
+    try:
+        UUID(user_id)
+        UserRole(user_role)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный данные в access токене")
+
+    access, refresh = create_jwt_tokens(payload)
+    set_jwt_in_cookies(response, *access, *refresh)
