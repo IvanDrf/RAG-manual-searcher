@@ -2,10 +2,11 @@ from uuid import UUID
 
 from sqlalchemy import UUID as SqlUUID
 from sqlalchemy import VARCHAR, ForeignKey, Text, UniqueConstraint
+from sqlalchemy import Enum as SqlEnum
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH
+from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, UserRole
 
 MAX_BOOK_NAME_LENGTH = 100
 
@@ -46,3 +47,4 @@ class UserORM(BaseORM):
 
     username: Mapped[str] = mapped_column(VARCHAR(length=MAX_USERNAME_LENGTH), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(VARCHAR(length=2 * MAX_PASSWORD_LENGTH), nullable=False)
+    user_role: Mapped[UserRole] = mapped_column(SqlEnum, default=UserRole.USER, nullable=False)
