@@ -47,3 +47,10 @@ async def login_user(user: LoginUserSchema, response: Response, session: Annotat
     payload = {"user_id": str(u.user_id), "user_role": u.user_role.value}
     access, refresh = create_jwt_tokens(payload)
     set_jwt_in_cookies(response, *access, *refresh)
+
+
+@auth_router.post("/logout", status_code=status.HTTP_204_NO_CONTENT, description="Выйти из аккаунта")
+@handle_errors
+async def logout_user(response: Response) -> None:
+    response.delete_cookie(key="access-token", httponly=True, secure=True, samesite="lax")
+    response.delete_cookie(key="refresh-token", httponly=True, secure=True, samesite="lax")
