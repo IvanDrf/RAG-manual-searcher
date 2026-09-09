@@ -1,14 +1,14 @@
 from typing import Annotated
-from uuid import uuid4
+from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dependencies import get_session
 from src.api.utils import create_jwt_tokens, handle_errors, set_jwt_in_cookies
 from src.domain.models import UserORM
-from src.domain.rules import UserRole, hash_password, is_passwords_are_same
-from src.domain.schemas import LoginUserSchema, RegisterUserSchema
+from src.domain.rules import UserRole, decode_jwt, hash_password, is_passwords_are_same
+from src.domain.schemas import LoginUserSchema, RegisterUserSchema, UserInfoSchema
 from src.infrastructure.repository.postgresql.user_repo import add_user, find_user
 
 auth_router = APIRouter(prefix="/api/v1/auth", tags=["authorization"])
@@ -50,7 +50,26 @@ async def login_user(user: LoginUserSchema, response: Response, session: Annotat
 
 
 @auth_router.post("/logout", status_code=status.HTTP_204_NO_CONTENT, description="Выйти из аккаунта")
-@handle_errors
 async def logout_user(response: Response) -> None:
     response.delete_cookie(key="access-token", httponly=True, secure=True, samesite="lax")
     response.delete_cookie(key="refresh-token", httponly=True, secure=True, samesite="lax")
+
+
+@auth_router.get("/me", status_code=status.HTTP_200_OK, description="Информация о пользователе")
+@handle_errors
+async def get_user_info(access_token: Annotated[str, Cookie(alias="access-token")]) -> UserInfoSchema:
+    if not access_token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="отсутствует access токен")
+
+    payload = decode_jwt(access_token)
+    user_id, user_role = payload.get("user_id"), payload.get("user_role")
+    if not user_id or not user_role:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный access токен")
+
+    try:
+        user_id = UUID(user_id)
+        user_role = UserRole(user_role)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный данные в access токене")
+
+    return UserInfoSchema(user_id=user_id, user_role=user_role)
