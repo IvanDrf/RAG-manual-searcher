@@ -9,7 +9,7 @@ from src.api.utils import create_jwt_tokens, handle_errors, set_jwt_in_cookies
 from src.domain.models import UserORM
 from src.domain.rules import UserRole, decode_jwt, hash_password, is_passwords_are_same
 from src.domain.schemas import LoginUserSchema, RegisterUserSchema, UserInfoSchema
-from src.infrastructure.repository.postgresql.user_repo import add_user, find_user
+from src.infrastructure.repository.postgresql.user_repo import add_user, find_user_by_username
 
 auth_router = APIRouter(prefix="/api/v1/auth", tags=["authorization"])
 
@@ -21,7 +21,7 @@ auth_router = APIRouter(prefix="/api/v1/auth", tags=["authorization"])
 )
 @handle_errors
 async def register_user(user: RegisterUserSchema, response: Response, session: Annotated[AsyncSession, Depends(get_session)]) -> None:
-    u = await find_user(session, user.username)
+    u = await find_user_by_username(session, user.username)
     if u is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="пользователь с таким именем уже существует")
 
@@ -40,7 +40,7 @@ async def register_user(user: RegisterUserSchema, response: Response, session: A
 @auth_router.post("/login", status_code=status.HTTP_204_NO_CONTENT, description="Логин пользователя")
 @handle_errors
 async def login_user(user: LoginUserSchema, response: Response, session: Annotated[AsyncSession, Depends(get_session)]) -> None:
-    u = await find_user(session, user.username)
+    u = await find_user_by_username(session, user.username)
     if u is None or not is_passwords_are_same(password=user.password, hashed_password=u.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="неправильный логин или пароль")
 
