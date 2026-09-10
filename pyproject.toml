@@ -9,14 +9,12 @@ dependencies = [
     "alembic>=1.19.2",
     "asyncpg>=0.31.0",
     "bcrypt>=5.0.0",
-    "beautifulsoup4>=4.15.0",
     "fastapi>=0.141.1",
+    "httpx>=0.28.1",
     "loguru>=0.7.3",
-    "pdfplumber>=0.11.10",
     "pydantic-settings>=2.15.0",
     "pyjwt>=2.13.0",
     "sqlalchemy>=2.0.52",
-    "tqdm>=4.70.0",
     "uvicorn>=0.52.4",
 ]
 
