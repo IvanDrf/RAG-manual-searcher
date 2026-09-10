@@ -1,11 +1,27 @@
-from typing import Final
+from typing import Final, Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+LoggerLevel = Literal["debug", "info", "warning", "error", "critical"]
+
 
 class BaseConfig(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+
+class AppConfig(BaseConfig):
+    app_host: str = Field(default="localhost", validation_alias="APP_HOST")
+    app_port: int = Field(default=8080, gt=1000, lt=50000, validation_alias="APP_PORT")
+
+    app_loger_level: LoggerLevel = Field(default="info", validation_alias="APP_LOGGER_LEVEL")
+    app_password_salt: str = Field(default="", min_length=1, validation_alias="APP_PASSWORD_SALT")
+
+
+class JWTConfig(BaseConfig):
+    jwt_secret: str = Field(default="", min_length=1, validation_alias="JWT_SECRET")
+    jwt_access_exp: int = Field(default=5, gt=0, lt=60, validation_alias="JWT_ACCESS_EXP")
+    jwt_refresh_exp: int = Field(default=15, gt=0, le=1440, validation_alias="JWT_REFRESH_EXP")
 
 
 class PostgreSQLConfig(BaseConfig):
@@ -21,7 +37,7 @@ class PostgreSQLConfig(BaseConfig):
         return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
 
 
-class Config(PostgreSQLConfig):
+class Config(AppConfig, PostgreSQLConfig, JWTConfig):
     pass
 
 
