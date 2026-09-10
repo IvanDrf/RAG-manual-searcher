@@ -66,16 +66,16 @@ dx
 I = .
 sinx
 Имеем
-Z dx Z cos x dx Z 1 x Z dtg x (cid:12) x(cid:12)
-I = = 2 · = (tg )0dx = 2 = ln(cid:12)tg (cid:12)+C.
-2sin x cos x sin x 2cos2 x tg x 2 tg x (cid:12) 2(cid:12)
+Z dx Z cos x dx Z 1 x Z dtg x  x
+I = = 2 · = (tg )0dx = 2 = lntg +C.
+2sin x cos x sin x 2cos2 x tg x 2 tg x  2
 2 2 2 2 2 2
 π
 Т.к. cosx = sin(x+ ) ,то отсюда
 2
-Z dx Z dx (cid:12) (cid:16)x π(cid:17)(cid:12)
-I = = = ln(cid:12)tg + (cid:12)+C.
-cosx sin(x+ π (cid:12) 2 2 (cid:12)
+Z dx Z dx  x π
+I = = = lntg + +C.
+cosx sin(x+ π  2 2 
 2
 Теорема (об интегрировании заменой переменной).
 Пусть функция ϕ дифференцируема на промежутке I и взаимно однозначно отобра-
@@ -99,9 +99,9 @@ f(x)dx = F(ϕ−1(x))+C,
 ϕ0(ϕ−1(x))
 Поэтому
 1
-(cid:0)
+
 F(ϕ−1(x))
-(cid:1)0
+0
 = F0(ϕ−1(x))·(ϕ−1(x))0 = f(ϕ(ϕ−1(x)))·ϕ(ϕ−1(x))· = f(x).
 ϕ0(ϕ−1(x))
 Отсюда непосредственно вытекает утверждение теоремы.
@@ -112,7 +112,7 @@ I = a2 −x2dx, −a < x < a, a > 0.
 Рассмотрим функцию ϕ(t) = asint, − < t < . Нетрудно проверить, что все
 2 2
 условия последней теоремы выполнены. Имеем
-Z Z (cid:18) (cid:19)
+Z Z  
 p t sin2t
 a2 −a2sin2t·acostdt = a2 cos2tdt = a2 + +C =
 2 4
@@ -122,7 +122,7 @@ a2 p
 x
 Заменяя в последнем выражении t на ϕ−1(x) = arcsin , получаем
 a
-a2 (cid:16) x √ (cid:17)
+a2  x √ 
 I = arcsin +x a2 −x2 +C.
 2 a
 Теорема (об интегрировании по частям).
@@ -144,18 +144,18 @@ I = bxdx и I = eaxsinbxdx.
 1 2
 3
 Имеем
-Z (cid:18)
+Z 
 sinbx
-(cid:19)0
+0
 sinbx a
 Z
 sinbx a
 I = eax dx = eax · − eaxsinbxdx = eax − I ;
 1 2
 b b b b b
-Z (cid:18)
+Z 
 cosbx
-(cid:19)0
+0
 cosbx a
 Z
 cosbx a
@@ -199,10 +199,10 @@ b2 −4ac b
 k2 = и u = x+ ,
 4a2 2a
 получим
-Z (cid:12) (cid:12)
-1 du 1 (cid:12)u−k(cid:12)
-I = = ln(cid:12) (cid:12)+C;
-a u2 −k2 2ak (cid:12)u+k(cid:12)
+Z  
+1 du 1 u−k
+I = = ln +C;
+a u2 −k2 2ak u+k
 если же D < 0, то k2 = −D , и
 Z
 1 du 1 u
@@ -217,7 +217,7 @@ I = = − +C.
 Т.о., остается лишь вернуться к прежней переменной x .
 Вычисление интеграла I можно свести к вычислению I :
 1
-Z (cid:18) (cid:19)
+Z  
 A 2ax+b Ab
 I = dx+ B − ·I ;
 2a ax2 +bx+c 2a 1
@@ -234,7 +234,7 @@ Z Z Z
 dx dx du
 J = √ = = ,
 1 q p
-ax2 +bx+c a (cid:0) (x+ b )2 − b2−4ac (cid:1) a(u2 ±k2)
+ax2 +bx+c a  (x+ b )2 − b2−4ac  a(u2 ±k2)
 2a 4a2
 b |b2 −4ac|
 где u = x+ , k = ;
@@ -249,7 +249,7 @@ k2 −u2 u2 ±k2 |u| u
 интегрирования относительно нуля.
 Вычисление интеграла J сводится к вычислению J :
 1
-Z (cid:18) (cid:19)
+Z  
 A 2ax+b Ab
 J = √ dx+ B − J ;
 1

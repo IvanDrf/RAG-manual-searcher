@@ -1,6 +1,6 @@
 # --- Project data (local only) ---
-student_book_pdf/
-student_book_txt/
+#student_book_pdf/
+#student_book_txt/
 *.pdf
 
 # --- Secrets / local config ---

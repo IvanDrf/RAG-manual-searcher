@@ -367,7 +367,7 @@ KUPNOSTX@ m DEJSTWITELXNYH ^ISEL, TO WEKTORNU@ FUNKCI@ MNOGIH PEREMENNYH
 f: A ⊆ Rn → Rm MOVNO RASSMATRIWATX KAK SOWOKUPNOSTX m SKALQRNYH FUNKCIJ
 f , POLAGAQ, ^TO
 i
-(cid:0) (cid:1)
+ 
 f(x) = f (x),...,f (x) , x ∈ A. (1)
 1 m
 fUNKCII MNOGIH PEREMENNYH f , i = 1,...,m, NAZYWA@T KOORDINATNYMI FUNK-
@@ -383,7 +383,7 @@ tO^KU d ∈ Rm NAZYWA@T PREDELOM FUNKCII f: A → Rm PO BAZE B, ESLI
 oBOZNA^ENIE: limf(x) = d.
 B
 tEOREMA 1 (OB \KWIWALENTNOSTI OPREDELENIJ PREDELA FUNKCII).
-(cid:0) (cid:1)
+ 
 limf(x) = d ⇔ a) limρ f(x),d = 0
 B B
 ⇔ b) ∀U(d) (OKREST.) ∃b ∈ B : f(b) ⊆ U(d)
@@ -440,8 +440,8 @@ y y x x x y
 dOK–WO ANALOGI^NO SLU^A@ FUNKCII ODNOGO PEREMENNOGO.
 tEOREMA 4. eSLI B ⊂ A, a — PREDELXNAQ TO^KA MNOVESTWA B, I d = limf(x)
 x→a
-(cid:12)
-SU]ESTWUET, TO SU]ESTWUET limf(cid:12) (x), RAWNYJ d.
+
+SU]ESTWUET, TO SU]ESTWUET limf (x), RAWNYJ d.
 x→a B
 dOK–WO SLEDUET IZ OPREDELENIJ.
 pRIMER 1. rASSMOTRIM FUNKCI@ DWUH PEREMENNYH
@@ -454,16 +454,16 @@ B = {(x,y) ∈ R2 : y = kx}, k ∈ R.
 k
 wOSPOLXZUEMSQ TEM, ^TO W TO^KAH B FUNKCI@ f MOVNO RASSMATRIWATX KAK FUNK-
 k
-(cid:12)
-CI@ ODNOGO DEJSTWITELXNOGO PEREMENNOGO f(cid:12) (x) ≡ f(x,kx), KOTORAQ PRI x 6= 0
+
+CI@ ODNOGO DEJSTWITELXNOGO PEREMENNOGO f (x) ≡ f(x,kx), KOTORAQ PRI x 6= 0
 B
 k
 PRINIMAET POSTOQNNOE ZNA^ENIE:
-(cid:12) kx2 k
-f(cid:12) (x) = f(x,kx) = = .
+ kx2 k
+f (x) = f(x,kx) = = .
 B k x2 +k2x2 1+k2
-(cid:12)
-pO\TOMU PRI (x;y) → (0;0) SU]ESTWUET PREDEL FUNKCII f(cid:12) , RAWNYJ \TOMU PO-
+
+pO\TOMU PRI (x;y) → (0;0) SU]ESTWUET PREDEL FUNKCII f , RAWNYJ \TOMU PO-
 B
 k
 STOQNNOMU ZNA^ENI@. tAK KAK \TO ZNA^ENIE ZAWISIT OT k, TO PO TEOREME 3 FUNKCIQ
@@ -477,12 +477,12 @@ a ∈ A ⊆ Rn W DWUH SLU^AQH: 1) a — IZOLIROWANNAQ TO^KA MNOVESTWA A, ILI
 x→a
 tEOREMA 1 (OB \KWIWALENTNOSTI OPREDELENIJ NEPRERYWNOSTI).
 fUNKCIQ f: A → Rm NEPRERYWNA W TO^KE a ∈ A ⊆ Rn ⇔
-(cid:0) (cid:1)
+ 
 ∀ε > 0 ∃δ = δ(ε) > 0 : ∀x ∈ A∩U (a) f(x) ∈ U f(a) .
 δ ε
 dOK–WO SLEDUET IZ OPREDELENIJ.
 9
-(cid:0) (cid:1)
+ 
 tEOREMA 2. wEKTORNAQ FUN. f(x) = f (x),...,f (x) NEPRERYWNA W T. a ⇔
 1 m
 ∀i = 1,...,m FUNKCIQ f (x) NEPRERYWNA W T. a.
@@ -501,7 +501,7 @@ G) eSLI SKALQRNAQ FUNKCIQ f: A ⊆ Rn → R NEPRERYWNA W TO^KE a I f(a) > 0
 POLOVITELXNA (SOOTWETSTWENNO OTRICATELXNA) W TO^KAH MNOVESTWA U(a)∩A.
 D) eSLI FUNKCIQ f: A ⊆ Rn → Rm NEPRERYWNA W TO^KE a ∈ A, f(A) ⊆ B I
 FUNKCIQ g: B ⊆ Rm → Rp NEPRERYWNA W TO^KE d = f(a), TO SLOVNAQ FUNKCIQ
-(cid:0) (cid:1)
+ 
 (g ◦f)(x) = g f(x) , x ∈ A, NEPRERYWNA W TO^KE a.
 dOK–WO SLEDUET IZ SWOJSTW PREDELA FUNKCII MNOGIH PEREMENNYH.
 pRIMER 1. pRI i = 1,...,n FUNKCI@ π : (x ,...,x ) 7→ x IZ Rn W R NAZYWA@T
@@ -540,26 +540,26 @@ OTKRYTOGO W Rm MNOVESTWA OTKRYT W A.
 10
 dOK–WO. ⇒ : rASSMOTRIM OTKRYTOE MNOVESTWO V ⊆ Rm. eSLI f−1(V) —
 PUSTOE MNOVESTWO, TO ONO OTKRYTO. pUSTX a ∈ f−1(V). rASSMOTRIM TO^KU f(a) ∈
-(cid:0) (cid:1)
+ 
 V. tAK KAK V — OTKRYTOE MNOVESTWO, TO ∃ε > 0 : U f(a) ⊆ V. tAK KAK FUNKCIQ
 ε
 f NEPRERYWNA W TO^KE a, TO
-(cid:0) (cid:1)
+ 
 ∃δ = δ(ε) > 0 : ∀x ∈ A∩U (a) f(x) ∈ U f(a) .
 δ ε
 pO\TOMU
-(cid:16) (cid:17)
-(cid:0) (cid:1)
+ 
+ 
 a ∈ A∩U (a) ⊆ f−1 U f(a) ⊆ f−1(V).
 δ ε
 iMEEM: U = S U (a) — OTKRYTOE W Rn MNOVESTWO, I f−1(V) = U ∩ A, A
 a∈f−1(V) δ
 ZNA^IT, f−1(V) — OTKRYTOE W A MNOVESTWO.
-(cid:0) (cid:1)
+ 
 ⇐ : fIKSIRUEMa ∈ AIε > 0. rASSMOTRIMOTKRYTOEMNOVESTWOV = U f(a) .
 ε
 tOGDA f−1(V) OTKRYTO W A ⇒ f−1(V) = U ∩A 3 a ⇒
-(cid:0) (cid:1)
+ 
 ∃δ > 0 : U (a) ⊆ U ⇒ ∀x ∈ A∩U (a) ⊆ f−1(V) f(x) ∈ V = U f(a)
 δ δ ε
 ⇒ f NEPRERYWNA W T. a. .
@@ -579,14 +579,14 @@ STWUET KONE^NOE PODPOKRYTIE {U : i = 1,...,k} MNOVESTWA A ⇒
 αi
 B): x,y ∈ f(A) — PROIZWOLXNYE ⇒ SU]ESTWU@T a,b ∈ A : f(a) = x,f(b) =
 y ⇒ SU]ESTWUET KRIWAQ γ : ~r = ~r(t),t ∈ [α,β], ~r(α) = a,~r(β) = b, ∀t ~r(t) ∈
-(cid:0) (cid:1) (cid:0) (cid:1)
+   
 A ⇒ f(γ) : ~r = f ~r(t) ,t ∈ [α,β], — KRIWAQ, SOEDINQ@]AQ f ~r(α) = x I
-(cid:0) (cid:1) (cid:0) (cid:1)
+   
 f ~r(β) = y, ∀t f ~r(t) ∈ f(A) ⇒ f(A) — LINEJNO SWQZNOE MNOVESTWO. .
 pRIMER3. dOKAVEMNESWQZNOSTX Rn\Sn−1(a). rASSMOTRIMNEPRERYWNU@FUNK-
 r
 CI@f(x) = |x−a|. tAKKAKMNOVESTWOf
-(cid:0)Rn\Sn−1(a) (cid:1)
+Rn\Sn−1(a) 
 = [0,r)∩(r,+∞)NEQWLQETSQ
 r
 LINEJNO SWQZNYM, TO PO TEOREME 5 P.B MNOVESTWO Rn \ Sn−1(a) TAKVE NE LINEJNO
@@ -719,7 +719,7 @@ A RAWENSTWO (2) PRINIMAET WID
 i i i
 rAZDELIW POSLEDNEE RAWENSTWO NA ∆x I PEREJDQ K PREDELU PRI ∆x → 0, POLU^IM
 i i
-(cid:18) (cid:19)
+ 
 ∆f(x) |∆x |
 i
 lim = l + lim α(∆x) = l ,
@@ -774,7 +774,7 @@ f0(a) = =  . . . . . . .
 ∂fm(a) ... ∂fm(a)
 ∂xn ∂xn
 ~ASTO ISPOLXZU@T ZAPISX MATRICY qKOBI W WIDE BLO^NOJ MATRICY–STROKI
-(cid:18) (cid:19)
+ 
 ∂f(a) ∂f(a)
 f0(a) = ...
 ∂x ∂x
@@ -791,7 +791,7 @@ f0(a) =  . . .
 w POSLEDNEM SLU^AE KAVDYJ BLOK PREDSTAWLQET SOBOJ MATRICU qKOBI SOOTWETSTWU-
 @]EJ KOORDINATNOJ FUNKCII.
 pRIMER 1. dLQ WEKTORNOJ FUNKCII
-(cid:0) (cid:1)T
+ T
 f(x,y) = xe−y,x2y3,y
 DWUH PEREMENNYH x I y NAJDEM WSE ^ASTNYE PROIZWODNYE I ZAPI[EM MATRICU qKO-
 BI:
@@ -863,7 +863,7 @@ RUEMOSTI, O KOTORYH GOWORITSQ W TEOREMAH 1 ZDESX I 2 IZ §5, NE QWLQ@TSQ DOSTATO
 NYMI USLOWIQMI DIFFERENCIRUEMOSTI, T.E. OBRA]ENIQ SOOTWETSTWU@]IH TEOREM
 NEWERNY.
 pRIMER 1. fUNKCIQ DWUH PEREMENNYH
-(cid:26) xy , x2 +y2 6= 0;
+ xy , x2 +y2 6= 0;
 f(x,y) = x2+y2
 0, x = y = 0,
 W NA^ALE KOORDINAT IMEET ^ASTNYE PROIZWODNYE f0(0,0) = 0, f0(0,0) = 0, TAK KAK
@@ -886,9 +886,9 @@ f(x,y) = x2+y2
 0, x = y = 0.
 NEPRERYWNA PRI x2 + y2 6= 0 KAK OTNO[ENIE DWUH NEPRERYWNYH FUNKCIJ. |TA
 FUNKCIQ NEPRERYWNA I W TO^KE (0,0), POSKOLXKU IZ DWOJNOGO NERAWENSTWA
-(cid:12) (cid:12)
-0 6 (cid:12) (cid:12) x2y (cid:12) (cid:12) = |x||y| |x| 6 1 |x| 6 1 |(x,y)|
-(cid:12)x2 +y2(cid:12) |x|2 +|y|2 2 2
+ 
+0 6   x2y   = |x||y| |x| 6 1 |x| 6 1 |(x,y)|
+x2 +y2 |x|2 +|y|2 2 2
 I SWOJSTWA PREDELOW SLEDUET SU]ESTWOWANIE PREDELA
 x2y
 lim = 0 = f(0,0).
@@ -933,9 +933,9 @@ x I y. sOGLASNO USLOWI@ TEOREMY, MOVNO WYBRATX TAKOE ^ISLO δ > 0, ^TO FUNK-
 CIQ f(x,y) BUDET IMETX ^ASTNYE PROIZWODNYE W L@BOJ TO^KE (x+∆x,y +∆y) PRI
 |∆x| < δ I |∆y| < δ. pRIRA]ENIE FUNKCII f(x,y) UDOBNO PREDSTAWITX KAK SUMMU
 DWUH SLAGAEMYH:
-(cid:0) (cid:1)
+ 
 ∆f(x,y) = f(x+∆x,y +∆y)−f(x,y) = f(x+∆x,y +∆y)−f(x,y +∆y) +
-(cid:0) (cid:1)
+ 
 + f(x,y +∆y)−f(x,y) = ∆ϕ(x)+∆ψ(y),
 GDE
 ϕ(t) = f(t,y +∆y), ψ(v) = f(x,v)
@@ -950,7 +950,7 @@ u^ITYWAQ NEPRERYWNOSTX ^ASTNYH PROIZWODNYH W TO^KE (x,y), POLU^AEM, ^TO
 f0(x+θ ∆x,y +∆y) = f0(x,y)+β, f0(x,y +θ ∆y) = f0(x,y)+γ,
 x 1 x y 2 y
 GDE β I γ — BESKONE^NO MALYE PRI (∆x,∆y) → (0,0). sLEDOWATELXNO,
-(cid:0) (cid:1) (cid:0) (cid:1)
+   
 ∆f(x,y) = f0(x,y)+β ∆x+ f0(x,y)+γ ∆y =
 x y
 = f0(x,y)∆x+f0(x,y)∆y +β∆x+γ∆y.
@@ -1011,7 +1011,7 @@ FUNKCIQ f DIFFERENCIRUEMA W TO^KE a, ONA OPREDELENA W NEKOTOROJ OKRESTNOSTI
 \TOJ TO^KI I QWLQETSQ NEPRERYWNOJ FUNKCIEJ W TO^KE a. zNA^IT, SOGLASNO OPRE-
 DELENI@ NEPRERYWNOSTI, SU]ESTWUET TAKAQ OKRESTNOSTX U (a) IZ OBLASTI OPREDE-
 δ
-(cid:0) (cid:1)
+ 
 LENIQ FUNKCII f, DLQ KOTOROJ f U (a) ⊆ U (b). w OKRESTNOSTI U (a) OPREDELENA
 δ σ δ
 SLOVNAQ FUNKCIQ g ◦f.
@@ -1029,19 +1029,19 @@ GDE
 γ(∆x) = g0(b)α(∆x)+β(∆y) .
 |∆x|
 iMEEM
-(cid:12)
-∆x → 0 ⇒ α(∆x) → 0 (cid:12)
-(cid:12) ⇒ γ(∆x) → 0,
-⇒ ∆y → 0 ⇒ β(∆y) → 0 (cid:12)
+
+∆x → 0 ⇒ α(∆x) → 0 
+ ⇒ γ(∆x) → 0,
+⇒ ∆y → 0 ⇒ β(∆y) → 0 
 TAK KAK
-|∆y| (cid:12) ∆x (cid:12)
-= (cid:12)f0(a) +α(∆x)(cid:12)
-|∆x| (cid:12) |∆x| (cid:12)
+|∆y|  ∆x 
+= f0(a) +α(∆x)
+|∆x|  |∆x| 
 — OGRANI^ENNAQ FUNKCIQ. pREDSTAWLENIE (4) OZNA^AET, ^TO FUNKCIQ g ◦ f DIF-
 FERENCIRUEMA W TO^KE a. pRI \TOM PROIZWEDENIE g0(b)f0(a) DWUH MATRIC qKOBI
 QWLQETSQ, SOGLASNO (4), MATRICEJ qKOBI SLOVNOJ FUNKCII g ◦f, T.E. IMEET MESTO
 RAWENSTWO (1). .
-(cid:0) (cid:1)
+ 
 kOMPOZICI@ (g ◦ f)(x) = g f(x) DWUH FUNKCIJ f I g ^ASTO ZADA@T W WIDE
 z = g(y), y = f(x), WWODQ DOPOLNITELXNYJ NABOR PEREMENNYH y ∈ Rm. pEREMEN-
 NYE W NABORE y ∈ Rm NAZYWA@T PROMEVUTO^NYMI PEREMENNYMI, POD^ERKIWAQ
@@ -1049,7 +1049,7 @@ ROLX, KOTORU@ ONI IGRA@T PRI ZADANII SLOVNOJ FUNKCII. uKAZANNAQ ROLX PRO-
 QWLQETSQ I PRI WY^ISLENII ^ASTNYH PROIZWODNYH SLOVNOJ FUNKCII. iSPOLXZUQ
 KOORDINATNYE FUNKCII z (y), y (x) I MATRICY qKOBI
 i s
-(cid:18) (cid:19) (cid:18) (cid:19)
+   
 ∂z ∂y
 g0 = i , f0 = s
 ∂y ∂x
@@ -1083,9 +1083,9 @@ TO^KAH.
 eSLI n = 1 (ILI m = 1), TO U FUNKCII f (SOOTWETSTWENNO g) BUDET WSEGO LI[X
 ODIN ARGUMENT I ^ASTNAQ PROIZWODNAQ BUDET FAKTI^ESKI OBYKNOWENNOJ PROIZWOD-
 NOJ. |TO DOLVNO BYTX OTRAVENO W OBOZNA^ENIQH PROIZWODNYH. nAPRIMER, ESLI
-z = g(y), y = f(t) = (cid:0) f (t),...,f (t) (cid:1)T , GDE z ∈ R, t ∈ R, y = (y ,...,y ) ∈ Rm, TO
+z = g(y), y = f(t) =  f (t),...,f (t) T , GDE z ∈ R, t ∈ R, y = (y ,...,y ) ∈ Rm, TO
 1 m 1 m
-(cid:0) (cid:1)
+ 
 SLOVNAQ FUNKCIQ z = g f(t) ZAWISIT TOLXKO OT ODNOGO PEREMENNOGO t I
 m
 dz X ∂z dy ∂z dy ∂z dy
@@ -1096,10 +1096,10 @@ s 1 m
 s=1
 GDE ^ASTNYE I OBYKNOWENNYE PROIZWODNYE WY^ISLQ@TSQ W SOOTWETSTWU@]IH TO^-
 KAH.
-(cid:0) (cid:1)
+ 
 pROIZWODNU@ SLOVNOJ FUNKCII z = g f(t) W SLU^AE n = 1, k = 1 (T.E. DEJSTWI-
 TELXNOJ FUNKCII DEJSTWITELXNOGO PEREMENNOGO), WY^ISLQEMU@ PO FORMULE (6),
-(cid:0) (cid:1)
+ 
 NAZYWA@T POLNOJ PROIZWODNOJ FUNKCII g f(t) .
 pRIMER 1. nAJDEM POLNU@ PROIZWODNU@ SLOVNOJ FUNKCII z = f(t,x,y), x =
 sint, y = cost, PREDPOLAGAQ, ^TO FUNKCIQ f: R3 → R DIFFERENCIRUEMA W R3.
@@ -1142,18 +1142,18 @@ SAMA QWLQETSQ FUNKCIEJ MNOGIH PEREMENNYH, OPREDELENNOJ W OKRESTNOSTI U (a),
 I MOVET OKAZATXSQ, ^TO ONA IMEET ^ASTNU@ PROIZWODNU@ W TO^KE a, NAPRIMER PO
 PEREMENNOMU x . ~ASTNU@ PROIZWODNU@
 j
-(cid:18) (cid:19)(cid:12)
-(cid:0)
+ 
+
 f0
-(cid:1)0
+0
 (a) =
-∂ ∂f(x) (cid:12)
-(cid:12)
+∂ ∂f(x) 
+
 xi xj ∂x
 j
 ∂x
 i
-(cid:12)
+
 x=a
 FUNKCII f0 (x) NAZYWA@T ^ASTNOJ PROIZWODNOJ WTOROGO PORQDKA FUNKCII
 xi
@@ -1193,7 +1193,7 @@ n
 KOTORU@ NAZYWA@T MATRICEJ gESSE FUNKCII f W TO^KE x.
 pRIMER 1. nAJDEM WSE ^ASTNYE PROIZWODNYE WTOROGO PORQDKA DLQ FUNKCII
 DWUH PEREMENNYH f(x,y) = 3x2y +y2 +5 I ZAPI[EM DLQ NEE MATRICU gESSE:
-(cid:18) (cid:19)
+ 
 6y 6x
 f00(x) = .
 6x 2
@@ -1243,7 +1243,7 @@ x x
 23
 I POTOMU NEPRERYWNA NA \TOM OTREZKE. sLEDOWATELXNO, K FUNKCII ϕ(x) NA UKAZAN-
 NOM OTREZKE MOVNO PRIMENITX TEOREMU lAGRANVA:
-(cid:2) (cid:3)
+ 
 g(∆x,∆y) = ϕ0(p+θ∆x)∆x = f0(p+θ∆x,q+∆y)−f0(p+θ∆x,q) ∆x, θ ∈ (0, 1).
 x x
 wYRAVENIEWKWADRATNYHSKOBKAHPREDSTAWLQETSOBOJPRIRA]ENIEFUNKCIIλ(y) =
@@ -1283,13 +1283,13 @@ xy , x2 +y2 6= 0;
 f(x,y) = x2+y2
 0, x = y = 0,
 RAZLI^NY W TO^KE (0;0). nAJDEM ^ASTNYE PROIZWODNYE PERWOGO PORQDKA:
- (cid:18) (cid:19)
+  
 x2−y2 4x2y2
 y + , x2 +y2 6= 0;
 f0(x,y) = x2+y2 (x2+y2)2
 x
  0, x = y = 0,
- (cid:18) (cid:19)
+  
 x2−y2 4x2y2
 x − , x2 +y2 6= 0;
 f0(x,y) = x2+y2 (x2+y2)2
@@ -1364,7 +1364,7 @@ KAK FUNKCIQ OT x S POSTOQNNYMI dx ,...,dx MOVET OKAZATXSQ DIFFERENCIRUEMOJ
 1 n
 FUNKCIEJ W TO^KE x. w \TOM SLU^AE WYRAVENIE
 !
-(cid:0) (cid:1) X n ∂f(x) X n X n ∂2f(x)
+  X n ∂f(x) X n X n ∂2f(x)
 d df(x) = d dx = dx dx , (1)
 j i j
 ∂x ∂x ∂x
@@ -1398,7 +1398,7 @@ MOVET OKAZATXSQ DIFFERENCIRUEMOJ FUNKCIEJ PO SOWOKUPNOSTI PEREMENNYH x.
 pOWTORQQPOSLEDOWATELXNOPROCESSWY^ISLENIQDIFFERENCIALOW,PRIHODIMKDIF-
 FERENCIALU FUNKCII k-GO PORQDKA, KOTORYJ QWLQETSQ DIFFERENCIALOM PERWOGO
 PORQDKA OT DIFFERENCIALA (k−1)-GO PORQDKA FUNKCII f:
-(cid:0) (cid:1)
+ 
 dkf(x) = d dk−1f(x) .
 dOSTATO^NYM USLOWIEM SU]ESTWOWANIQ DIFFERENCIALA k-GO PORQDKA W OBLASTI U
 QWLQETSQ k-J PORQDOK GLADKOSTI FUNKCII W \TOJ OBLASTI, T.E. USLOWIE f ∈ Ck(U).
@@ -1410,32 +1410,32 @@ dx +···+ dx
 1 n
 26
 DIFFERENCIAL k-GO PORQDKA FUNKCII f ∈ Ck UDOBNO ZAPISYWATX W WIDE
-(cid:16) ∂ ∂ (cid:17)k
+ ∂ ∂ k
 dkf(x) = dx +···+ dx f(x).
 1 n
 ∂x ∂x
 1 n
 zDESX WYRAVENIE W SKOBKAH WOZWODITSQ W STEPENX k PO OBY^NYM ALGEBRAI^ESKIM
 PRAWILAM, PRI^EM POLAGA@T, ^TO
-(cid:16) ∂ (cid:17)m ∂m
+ ∂ m ∂m
 dx = dxm, GDE dxm = (dx )m.
 ∂x i ∂xm i i i
 i i
 w SLU^AE FUNKCII DWUH NEZAWISIMYH PEREMENNYH z = f(x,y) ∈ C2 IMEEM
-(cid:16) ∂ ∂ (cid:17)2
+ ∂ ∂ 2
 d2f(x,y) = dx+ dy f(x,y) = f00 dx2 +2f00 dxdy +f00 dy2.
 ∂x ∂y xx xy yy
 pRIMER 1. dLQ FUNKCII z = x2y3 EE WTOROJ DIFFERENCIAL IMEET WID
 d2z = 2y3dx2 +12xy2dxdy +6x2ydy2.
 a EE MATRICA gESSE ESTX
-(cid:18) (cid:19)
+ 
 2y3 6xy2
 . .
 6xy2 6x2y
 oTMETIM, ^TO DIFFERENCIAL WTOROGO PORQDKA NE OBLADAET SWOJSTWOM INWARI-
 ANTNOSTI FORMY ZAPISI. nAPRIMER, ESLI x,y — FUNKCII KAKIH–LIBO DRUGIH
 ARGUMENTOW, TO WMESTO FORMULY (2) POLU^AEM:
-(cid:0) (cid:1)
+ 
 d2f(x,y) = d f0 dx+f0 dy = f00 dx2 +2f00 dxdy +f00 dy2 +f0 d2x+f0 d2y.
 x y xx xy yy x y
 9.3 fORMULA tEJLORA
@@ -1467,7 +1467,7 @@ g(1) = f(a+1·∆x) = f(a+∆x), g(0) = f(a).
 dLQ WY^ISLENIQ PROIZWODNYH FUNKCII g(t) RASSMOTRIM EE KAK SLOVNU@ FUNK-
 CI@ g(t) = f(x), x = a+t∆x. sOGLASNO SWOJSTWU INWARIANTNOSTI FORMY ZAPISI
 DIFFERENCIALA PERWOGO PORQDKA,
-(cid:16) ∂ ∂ (cid:17) (cid:16) ∂ ∂ (cid:17)
+ ∂ ∂   ∂ ∂ 
 dg(t) = df(x) = dx +···+ dx f(x) = ∆x +···+ ∆x f(x)dt,
 1 n 1 n
 ∂x ∂x ∂x ∂x
@@ -1475,22 +1475,22 @@ dg(t) = df(x) = dx +···+ dx f(x) = ∆x +···+ ∆x f(x)dt,
 TAK KAK PRI FIKSIROWANNYH a I ∆x IMEEM dx = d(a +t∆x ) = ∆x dt, i = 1,...,n.
 i i i i
 pOWTORQQ PROCESS DIFFERENCIROWANIQ, NAHODIM
-(cid:0) (cid:1)
-(cid:16) ∂ ∂ (cid:17)k
+ 
+ ∂ ∂ k
 dkg(t) = d dk−1f(u) = ∆x +···+ ∆x f(x)dtk.
 1 n
 ∂x ∂x
 1 n
 iZ NAJDENNYH DIFFERENCIALOW FUNKCII g(t) PRI t = 0 (^TO RAWNOSILXNO x = a)
 POLU^AEM
-(cid:12)
-g(k)(0) = dkf(a)(cid:12) , k = 1,...,m, i = 1,...,n,
-(cid:12)
+
+g(k)(0) = dkf(a) , k = 1,...,m, i = 1,...,n,
+
 dxi=∆xi
 I PRI k = m+1 I t = θ ∈ (0, 1)
-(cid:12)
-g(m+1)(θ) = dm+1f(a+θ∆x)(cid:12) , i = 1,...,n.
-(cid:12)
+
+g(m+1)(θ) = dm+1f(a+θ∆x) , i = 1,...,n.
+
 dxi=∆xi
 zAMENQQ W (2) t NA 1 I PROIZWODNYE FUNKCII g SOGLASNO POLU^ENNYM FORMULAM,
 PRIHODIM K RAWENSTWU (3). .
@@ -1509,7 +1509,7 @@ pRIMER 2. zAPI[EM FORMULU (3) DLQ FUNKCII DWUH PEREMENNYH f(x,y) W
 SLU^AE m = 2:
 f(x+∆x,y +∆y) = f(x,y)+f0(x,y)∆x+f0(x,y)∆y +
 x y
-1(cid:16) (cid:17) 1
+1  1
 + f00 (x,y)(∆x)2 +2f00 (x,y)∆x∆y +f00 (x,y)(∆y)2 + d3f(x+θ∆x,y +θ∆y).
 2 x2 xy y2 3!
 28
@@ -1607,7 +1607,7 @@ SU]ESTWOWANIE TAKOJ WEKTORNOJ FUNKCII y = h(x), GDE x = (x ,...,x ) ∈ Rn,
 1 n
 y = (x ,...,x ) ∈ Rm, ^TO
 n+1 n+m
-(cid:0) (cid:1)
+ 
 y = h(x) ⇔ f(x,y) = 0, f(x,y) = f (x,y),...,f (x,y) .
 1 m
 w \TOM SLU^AE O FUNKCII h(x) GOWORQT KAK O NEQWNOJ FUNKCII, ILI NEQWNO ZA-
@@ -1657,14 +1657,14 @@ tOGDA TO^KA (a,b) IMEET OKRESTNOSTX WIDA
 P = {|x−a| < δ , |y −b| < δ },
 x y
 W KOTOROJ URAWNENIE f(x,y) = 0 RAZRE[IMO OTNOSITELXNO y, T.E.
-(cid:16) (cid:17)
+ 
 ∃h ∈ C1(T), T = (a−δ , a+δ ) : ∀(x,y) ∈ P f(x,y) = 0 ⇔ y = h(x) .
 x x
 pRI \TOM
-(cid:12)
-f0(x,y)(cid:12)
-h0(x) = − x (cid:12) . (2)
-f0(x,y)(cid:12)
+
+f0(x,y)
+h0(x) = − x  . (2)
+f0(x,y)
 y y=h(x)
 31
 dOK–WO. bUDEM DLQ OPREDELENNOSTI S^ITATX, ^TO f0(a,b) > 0, TAK KAK W PRO-
@@ -1694,7 +1694,7 @@ x
 ZNA^ENIE. iNA^E GOWORQ, PRI x ∈ [a − δ, a + δ] URAWNENIE f(x,y) = 0 NA OTREZ-
 KE [b − ∆, b + ∆] IMEET EDINSTWENNOE RE[ENIE OTNOSITELXNO y, T.E. NA OTREZKE
 x ∈ [a−δ, a+δ] OPREDELENA ODNOZNA^NYM OBRAZOM FUNKCIQ y = h(x), UDOWLETWORQ-
-(cid:0) (cid:1)
+ 
 @]AQ SOOTNO[ENI@ f x,h(x) ≡ 0. tEM SAMYM DOKAZANA RAZRE[IMOSTX URAWNENIQ
 f(x,y) = 0 OTNOSITELXNO y W NEKOTOROM PRQMOUGOLXNIKE P. w KA^ESTWE δ I δ
 x y
@@ -1806,16 +1806,16 @@ tOGDA TO^KA (a,b) IMEET OKRESTNOSTX WIDA
 P = {(x,y) ∈ Rn+1: x ∈ U (a), |y −b| < δ },
 δx y
 W KOTOROJ URAWNENIE f(x,y) = 0 RAZRE[IMO OTNOSITELXNO y, T.E.
-(cid:16) (cid:17)
-(cid:0) (cid:1)
+ 
+ 
 ∃h ∈ C1 U (a) : ∀(x,y) ∈ P f(x,y) = 0 ⇔ y = h(x) .
 δx
 34
 pRI \TOM
-(cid:0) (cid:1)
+ 
 ∂h(x) f0 x,h(x)
 = − xi , i = 1,...,n.
-(cid:0) (cid:1)
+ 
 ∂x f0 x,h(x)
 i y
 dOK–WO POWTORQET DOK–WO TEOREMY 1, NO WMESTO ^ASTNOJ PROIZWODNOJ PO PERE-
@@ -1827,7 +1827,7 @@ pUSTX f: Rm+n → Rm — WEKTORNAQ FUNKCIQ m + n PEREMENNYH. zAPI[EM
 1 n
 SWOBODNYH PEREMENNYH, A y = (y ,...,y ) ∈ Rm — GRUPPU IZ m ZAWISIMYH PERE-
 1 m
-(cid:0) (cid:1)T
+ T
 MENNYH. tOGDADLQFUNKCIIf(x,y) = f (x,y),...,f (x,y) WEKTORNOEURAWNENIE
 1 m
 f(x,y) = 0 RAWNOSILXNO SISTEME (1). pOSTAWIM WOPROS: PRI KAKIH USLOWIQH \TA
@@ -1859,7 +1859,7 @@ f y 0(x,y) =   . ∂ . y1 . . ∂ . y2 . ... ∂ . y . m .   .
 oTMETIM, ^TO MATRICA f0(x,y) QWLQETSQ KWADRATNOJ PORQDKA m, A MATRICA qKOBI
 y
 f0(x,y) PO WSEJ SOWOKUPNOSTI PEREMENNYH MOVET BYTX ZAPISANA KAK BLO^NAQ MA-
-(cid:0) (cid:1)
+ 
 TRICA f0(x,y),f0(x,y) . oTMETIM TAKVE, ^TO OPREDELITELX KWADRATNOJ MATRICY
 x y
 qKOBI (PO ^ASTI PEREMENNYH ILI PO WSEM PEREMENNYM — NEWAVNO) NAZYWA@T QKO-
@@ -1875,14 +1875,14 @@ P = {(x,y) ∈ Rn+m: x ∈ U (a), y ∈ U (b)},
 δx δy
 35
 W KOTOROJ URAWNENIE f(x,y) = 0 RAZRE[IMO OTNOSITELXNO y, T.E.
-(cid:16) (cid:17)
-∃h ∈ C1 (cid:0) U (a),Rm (cid:1) : ∀(x,y) ∈ P f(x,y) = 0 ⇔ y = h(x) .
+ 
+∃h ∈ C1  U (a),Rm  : ∀(x,y) ∈ P f(x,y) = 0 ⇔ y = h(x) .
 δx
 pRI \TOM
-(cid:16)
-(cid:0) (cid:1)
-(cid:17)−1
-(cid:0) (cid:1)
+
+ 
+−1
+ 
 h0(x) = − f0 x,h(x) f0 x,h(x) . (4)
 y x
 dOKAZATELXSTWO TEOREMY PROWEDEM INDUKCIEJ PO KOLI^ESTWU URAWNENIJ SI-
@@ -1908,7 +1908,7 @@ m m 1 m−1
 m
 ROJ OKRESTNOSTI U (a,b) TO^KI (a,b) WIDA
 ∗
-U (a,b) = (cid:8) (x,y˜,y ) ∈ Rn+m: |x−a| < δ , |y˜− ˜ b| < δ , |y −b | < δ (cid:9) ,
+U (a,b) =  (x,y˜,y ) ∈ Rn+m: |x−a| < δ , |y˜− ˜ b| < δ , |y −b | < δ  ,
 ∗ m 1 2 m m 3
 ˜
 GDE b = (b,b ) = (b ,...,b ,b ), SOGLASNO TEOREME 2, RAZRE[IMO OTNOSITELX-
@@ -1917,15 +1917,15 @@ m 1 m−1 m
 NO PEREMENNOGO y , T.E. W OKRESTNOSTI TO^KI (a,b) SU]ESTWUET TAKAQ NEPRERYWNO
 m
 DIFFERENCIRUEMAQ FUNKCIQ ψ(x,y˜), ^TO
-(cid:26) ˜ (cid:26) ˜(cid:0) (cid:1)
+ ˜  ˜ 
 f(x,y˜,y ) = 0 f x,y˜,ψ(x,y˜) = 0
 f(x,y) = 0 ⇔ m ⇔ .
 y = ψ(x,y˜) y = ψ(x,y˜)
 m m
-˜(cid:0) (cid:1)
+˜ 
 dLQ SISTEMY URAWNENIJ g(x,y˜) = f x,y˜,ψ(x,y˜) = 0 WYPOLNQ@TSQ USLOWIQ TEO-
 REMY. dEJSTWITELXNO, ISPOLXZUQ PRAWILO DIFFERENCIROWANIQ SLOVNOJ FUNKCII,
-(cid:0) (cid:1)
+ 
 IZ OPREDELENIQ g I TOVDESTWA f x,y˜,ψ(x,y˜) = 0 WYWODIM RAWENSTWA
 m
 ˜ ˜
@@ -1935,7 +1935,7 @@ m m
 ∂y˜ ∂y˜ ∂y ∂y˜ ∂y˜ ∂y ∂y˜
 m m
 KOTORYE MOVNO ZAPISATX W WIDE MATRI^NOGO RAWENSTWA
-(cid:18) (cid:19) (cid:18) (cid:19)
+   
 g0 E
 y˜ = f0 .
 0 y ψ0
@@ -1951,26 +1951,26 @@ sOGLASNO PREDPOLOVENI@ MATEMATI^ESKOJ INDUKCII, SISTEMA g(x,y˜) = 0 RAZ-
 RE[IMA OTNOSITELXNO PEREMENNYH y˜W OKRESTNOSTI TO^KI (a,b) I MOVET BYTX PRED-
 ˜
 STAWLENA W WIDE y˜= ψ(x). nO TOGDA SISTEMA
-˜ (cid:0) ˜ (cid:1)
+˜  ˜ 
 y˜= ψ(x), y = ψ x,ψ(x)
 m
 36
-(cid:16) (cid:17)T
-˜ (cid:0) ˜ (cid:1)
+ T
+˜  ˜ 
 \KWIWALENTNA SISTEME f(x,y) = 0. fUNKCIQ h(x) = ψ(x),ψ x,ψ(x) NEPRE-
 RYWNO DIFFERENCIRUEMA W OKRESTNOSTI TO^KI a ∈ Rn KAK KOMPOZICIQ NEPRERYWNO
-˜ (cid:0) (cid:1)
+˜  
 DIFFERENCIRUEMYH FUNKCIJ ψ I ψ. pO\TOMU SLOVNAQ FUNKCIQ G(x) = f x,h(x)
 DIFFERENCIRUEMA W NEKOTOROJ OKRESTNOSTI TO^KI a. sOGLASNO PRAWILU DIFFEREN-
 CIROWANIQ SLOVNOJ FUNKCII,
-(cid:12)
-(cid:0) (cid:1)
-G0(x) = f0(x,y)+f0(x,y)h0(x) (cid:12) .
-x y (cid:12)
+
+ 
+G0(x) = f0(x,y)+f0(x,y)h0(x)  .
+x y 
 y=h(x)
 nO W TO VE WREMQ W SILU WYBORA FUNKCII h(x) IMEEM G(x) ≡ 0 W NEKOTOROJ OKREST-
 NOSTI TO^KI a. zNA^IT,
-(cid:0) (cid:1) (cid:0) (cid:1)
+   
 f0 x,h(x) +f0 x,h(x) h0(x) = 0
 x y
 W \TOJ OKRESTNOSTI TO^KI a. oTMETIM, ^TO MATRICA qKOBI f0(a,b) NEWYROVDENNAQ.
@@ -1981,7 +1981,7 @@ U(a,b) = {(x,y) : |x−a| < ε , |y −b| < ε }
 1 2
 TO^KI (a,b). ~ISLO ε MOVNO WZQTX NASTOLXKO MALYM, ^TO PRI |x−a| < ε BUDET
 1 1
-(cid:0) (cid:1)
+ 
 WYPOLNQTXSQ SOOTNO[ENIE |h(x)−b| < ε . w \TOM SLU^AE MATRICA f0 x,h(x) PRI
 2 y
 |x−a| < ε QWLQETSQ NEWYROVDENNOJ, I MY PRIHODIM K FORMULE (4). .
@@ -2064,11 +2064,11 @@ i=1
 dOK–WO. rASSMOTRIM FUNKCI@ g(s) = f(a + s~ν ) ODNOGO DEJSTWITELXNOGO PE-
 0
 REMENNOGO s. pOSKOLXKU FUNKCIQ MNOGIH PEREMENNYH f(x) DIFFERENCIRUEMA W
-(cid:0) (cid:1)
+ 
 TO^KE a = (a ,...,a ), TO SLOVNAQ FUNKCIQ g(s) = f x(s) , GDE x(s) = a + s~ν ,
 1 n 0
 DIFFERENCIRUEMA W TO^KE s = 0 I
-(cid:12) n
+ n
 dg(0) df(a
 1
 +sν
@@ -2077,10 +2077,10 @@ dg(0) df(a
 n
 +sν
 n
-)(cid:12) X ∂f(a)
-= (cid:12) = ν .
+) X ∂f(a)
+=  = ν .
 i
-ds ds (cid:12) ∂x
+ds ds  ∂x
 s=0 i=1 i
 w TO VE WREMQ, SOGLASNO OPREDELENI@ PROIZWODNOJ FUNKCII, IMEEM
 dg(0) g(s)−g(0) f(a+s~ν )−f(a)
@@ -2102,7 +2102,7 @@ a, NO ∀~ν 6=~0 ∃ .
 11.2 gRADIENT
 pUSTX SKALQRNAQ FUNKCIQ MNOGIH PEREMENNYH f W TO^KE a ∈ Rn IMEET WSE ^ASTNYE
 PROIZWODNYE PERWOGO PORQDKA. wEKTOR
-(cid:0) (cid:1)
+ 
 gradf(a) = f0 (a),...,f0 (a) ,
 x1 xn
 SOSTAWLENNYJ IZ ^ASTNYH PROIZWODNYH PERWOGO PORQDKA FUNKCII f W TO^KE a, NA-
@@ -2119,7 +2119,7 @@ B) = PR gradf(a) — PROEKCIQ WEKT. gradf(a) NA NAPRAW. WEKTORA ~ν;
 ∂~ν ~ν
 W) WEKTOR gradf(a) — NAPRAWLENIE NAIBOLX[EGO ROSTA F. f W T. a;
 ∂f(a)
-G) (cid:0) (cid:1) = |gradf(a)| — NAIBOLX[AQ SKOROSTX ROSTA FUNKCII W T. a.
+G)   = |gradf(a)| — NAIBOLX[AQ SKOROSTX ROSTA FUNKCII W T. a.
 ∂ gradf(a)
 dOK–WO. uTW. A) SLEDUET IZ TEOREMY 1, B) — IZ OPREDELENIQ ORTOGONALXNOJ
 PROEKCII WEKTORA ~y NA NAPRAWLENIE WEKTORA ~x: (~x,~y) = |~x|PR ~y.
@@ -2165,7 +2165,7 @@ x = ϕ(t), y = ψ(t), z = χ(t),
 A WEKTOR ~τ = (ϕ0(t ),ψ0(t ),χ0(t )) QWLQETSQ NAPRAWLQ@]IM WEKTOROM KASATELXNOJ
 0 0 0
 K γ W TO^KE M. tAK KAK γ PRINADLEVIT POWERHNOSTI S, TO
-(cid:0) (cid:1)
+ 
 F ϕ(t),ψ(t),χ(t) ≡ 0, (3)
 PRI^EM SLOVNAQ FUNKCIQ W LEWOJ ^ASTI TOVDESTWA DIFFERENCIRUEMA W TO^KE t .
 0
@@ -2223,7 +2223,7 @@ dz = f0(a,b)dx+f0(a,b)dy. (5)
 x y
 w TO VE WREMQ URAWNENIE z = f(x,y), RASSMATRIWAEMOE W PRQMOUGOLXNOJ SISTEME
 KOORDINAT Oxyz, ZADAET POWERHNOSTX W PROSTRANSTWE, I \TA POWERHNOSTX W TO^KE
-(cid:0) (cid:1)
+ 
 a,b,f(a,b) IMEET KASATELXNU@ PLOSKOSTX, URAWNENIE (4) KOTOROJ MOVNO ZAPISATX
 W WIDE
 z −c = f0(a,b)(x−a)+f0(a,b)(y −b).
@@ -2333,7 +2333,7 @@ NAPRAWLENIEM, ^TO I WEKTOR ∆x. wTOROJ DIFFERENCIAL d2f(a) FUNKCII f(x) W
 TO^KE a QWLQETSQ KWADRATI^NOJ FORMOJ k(∆x) OT WEKTORA PRIRA]ENIJ ∆x. iMEEM
 k(∆x) = k(|∆x|ν) = k(ν)|∆x|2. oTS@DA I IZ FORMULY tEJLORA S OSTATO^NYM
 ^LENOM W FORME pEANO DLQ FUNKCII f(x) W TO^KE a POLU^AEM
-1 1 1(cid:16) (cid:17)
+1 1 1 
 f(a+∆x)−f(a) = df(a)+ d2f(a)+o(|∆x|2) = k(∆x)+o(|∆x|2) = k(ν)+α |∆x|2,
 2 2 2
 (1)
@@ -2363,7 +2363,7 @@ DELENNAQ. w SILU TOGO, ^TO α → 0 PRI ∆x → 0, DLQ ε = m /2, MOVNO WYBRATX
 TAKOE ^ISLO δ > 0, ^TO |α| < ε = m /2 PRI 0 < |∆x| < δ. nO TOGDA α > −m /2 I W
 ∗ ∗
 SILU PREDSTAWLENIQ (1) NAHODIM, ^TO
-1(cid:16) 1 (cid:17) 1
+1 1  1
 f(a+∆x)−f(a) > m − m |∆x|2 = m |∆x|2 > 0,
 ∗ ∗ ∗
 2 2 4
@@ -2377,7 +2377,7 @@ sLU^AJ 2. eSLI m∗ < 0, TO k(y) 6 m∗ < 0 PRI |y| = 1. zNA^IT, k(∆x) =
 NA. wYBIRAQ ε = |m∗|/2, ZAKL@^AEM, KAK I WY[E, ^TO DLQ DOSTATO^NO MALOGO ^ISLA
 δ > 0 PRI 0 < |∆x| < δ WYPOLNENO NERAWENSTWO |α| < |m∗|/2. w SILU PREDSTAWLENIQ
 (1) NAHODIM, ^TO
-1(cid:16) 1 (cid:17) 1
+1 1  1
 f(a+∆x)−f(a) < m∗ + |m∗| |∆x|2 = m∗|∆x|2 < 0,
 2 2 4
 ESLI 0 < |∆x| < δ.
@@ -2392,12 +2392,12 @@ n m∗ |m | o
 wYBEREM ε = min , ∗ . tOGDA SU]ESTWUET TAKOE ^ISLO δ > 0, ^TO |α| < ε
 2 2
 PRI 0 < |∆x| < δ. pO\TOMU PRI ∆x = ty∗δ, 0 < t < 1, IMEEM ν = y∗ I
-1(cid:16) (cid:17) 1(cid:16) 1 (cid:17) 1
+1  1 1  1
 f(a+∆x)−f(a) = k(y∗)+α |∆x|2 > m∗ − m∗ |∆x|2 = m∗|∆x|2 > 0,
 2 2 2 4
 TAK KAK α > −ε > −m∗/2. aNALOGI^NO PRI ∆x = ty δ, 0 < t < 1, IMEEM
 ∗
-1(cid:16) (cid:17) 1(cid:16) 1 (cid:17) 1
+1  1 1  1
 f(a+∆x)−f(a) = k(y )+α |∆x|2 < m + |m | |∆x|2 = m |∆x|2 < 0,
 ∗ ∗ ∗ ∗
 2 2 2 4
@@ -2441,7 +2441,7 @@ f0(a,b) = f0(a,b) = 0.
 x y
 mATRICEJ KWADRATI^NOJ FORMY d2f(a,b) QWLQETSQ MATRICA gESSE f00(a,b), KOTORAQ
 IMEET WID
-(cid:18) (cid:19)
+ 
 A B
 f00(a,b) = , A = f00 (a,b), B = f00 (a,b), C = f00 (a,b).
 B C xx xy yy
@@ -2498,8 +2498,8 @@ OPREDELENIQ, KOTORYE POD^INQ@TSQ USTANOWLENNYM OGRANI^ENIQM. .
 pUSTX FUNKCIIf: Rn → R Iϕ: Rn → Rm OPREDELENYW NEKOTOROJ OKRESTNOSTI
 TO^KI a ∈ Rn. gOWORQT, ^TO FUNKCIQ f W TO^KE a ∈ Rn DOSTIGAET USLOWNOGO
 LOKALXNOGO MAKSIMUMA (MINIMUMA) PRI USLOWII ϕ(x) = 0, ESLI ϕ(a) = 0 I
-(cid:16) (cid:17)
-∃δ > 0 : ∀x ∈ U ˙ (a) ϕ(x) = 0 ⇒ f(x) 6 f(a) (cid:0) f(x) > f(a) (cid:1) . (2)
+ 
+∃δ > 0 : ∀x ∈ U ˙ (a) ϕ(x) = 0 ⇒ f(x) 6 f(a)  f(x) > f(a)  . (2)
 δ
 pONQTIQ USLOWNOGO LOKALXNOGO MAKSIMUMA I MINIMUMA OB_EDINQ@T POD OB]IM
 NAZWANIEM USLOWNYJ \KSTREMUM FUNKCII. eSLI W OPREDELENII NERAWENSTWA
@@ -2549,10 +2549,10 @@ b = h(a), h0(a) = − x = − x . (6)
 ϕ0(a,h(a)) ϕ0(P)
 y y
 w PRQMOUGOLXNIKE U TO^KI, UDOWLETWORQ@]IE USLOWI@ ϕ(x,y) = 0, IME@T WID
-(cid:0) (cid:1)
+ 
 x,h(x) , GDE x ∈ (a−δ , a+δ ). zNA^IT, ESLI FUNKCIQ f(x,y) IMEET W TO^KE
 1 1
-(cid:0) (cid:1)
+ 
 P USLOWNYJ \KSTREMUM PRI USLOWII ϕ(x,y) = 0, TO FUNKCIQ g(x) = f x,h(x)
 ODNOGO PEREMENNOGO IMEET W TO^KE a LOKALXNYJ \KSTREMUM. |TA FUNKCIQ, KAK
 KOMPOZICIQ DIFFERENCIRUEMYH FUNKCIJ, QWLQETSQ DIFFERENCIRUEMOJ W TO^KE a.
@@ -2671,8 +2671,8 @@ KWADRATI^NU@ FORMU d2L(a) , RAWNU@ OGRANI^ENI@ DIFFERENCIALA d2L(a) NA LI-
 H
 NEJNOEPODPROSTRANSTWOH W Rn, ZADANNOESISTEMOJLINEJNYHURAWNENIJdϕ(a) = 0
 (ILI, PO-DRUGOMU, ϕ0(a)∆x = 0). t.E.
-(cid:12)
-H = {∆x : dϕ(a) = 0}, d2L(a) = d2L(a)(cid:12) .
+
+H = {∆x : dϕ(a) = 0}, d2L(a) = d2L(a) .
 H dϕ(a)=0
 tEOREMA 3 (DOSTATO^NYE USLOWIQ USLOWNOGO \KSTREMUMA). pUSTX FUNK-
 CII f: Rn → R I ϕ: Rn → Rm DWAVDY NEPRERYWNO DIFFERENCIRUEMY W OKREST-
@@ -2690,7 +2690,7 @@ dOK–WO OSNOWANO NA SWEDENIE ZADA^I NA USLOWNYJ \KSTREMUM K ZADA^E NA BEZ-
 USLOWNYJ \KSTREMUM. a IMENNO, WYRAZIW IZ URAWNENIJ SWQZI ϕ(x) = 0 ^ASTX PE-
 REMENNYH (y) ^EREZ OSTALXNYE (z) I PODSTAWIW NAJDENNOE WYRAVENIE (y = h(z))
 W FUNKCI@ f(x) (x = (z,y)), MY PRIDEM K ZADA^E POISKA \KSTREMUMA FUNKCII
-(cid:0) (cid:1) (cid:0) (cid:1) (cid:0) (cid:1)
+     
 f z,h(z) = L z,h(z),λ . wTOROJ DIFFERENCIAL FUNKCII L z,h(z),λ W TO^KE a
 a a
 OTOVDESTWLQETSQ S KWADRATI^NOJ FORMOJ d2L(a) , PO\TOMU IZ DOSTATO^NYH USLO-
@@ -2713,11 +2713,11 @@ DAETy KAKFUNKCI@z, T.E.URAWNENIEϕ(z,y) = 0\KWIWALENTNOURAWNENI@y = h(z),
 GDEh(z)—NEPRERYWNODIFFERENCIRUEMAQFUNKCIQWOKRESTNOSTITO^KIb ∈ Rn−m,
 A h(b) = c. a ZNA^IT, a = (b,c) — TO^KA USLOWNOGO LOKALXNOGO \KSTREMUM FUNK-
 CII f(x) PRI USLOWII ϕ(x) = 0 T. I T.T., KOGDA b — TO^KA LOKALXNOGO \KSTREMUM
-(cid:0) (cid:1)
+ 
 FUNKCII g(z) = f z,h(z) .
 pO POSTROENI@ FUNKCIQ lAGRANVA L(z,y,λ ) NA MNOVESTWE TO^EK, UDOWLETWO-
 a
-(cid:0) (cid:1)
+ 
 RQ@]IH URAWNENIQM SWQZI ϕ(z,y) = 0, SOWPADAET S FUNKCIEJ g(z) = f z,h(z) .
 uBEDIMSQ W TOM, ^TO W USLOWIQH TEOREMY DLQ FUNKCII g(z) = L(z,h(z),λ ) W TO^KE
 a
@@ -2757,16 +2757,16 @@ T.E. W PRAWOJ ^ASTI RAWENSTWA (9) WYPOLNITX ZAMENU dy = h0(b)dz.
 iZ TEOREMY O PROIZWODNOJ NEQWNOJ FUNKCII SLEDUET, ^TO MATRICA qKOBI h0(b)
 MOVET BYTX WY^ISLENA PO FORMULE
 h0(b) = −
-(cid:0)
+
 ϕ0(b,c)
-(cid:1)−1
+−1
 ϕ0(b,c).
 y z
 pO\TOMU, UMNOVAQ SISTEMU h0(b)dz−dy = 0 NA NEWYROVDENNU@ MATRICU −ϕ0(b,c),
 y
 POLU^AEM SISTEMU dϕ(b,c) = ϕ0(b,c)dz + ϕ0(b,c)dy = 0. tAKIM OBRAZOM, DIFFE-
 z y
-(cid:0) (cid:1)
+ 
 RENCIAL WTOROGO PORQDKA FUNKCII g(z) = L z,h(z) W TO^KE z = b SOWPADAET S
 OGRANI^ENIEM d2L(b,c) NA LINEJNOE PODPROSTRANSTWO H DIFFERENCIALA WTOROGO
 H
@@ -2776,7 +2776,7 @@ NYH ZAWER[AET DOKAZATELXSTWO TEOREMY. nAPRIMER, ESLI KWADRATI^NAQ FORMA
 d2L(b,c) POLOVITELXNO OPREDELENNAQ, TO I d2g(b) QWLQETSQ POLOVITELXNO OPRE-
 H
 DELENNOJ KWADRATI^NOJ FORMOJ. sOGLASNO DOSTATO^NYM USLOWIQM \KSTREMUMA,
-(cid:0) (cid:1)
+ 
 FUNKCIQ g(z) = L z,h(z) IMEET W TO^KE b LOKALXNYJ MINIMUM. |TO RAWNOSILXNO
 TOMU, ^TO FUNKCIQ L(z,y) (A ZNA^IT, I FUNKCIQ f(z,y)) IMEET W TO^KE a = (b,c)
 USLOWNYJ LOKALXNYJ MINIMUM PRI USLOWII y = h(z) (ILI ϕ(z,y) = 0). .
@@ -2861,19 +2861,19 @@ NOSTI V TO^KI a ∈ Rn UDOWLETWORQET USLOWIQM:
 1) G ∈ C1(V,Rn);
 2) detG0(a) 6= 0.
 tOGDA ∃U (OKR. T. b = G(a)), ∃G−1: U → V:
-(cid:0) (cid:1) (cid:0) (cid:1)
+   
 A) ∀y ∈ U G G−1(y) = y I ∀x ∈ G−1(U) G−1 G(x) = x;
 B) G−1 ∈ C1(U,Rn) I
-(cid:12)
-(cid:0)
+
+
 G−1
-(cid:1)0
+0
 (y) =
-(cid:0)
+
 G0(x)
-(cid:1)−1(cid:12)
+−1
 . (1)
-(cid:12)
+
 x=G−1(y)
 dOK–WO. rASSMOTRIM FUNKCI@ f: R2n → Rn, OPREDELQEMU@ RAWENSTWOM
 f(x,y) = G(x) − y. |TA FUNKCIQ NEPRERYWNO DIFFERENCIRUEMA W OKRESTNOSTI
@@ -2889,30 +2889,30 @@ x y
 MENNYH x, T.E. SU]ESTWUET TAKAQ FUNKCIQ h(y), OPREDELENNAQ W OKRESTNOSTI U (b)
 δy
 TO^KI b, ^TO
-(cid:0) (cid:1)
+ 
 f h(y),y ≡ 0, (2)
 PRI^EM FUNKCIQ h(y) NEPRERYWNO DIFFERENCIRUEMA, A EE MATRICA qKOBI RAWNA
-(cid:16)
-(cid:0) (cid:1)
-(cid:17)−1
-(cid:0) (cid:1)
+
+ 
+−1
+ 
 h0(y) = − f0 h(y),y f0 h(y),y . (3)
 x y
-(cid:0) (cid:1)
+ 
 tAK KAK f(x,y) = G(x) − y, TOVDESTWO (2) OZNA^AET, ^TO G h(y) ≡ y, T.E.
 FUNKCIQ h(y) QWLQETSQ OBRATNOJ K FUNKCII G(x). kROME TOGO, MATRICA f0(x,y)
 y
 SOWPADAET S MATRICEJ −E, PROTIWOPOLOVNOJ EDINI^NOJ MATRICE E. pO\TOMU RA-
 WENSTWO (3) SWODITSQ K RAWENSTWU h0(y) =
-(cid:0)
+
 G0(h(y))
-(cid:1)−1
+−1
 , RAWNOSILXNOMU (1) .
 pRIMER 1. rASSMOTRIM OTOBRAVENIE G: R2 → R2, ZADANNOE URAWNENIQMI z =
 1
 x +ex2, z = ex1 −x . iMEEM G ∈ C1(R2,R2) I
 1 2 2
-(cid:18) (cid:19)
+ 
 1 ex2
 ∀(x ;x ) ∈ R2, G0(x ,x ) = , detG0(x ,x ) = −1−ex1+x2 6= 0.
 1 2 1 2 ex1 −1 1 2
@@ -2925,7 +2925,7 @@ TEOREMU O NEQWNOJ FUNKCII WYWODITX IZ TEOREMY OB OBRATNOJ FUNKCII. w SAMOM
 DELE, PUSTX DLQ FUNKCII f WYPOLNENY USLOWIQ TEOREMY 3 IZ §10. sISTEMU URAWNE-
 NIJ f(x,y) = 0, x ∈ Rn, y ∈ Rm, MOVNO TRAKTOWATX KAK ^ASTNYJ SLU^AJ SISTEMY
 URAWNENIJ f(x,y) = z PRI FIKSIROWANNOM z ∈ Rn. rASSMOTRIM OTOBRAVENIE
-(cid:18) (cid:19)
+ 
 x
 H(x,y) = ,
 f(x,y)
@@ -2933,7 +2933,7 @@ f(x,y)
 KOTOROE POLU^AETSQ DOBAWLENIEM NOWYH n KOORDINATNYH FUNKCIJ. |TO OTOBRAVE-
 NIE DIFFERENCIRUEMO W OKRESTNOSTI TO^KI (a;b), A EGO MATRICA qKOBI MOVET BYTX
 ZAPISANA KAK BLO^NAQ MATRICA
-(cid:18) (cid:19)
+ 
 E 0
 H0(x,y) = ,
 f0(x,y) f0(x,y)
@@ -2945,20 +2945,20 @@ y
 FUNKCII W OKRESTNOSTI TO^KI (a;b), PRI^EM H(a,b) = (a;0). zNA^IT, PO TEOREME
 OBOBRATNOJFUNKCIIWOKRESTNOSTITO^KI(a;0)SU]ESTWUETOBRATNOEOTOBRAVENIE
 H−1(x,z), KOTOROE MOVNO PREDSTAWITX W WIDE
-(cid:18) (cid:19)
+ 
 ϕ(x,z)
 H−1(x,z) = ,
 ψ(x,z)
 GDE ϕ(x,z) — SOWOKUPNOSTX PERWYH n KOORDINATNYH FUNKCIJ, A ψ(x,z) — SOWOKUP-
-(cid:0) (cid:1)
+ 
 NOSTX OSTAW[IHSQ m KOORDINATNYH FUNKCIJ. tOVDESTWO H H−1(x,z) ≡ (x;z) W
 BLO^NOJ FORME IMEET WID
-(cid:18) (cid:19) (cid:18) (cid:19)
+   
 ϕ(x,z) x
-(cid:0) (cid:1) ≡ .
+  ≡ .
 f ϕ(x,z), ψ(x,z) z
 oTS@DA NAHODIM, ^TO ϕ(x,z) ≡ x I
-(cid:0) (cid:1) (cid:0) (cid:1)
+   
 f ϕ(x,z), ψ(x,z) ≡ f x, ψ(x,z) ≡ z.
 nO POSLEDNEE TOVDESTWO I OZNA^AET, ^TO URAWNENIE f(x,y) = z RAZRE[IMO OTNOSI-
 TELXNO PEREMENNYH y I MOVET BYTX PREDSTAWLENO W WIDE y = ψ(x,z). w ^ASTNOM
@@ -2966,40 +2966,40 @@ SLU^AE z = 0 POLU^AEM RAZRE[IMOSTX URAWNENIQ f(x,y) = 0. iSPOLXZUQ PRAWI-
 LA OPERACIJ S BLO^NYMI MATRICAMI, MOVNO IZ FORMULY (1) DLQ MATRICY qKOBI
 OBRATNOJ FUNKCII POLU^ITX FORMULU DLQ MATRICY qKOBI NEQWNOJ FUNKCII. dEJ-
 STWITELXNO, DLQ NEWYROVDENNOJ KWADRATNOJ MATRICY B PORQDKA m I MATRICY A
-(cid:18) (cid:19)−1 (cid:18) (cid:19)
+ −1  
 E 0 E 0
 = .
 A B −B−1A B−1
 iSHODQ IZ \TOGO, ZAKL@^AEM, ^TO, SOGLASNO TEOREME OB OBRATNOJ FUNKCII,
-(cid:18) (cid:19)
+ 
 E 0
 (H−1)0(x,z) = .
 −
-(cid:0)
+
 f0(x,y)
-(cid:1)−1
+−1
 f0(x,y)
-(cid:0)
+
 f0(x,y)
-(cid:1)−1
+−1
 y x y
 sLEDOWATELXNO,
-(cid:16) (cid:17)
+ 
 ψ0(x,z) = −
-(cid:0)
+
 f0(x,y)
-(cid:1)−1
+−1
 f0(x,y)
-(cid:0)
+
 f0(x,y)
-(cid:1)−1
+−1
 .
 y x y
 w ^ASTNOM SLU^AE z = 0 DLQ FUNKCII ψ(x,0), NEQWNO ZADANNOJ URAWNENIEM f(x,y)=
 =0, POLU^AEM ψ0(x,0)=−
-(cid:0)
+
 f0(x,y)
-(cid:1)−1
+−1
 f0(x,y), ^TO SOOTWETSTWUET FORMULE PROIZWOD-
 x y x
 NOJ NEQWNO ZADANNOJ FUNKCII.
