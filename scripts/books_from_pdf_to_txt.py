@@ -1,5 +1,3 @@
-from multiprocessing import context
-from pathlib import Path
 import os
 import re
 import pdfplumber
@@ -8,7 +6,6 @@ from tqdm import tqdm
 def convert_pdf_to_txt():
     # Create array of name books from student_books_pdf
     array_name_books = [book for book in os.listdir("./student_book_pdf")]
-
     # Convert pdf to txt
     for book in tqdm(array_name_books):
         name_book = book.split(".")[0]
@@ -22,20 +19,15 @@ def convert_pdf_to_txt():
                     file.write(t + "\n")
 
 def fixing_bad_words_in_txt():
-
+    """Удаляет ошибки конвертации из PDF в TXT"""
     array_txt_books = [book for book in os.listdir('./student_book_txt')]
-
     for book in tqdm(array_txt_books):
         with open(f"./student_book_txt/{book}", mode='r+', encoding='utf-8') as file:
             content = file.read()
-
             cleaned_content = re.sub(r"^.*[À-ÿ].*$\n?", "", content, flags=re.MULTILINE)
             cleaned_content = re.sub(r"\(cid:\d+\)", "", cleaned_content)
-
             file.seek(0)
-
             file.write(cleaned_content)
-
             file.truncate()
 
 if __name__ == "__main__":
