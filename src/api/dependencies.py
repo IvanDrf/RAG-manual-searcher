@@ -22,3 +22,7 @@ async def get_session() -> AsyncGenerator[ISession, None]:
 async def ping_database() -> None:
     async with session_maker() as session:
         await session.execute(text("SELECT 1"))
+
+
+async def close_dependencies() -> None:
+    await engine.dispose()

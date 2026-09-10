@@ -7,7 +7,7 @@ from uvicorn import run
 
 from src.api.admin import admin_router
 from src.api.auth import auth_router
-from src.api.dependencies import ping_database
+from src.api.dependencies import close_dependencies, ping_database
 from src.core.config import CONFIG
 from src.core.logger import configure_logger
 
@@ -17,6 +17,7 @@ async def lifespan(_: FastAPI):
     configure_logger(CONFIG)
     await ping_database()
     yield
+    await close_dependencies()
 
 
 app = FastAPI(title="RAG-research app", lifespan=lifespan)
