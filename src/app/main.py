@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request, status
 from loguru import logger
 from uvicorn import run
 
+from src.api.admin import admin_router
 from src.api.auth import auth_router
 from src.api.dependencies import ping_database
 from src.core.config import CONFIG
@@ -20,6 +21,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="RAG-research app", lifespan=lifespan)
 app.include_router(auth_router)
+app.include_router(admin_router)
 
 
 @app.get("/health", status_code=status.HTTP_200_OK, description="health check для проверки сервера на работоспособность")
