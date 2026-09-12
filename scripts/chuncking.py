@@ -36,32 +36,5 @@ def lemman_text_and_write_to_csv() -> None:
     df.to_csv("../database.csv", index=False)
 
 
-def tokinizing_text_from_LLM(text: str) -> str:
-    """Лемматизация слов для запроса в LLM"""
-    if not isinstance(text, str):
-        raise TypeError("text must be string")
-
-    morph = pymorphy3.MorphAnalyzer()
-    stop_words: set[str] = set(stopwords.words("russian"))
-    # привидение к нижнему регистру, и токенизируя
-    tokinized_words: list[str] = word_tokenize(text.casefold(), language="russian")
-    tokinized_words = [word for word in tokinized_words if word.isalpha() and word not in stop_words]
-
-    cache: dict[str, str] = {}
-    for idx, word in enumerate(tokinized_words):
-        if word not in cache:
-            cache[word] = morph.parse(word)[0].normal_form
-        tokinized_words[idx] = cache[word]
-
-    return " ".join(tokinized_words)
-
-
 if __name__ == "__main__":
-    text = (
-        "Студенты решали сложные уравнения на лекциях. ",
-        "Матрицы были квадратными, а собственные значения — действительными. ",
-        "В теореме доказали непрерывность функции на отрезке [a, b]. ",
-        "Это было очень важно для понимания!",
-    )
-    for tx in text:
-        print(tokinizing_text_from_LLM(tx))
+    pass
