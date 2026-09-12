@@ -1,7 +1,7 @@
 from src.infrastructure.rag.bm25 import start_bm25
 
 
-def rag(text: str, k: int) -> str:
+def rag(text: str, k: int = 3) -> str:
     """Return promt with chuncks"""
     if not isinstance(text, str):
         raise TypeError("text must be string")
