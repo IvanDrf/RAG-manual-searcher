@@ -10,13 +10,14 @@ dependencies = [
     "asyncpg>=0.31.0",
     "bcrypt>=5.0.0",
     "beautifulsoup4>=4.15.0",
-    "fastapi>=0.141.1",
-    "loguru>=0.7.3",
+    "bm25s>=0.3.11",
+    "nltk>=3.10.3",
+    "pandas>=3.0.5",
     "pdfplumber>=0.11.10",
     "pydantic-settings>=2.15.0",
-    "pyjwt>=2.13.0",
+    "pymorphy3>=2.0.6",
+    "pystemmer>=3.1.0",
     "sqlalchemy>=2.0.52",
-    "tqdm>=4.70.0",
     "uvicorn>=0.52.4",
 ]
 
@@ -25,4 +26,4 @@ line-length = 140
 exclude = ["alembic"]
 
 [dependency-groups]
-dev = ["pre-commit>=4.6.2", "ruff>=0.16.6"]
+dev = ["ipykernel>=7.3.0", "pre-commit>=4.6.2", "ruff>=0.16.6"]

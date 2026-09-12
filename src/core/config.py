@@ -37,7 +37,12 @@ class PostgreSQLConfig(BaseConfig):
         return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
 
 
-class Config(AppConfig, PostgreSQLConfig, JWTConfig):
+class LLMConfig(BaseConfig):
+    llm_url: str = Field(default="", min_length=1, validation_alias="LLM_URL")
+    llm_timeout: int = Field(default=10, gt=0, validation_alias="LLM_REQUEST_TIMEOUT")
+
+
+class Config(AppConfig, PostgreSQLConfig, JWTConfig, LLMConfig):
     pass
 
 

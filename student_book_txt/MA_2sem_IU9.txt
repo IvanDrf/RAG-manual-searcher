@@ -54,12 +54,12 @@ NU@ W \TOM PROMEVUTKE.
 dOKAZATELXSTWO BUDET DANO POZVE (SM. SLEDSTWIE W §8).
 pRIMERY 1–4) ex,1/x,cosx,1/cos2x.
 1.2 pROSTEJ[IE SWOJSTWA NEOPREDELENNOGO INTEGRALA
-(cid:18)Z (cid:19)0 Z
+Z 0 Z
 1) f(x)dx = f(x), 2) d f(x)dx = f(x)dx,
 Z Z
 3) F0(x)dx = F(x)+C, 4) dF(x) = F(x)+C,
 Z Z Z
-(cid:16) (cid:17)
+ 
 5) λ f (x)+λ f (x) dx = λ f (x)dx+λ f (x)dx.
 1 1 2 2 1 1 2 2
 dOK–WO SLEDUET IZ OPREDELENIJ I SWOJSTW PROIZWODNYH I DIFFERENCIALOW.
@@ -67,7 +67,7 @@ pRIMERY 5–7) xs,sinx,1/sin2x.
 1.3 oB]IE METODY INTEGRIROWANIQ
 3.1.iNTEGRIROWANIE PODWEDENIEM POD ZNAK DIFFERENCIALA:
 Z Z Z
-(cid:16) (cid:17) (cid:16) (cid:17) (cid:16) (cid:17)
+     
 g(x)dx = f u(x) u0(x)dx = f u(x) du(x) = F u(x) +C,
 GDE F(u) — PERWOOBRAZNAQ FUNKCII f(u).
 dOK–WO: DIFFERENCIROWANIE SLOVNOJ FUNKCII.
@@ -75,18 +75,18 @@ dOK–WO: DIFFERENCIROWANIE SLOVNOJ FUNKCII.
 R
 pRIMER 8. 1/(ax+b)kdx, POD ZNAK DIFFERENCIALA ax+b.
 3.2. iNTEGRIROWANIE ZAMENOJ PEREMENNOJ (PODSTANOWKOJ):
-Z Z (cid:16) (cid:17) (cid:12)
-f(x)dx = f ϕ(t) ϕ0(t)dt(cid:12) .
-(cid:12)
+Z Z   
+f(x)dx = f ϕ(t) ϕ0(t)dt .
+
 t=ϕ−1(x)
 dOK–WO: DIFFERENCIROWANIE SLOVNOJ I OBRATNOJ FUNKCIJ (PO x).
 oFORMLENIE: ISPOLXZUEMU@ ZAMENU PRIWODQT W KOMMENTARIQH MEVDU DWUMQ
 WERTIKALXNYMI ^ERTAMI.
 pRIMER 9.
-Z (cid:12) (cid:12) Z
-1 (cid:12)x = asinz (cid:12) 1 x
-√ dx = (cid:12) (cid:12) = acosz dz = z = arcsin .
-a2 −x2 (cid:12)z = arcsin x (cid:12) acosz a
+Z   Z
+1 x = asinz  1 x
+√ dx =   = acosz dz = z = arcsin .
+a2 −x2 z = arcsin x  acosz a
 a
 3.3. iNTEGRIROWANIE PO ^ASTQM:
 Z Z
@@ -139,9 +139,9 @@ i2 = −1) KRATNOSTI k ∈ N. nO TOGDA SOPRQVENNOE S \TIM KORNEM KOMPLEKSNOE
 ^ISLO z = α−βi QWLQETSQ DLQ DANNOGO MNOGO^LENA KORNEM TOJ VE KRATNOSTI, T.E.
 MNOGO^LEN Q (x) DELITSQ NA MNOGO^LEN
 n
-(cid:0)
+
 (x−z)(x−z)
-(cid:1)k
+k
 = (x2 +px+q)k,
 GDE p = −2α I q = α2 +β2 — DEJSTWITELXNYE ^ISLA.
 oSNOWNAQ TEOREMA ALGEBRY. l@BOJ MNOGO^LEN Q (x) STEPENI n S DEJSTWI-
@@ -156,7 +156,7 @@ i i 1 r 1 t
 2.2 rAZLOVENIE PRAWILXNOJ RACIONALXNOJ DROBI NA PRO-
 STEJ[IE
 tEOREMA 2. wSQKAQ PRAWILXNAQ RACIONALXNAQ DROBX PREDSTAWLQETSQ W WIDE
-(cid:20) (cid:21)
+ 
 P (x) A A
 m
 =
@@ -171,7 +171,7 @@ n
 )k1 x−c
 1
 2 r
-(cid:20) (cid:21)
+ 
 M x+N M x+N ANALOGI^NO DLQ
 +
 1,1 1,1
@@ -267,7 +267,7 @@ wYBEREM DEJSTWITELXNYE ^ISLA M I N TAK, ^TOBY MNOGO^LEN P (x)−(Mx+
 m
 N)Q (x) DELILSQ NA x2 +px+q. |TO \KWIWALENTNO TOMU, ^TO
 n−2s
-(cid:0) (cid:1)
+ 
 P (z)− Mz +N Q (z) = 0, z = α+βi. (5)
 m n−2s
 tOGDA I SOPRQVENNOE z KOMPLEKSNOE ^ISLO z = α − βi TAKVE BUDET KORNEM \TOGO
@@ -292,7 +292,7 @@ m n−2s l
 = , (6)
 (x2 +px+q)sQ (x) (x2 +px+q)s−1Q (x)
 n−2s n−2s
-(cid:0) (cid:1)
+ 
 GDEP (x) = P (x)−(Mx+N)Q (x) /(x2+px+q). rACIONALXNAQDROBXWPRAWOJ
 l m n−2s
 ^ASTI (6) POLU^ENA SOKRA]ENIEM PRAWILXNOJ RACIONALXNOJ DROBI S DEJSTWITELX-
@@ -385,25 +385,25 @@ Z cos3x Z Z r cosx
 3. pRI WY^ISLENII INTEGRALOW OT PROIZWEDENIJ SINUSOW I KOSINUSOW RAZLI^-
 NYH ARGUMENTOW NEOBHODIMO ISPOLXZOWATX TRIGONOMETRI^ESKIE FORMULY PONIVE-
 NIQ STEPENI:
-1(cid:16) (cid:17)
+1 
 sinαx cosβx = sin(α+β)x+sin(α−β)x ;
 2
 7
-1(cid:16) (cid:17)
+1 
 sinαx sinβx = cos(α−β)x−cos(α+β)x ;
 2
-1(cid:16) (cid:17)
+1 
 cosαx cosβx = cos(α+β)x+cos(α−β)x ,
 2
 SWODQ PODYNTEGRALXNU@ FUNKCI@ K LINEJNOJ KOMBINACII SINUSOW I KOSINUSOW.
 3.3 iNTEGRIROWANIE IRRACIONALXNYH WYRAVENIJ
 1. dLQ WY^ISLENIQ INTEGRALOW WIDA
  s s 
-Z (cid:18)
+Z 
 ax+b
-(cid:19)k1 (cid:18)
+k1 
 ax+b
-(cid:19)k
+k
 l
 Rx,m1 ,...,ml  dx
 cx+e cx+e
@@ -413,17 +413,17 @@ ax+b
 cx+e
 GDE m ∈ N QWLQETSQ OB]IM KRATNYM ^ISEL m (i = 1,...,l), T.E. m/m ∈ Z.
 i √ i
-(cid:0) (cid:1)
+ 
 2. dLQ INTEGRIROWANIQ FUNKCIJ WIDA R x, ax2 +bx+c SLEDUET SNA^ALA
 WYDELITX POLNYJ KWADRAT W TREH^LENE
 r
-√ (cid:16) b (cid:17)2 b2
+√  b 2 b2
 ax2 +bx+c = a x+ +c−
 2a 4a
 I SDELATX LINEJNU@ ZAMENU PEREMENNOJ t = x + b/(2a). tOGDA INTEGRAL PRIMET
 WID INTEGRALA OT FUNKCII ODNOGO IZ TREH WIDOW:
 √ √ √
-(cid:0) (cid:1) (cid:0) (cid:1) (cid:0) (cid:1)
+     
 R t, A2 −t2 , R t, t2 −A2 , R t, t2 +A2 .
 1 2 3
 √
@@ -592,11 +592,11 @@ t.E. ^ISLO I ESTX INTEGRAL rIMANA OT FUNKCII f NA OTREZKE [a, b], ESLI DLQ
 L@BOGO ε > 0 NAJDETSQ TAKOE ^ISLO δ > 0, ^TO DLQ L@BOGO RAZBIENIQ (P,ξ) S
 OTME^ENNYMI TO^KAMI OTREZKA [a, b], PARAMETR KOTOROGO λ < δ, IMEET MESTO SOOT-
 NO[ENIE
-(cid:12) (cid:12)
-(cid:12) X n (cid:12)
-(cid:12)I − f(ξ )∆x (cid:12) < ε.
-(cid:12) i i(cid:12)
-(cid:12) (cid:12)
+ 
+ X n 
+I − f(ξ )∆x  < ε.
+ i i
+ 
 i=1
 mNOVESTWO WSEH FUNKCIJ, INTEGRIRUEMYH PO rIMANU NA OTREZKE [a,b], BUDEM
 OBOZNA^ATX ^EREZ R[a,b]. pOSKOLXKU POKA MY NE BUDEM RASSMATRIWATX DRUGIE TIPY
@@ -635,23 +635,23 @@ SU]ESTWUET KONE^NYJ PREDEL INTEGRALXNYH SUMM DLQ \TOJ FUNKCII NA DANNOM
 OTREZKE. iZ TEOREMY O LOKALXNOJ OGRANI^ENNOSTI FUNKCII, IME@]EJ PREDEL, SU-
 ]ESTWUET \LEMENT BAZY b , NA KOTOROM INTEGRALXNAQ SUMMA OGRANI^ENA, T.E.
 d
-(cid:16) (cid:17)
-(cid:12) (cid:12)
-∃c > 0 λ(P) < d =⇒ (cid:12)σ(f;P,ξ)(cid:12) < c . (1)
+ 
+ 
+∃c > 0 λ(P) < d =⇒ σ(f;P,ξ) < c . (1)
 wYBEREMODNOIZTAKIHRAZBIENIJ(P,ξ)SOTME^ENNYMITO^KAMI. pOSKOLXKUFUNK-
 CIQ f(x) NE OGRANI^ENA NA OTREZKE [a,b], TO NAJDETSQ ^ASTI^NYJ OTREZOK ∆ , NA
 j
 KOTOROM FUNKCIQ f(x) QWLQETSQ NEOGRANI^ENNOJ. rAZOBXEM INTEGRALXNU@ SUMMU
 NA DWA SLAGAEMYH I ISPOLXZUEM NERAWENSTWO TREUGOLXNIKA:
-(cid:12) (cid:12)
-(cid:12) (cid:12)σ(f;P,ξ) (cid:12) (cid:12) = (cid:12) (cid:12)f(ξ )∆x + X f(ξ )∆x (cid:12) (cid:12) >
-(cid:12) j j i i(cid:12)
-(cid:12) (cid:12)
+ 
+ σ(f;P,ξ)   =  f(ξ )∆x + X f(ξ )∆x   >
+ j j i i
+ 
 i6=j
-(cid:12) (cid:12)
-> (cid:12) (cid:12)f(ξ )∆x (cid:12) (cid:12)− (cid:12) (cid:12) X f(ξ )∆x (cid:12) (cid:12) = (cid:12) (cid:12)f(ξ ) (cid:12) (cid:12)∆x −c , (2)
-j j (cid:12) i i(cid:12) j j 1
-(cid:12) (cid:12)
+ 
+>  f(ξ )∆x  −   X f(ξ )∆x   =  f(ξ )  ∆x −c , (2)
+j j  i i j j 1
+ 
 i6=j
 GDE c — ZNA^ENIE WTOROGO SLAGAEMOGO. mENQQ TOLXKO TO^KU ξ ∈ ∆ , NO NE MENQQ
 1 j j
@@ -680,7 +680,7 @@ lEMMA 1. pUSTX P — PRODOLVENIE RAZBIENIQ P, ξ,ξ — OTME^ENNYE TO^KI
 ˜
 RAZBIENIJ P,P SOOTWETSTWENNO. tOGDA
 n
-(cid:12) (cid:12)σ(f;P ˜ ,ξ ˜ )−σ(f;P,ξ) (cid:12) (cid:12) 6 X ω(f;∆ )∆x . (3)
+ σ(f;P ˜ ,ξ ˜ )−σ(f;P,ξ)   6 X ω(f;∆ )∆x . (3)
 i i
 i=1
 12
@@ -706,21 +706,21 @@ ij ij
 OPREDELENIQ, NERAWENSTWO TREUGOLXNIKA I RAWENSTWA ∆x = ∆x +...+∆x PRI
 i i1 iki
 i = 1,...,n, POLU^AEM
-(cid:12) (cid:12)
-(cid:12) (cid:12)σ(f;P ˜ ,ξ ˜ )−σ(f;P,ξ) (cid:12) (cid:12) = (cid:12) (cid:12) X n X ki f(ξ )∆x − X n f(ξ )∆x (cid:12) (cid:12) =
-(cid:12) ij ij i i(cid:12)
-(cid:12) (cid:12)
+ 
+ σ(f;P ˜ ,ξ ˜ )−σ(f;P,ξ)   =   X n X ki f(ξ )∆x − X n f(ξ )∆x   =
+ ij ij i i
+ 
 i=1 j=1 i=1
-(cid:12) (cid:12) (cid:12) (cid:12)
-= (cid:12) (cid:12) X n X ki f(ξ )∆x − X n X ki f(ξ )∆x (cid:12) (cid:12) = (cid:12) (cid:12) X n X ki (cid:0) f(ξ )−f(ξ ) (cid:1) ∆x (cid:12) (cid:12) 6
-(cid:12) ij ij i ij(cid:12) (cid:12) ij i ij(cid:12)
-(cid:12) (cid:12) (cid:12) (cid:12)
+   
+=   X n X ki f(ξ )∆x − X n X ki f(ξ )∆x   =   X n X ki  f(ξ )−f(ξ )  ∆x   6
+ ij ij i ij  ij i ij
+   
 i=1 j=1 i=1 j=1 i=1 j=1
 6 X
 n
 X
 ki
-(cid:12) (cid:12)f(ξ )−f(ξ ) (cid:12) (cid:12)∆x 6 X
+ f(ξ )−f(ξ )  ∆x 6 X
 n
 X
 ki
@@ -749,7 +749,7 @@ dOK–WO LEMMY 2. pO OPREDELENI@ ^ISEL M DLQ KAVDOGO i NAJDETSQ TO^KA
 i
 ξ ∈ ∆ , W KOTOROJ M < f(ξ )+ ε . tOGDA DLQ ξ = (ξ ,...,ξ ) IMEEM
 i i i i b−a 1 n
-n n (cid:18) (cid:19) n
+n n   n
 X X ε X
 S(f;P) = M ∆x < f(ξ )+ ∆x = f(ξ )∆x +ε = σ(f;P,ξ)+ε. .
 i i i i i i
@@ -770,21 +770,21 @@ i=1
 pO OPREDELENI@ PREDELA PO BAZE DLQ L@BOGO ε > 0 NAJDETSQ ^ISLO δ > 0 TAKOE,
 ^TO DLQ L@BOGO RAZBIENIQ (P,ξ) S OTME^ENNYMI TO^KAMI OTREZKA [a, b], PARAMETR
 KOTOROGO λ < δ, IMEET MESTO SOOTNO[ENIE
-(cid:12) (cid:12)
-(cid:12)X n (cid:12) ε
-(cid:12) ω(f;∆ )∆x (cid:12) < . (7)
-(cid:12) i i(cid:12) 2
-(cid:12) (cid:12)
+ 
+X n  ε
+ ω(f;∆ )∆x  < . (7)
+ i i 2
+ 
 i=1
 eSLI TEPERX (P0,ξ0) I (P00,ξ00) — RAZBIENIQ S OTME^ENNYMI TO^KAMI OTREZKA
 [a, b], PARAMETRY KOTORYH UDOWLETWORQET USLOWIQM λ0 < δ, λ00 < δ, TO RASSMOTRIM
 RAZBIENIE P ˜ = P0 ∪ P00, QWLQ@]EESQ PRODOLVENIEM OBOIH RAZBIENIJ P0,P00. iZ
 NERAWENSTW (3) I (7) SLEDUET, ^TO
-(cid:12) (cid:12)σ(f;P ˜ ,ξ ˜ )−σ(f;P0,ξ0) (cid:12) (cid:12) < ε , (cid:12) (cid:12)σ(f;P ˜ ,ξ ˜ )−σ(f;P00,ξ00) (cid:12) (cid:12) < ε .
+ σ(f;P ˜ ,ξ ˜ )−σ(f;P0,ξ0)   < ε ,  σ(f;P ˜ ,ξ ˜ )−σ(f;P00,ξ00)   < ε .
 2 2
 a ZNA^IT, IZ NERAWENSTWA TREUGOLXNIKOW POLU^AEM
-(cid:12) (cid:12)
-(cid:12)σ(f;P0,ξ0)−σ(f;P00,ξ00)(cid:12) < ε.
+ 
+σ(f;P0,ξ0)−σ(f;P00,ξ00) < ε.
 w SILU KRITERIQ kO[I SU]ESTWUET PREDEL lim σ(f;P,ξ), T.E. f ∈ R[a,b].
 λ→0
 ⇒ : eSLI f ∈ R[a,b], TO SU]ESTWUET PREDEL lim σ(f;P,ξ). w SILU KRITERIQ
@@ -792,25 +792,25 @@ w SILU KRITERIQ kO[I SU]ESTWUET PREDEL lim σ(f;P,ξ), T.E. f ∈ R[a,b].
 kO[I DLQ L@BOGO ε > 0 NAJDETSQ TAKOE ^ISLO δ > 0, ^TO DLQ RAZBIENIJ (P,ξ0)
 I (P,ξ00) S OTME^ENNYMI TO^KAMI OTREZKA [a, b], PARAMETR KOTORYH λ < δ, IMEET
 MESTO SOOTNO[ENIE
-(cid:12) (cid:12)
-(cid:12)σ(f;P,ξ)−σ(f;P,ξ0)(cid:12) < ε. (8)
+ 
+σ(f;P,ξ)−σ(f;P,ξ0) < ε. (8)
 iZ SOOTNO[ENIJ (4)–(6), (8) SLEDUET, ^TO
 |S(f;P)−s(f;P)| 6 |σ(f;P,ξ)−σ(f;P,ξ0)+2ε| < 3ε,
 A ZNA^IT
-(cid:0) (cid:1)
+ 
 lim S(f;P)−s(f;P) = 0.
 λ→0
 nO ω(f;∆ ) = M −m , PO\TOMU
 i i i
 n n
-X X (cid:0) (cid:1)
+X X  
 lim ω(f;∆ )∆x = lim (M −m )∆x = lim S(f;P)−s(f;P) = 0.
 i i i i i
 λ→0 λ→0 λ→0
 i=1 i=1
 .
 pRIMER. fUNKCIQ dIRIHLE
-(cid:26) 1, PRI x ∈ Q,
+ 1, PRI x ∈ Q,
 D(x) =
 0, PRI x ∈ R\Q,
 RASSMATRIWAEMAQ NA OTREZKE [0,1], NE INTEGRIRUEMA NA NEM. dEJSTWITELXNO, DLQ
@@ -910,7 +910,7 @@ NA L@BOM MENX[EM OTREZKE [c,d] ⊂ [a,b].
 dOK–WO. pUSTX P — RAZBIENIE OTREZKA [c,d]. dOBAWIW K P NEKOTORYE TO^KI,
 DOSTROIM P DO RAZBIENIQ P0 OTREZKA [a,b], NO TAK, ^TOBY DIAMETR λ0 RAZBIENIQ P0
 BYL NE BOLX[E DIAMETRA λ RAZBIENIQ P. tOGDA
-0 6 X ω(f (cid:12) (cid:12) ;∆ )∆x 6 X ω(f;∆ )∆x , (1)
+0 6 X ω(f   ;∆ )∆x 6 X ω(f;∆ )∆x , (1)
 [c,d] i i i i
 P P0
 P P
@@ -998,7 +998,7 @@ dOK–WO. pUSTX a < b. dLQ NEKOTOROGO RAZBIENIQ P = (x ,...,x ) S OTME^EN-
 NYMI TO^KAMI ξ = (ξ ,...,ξ ) OTREZKA [a, b] IMEEM RAWENSTWO
 1 n
 n n n
-X(cid:0) (cid:1) X X
+X  X X
 α f (ξ )+α f (ξ ) ∆x = α f (ξ )∆x +α f (ξ )∆x . (6)
 1 1 i 2 2 i i 1 1 i i 2 2 i i
 i=1 i=1 i=1
@@ -1051,7 +1051,7 @@ Z b Z α Z β Z b
 f(x)dx = f(x)dx+ f(x)dx+ f(x)dx >
 a a α β
 Z β Z β Z β
-> f(x)dx = (cid:0) f(x)−A (cid:1) dx+ Adx > A(β −α) > 0. .
+> f(x)dx =  f(x)−A  dx+ Adx > A(β −α) > 0. .
 α α α
 tEOREMA 2 (MONOTONNOSTX INTEGRALA). eSLI a < b, FUNKCII f I f INTE-
 1 2
@@ -1066,7 +1066,7 @@ dOK–WO.wSILUSWOJSTWALINEJNOSTIOPREDELENNOGOINTEGRALAFUNKCIQf (x)−
 f (x) INTEGRIRUEMA NA OTREZKE [a,b] I, PRIMENQQ TEOREMU 1, POLU^AEM
 2
 Z b Z b Z b
-f (x)dx− f (x)dx = (cid:0) f (x)−f (x) (cid:1) dx > 0,
+f (x)dx− f (x)dx =  f (x)−f (x)  dx > 0,
 1 2 1 2
 a a a
 TAK KAK PO USLOWI@ f (x)−f (x) > 0 ∀x ∈ [a,b]. .
@@ -1083,12 +1083,12 @@ zADA^A. dAJTE GEOMETRI^ESKU@ INTERPRETACI@ DANNOJ TEOREMY.
 tEOREMA 3 (OB OCENKE MODULQ INTEGRALA). eSLI FUNKCIQ f(x) INTEGRIRUEMA
 NA OTREZKE [a,b], TO EE MODULX |f(x)| ESTX TAKVE INTEGRIRUEMAQ FUNKCIQ NA OTREZKE
 [a,b] I
-(cid:12)Z b (cid:12) (cid:12)Z b (cid:12)
-(cid:12) (cid:12) f(x)dx (cid:12) (cid:12) 6 (cid:12) (cid:12) |f(x)|dx (cid:12) (cid:12). (1)
-(cid:12) (cid:12) (cid:12) (cid:12)
+Z b  Z b 
+  f(x)dx   6   |f(x)|dx  . (1)
+   
 a a
 19
-dOK–WO. u^ITYWAQ NERAWENSTWO (cid:12) (cid:12)|f(ξ)| − |f(η)| (cid:12) (cid:12) 6 (cid:12) (cid:12)f(ξ) − f(η) (cid:12) (cid:12), WERNOE DLQ
+dOK–WO. u^ITYWAQ NERAWENSTWO  |f(ξ)| − |f(η)|   6  f(ξ) − f(η)  , WERNOE DLQ
 L@BYH TO^EK ξ, η ∈ [a, b], ZAKL@^AEM, ^TO ω(|f|;E) 6 ω(f;E). pO\TOMU DLQ PROIZ-
 WOLXNOGO RAZBIENIE OTREZKA [a,b] IMEEM
 n n
@@ -1194,19 +1194,19 @@ Z x0+∆x Z x0 Z x0+∆x
 a a x0
 iSPOLXZUQ TEOREMU OB OCENKE MODULQ I MONOTONNOSTX INTEGRALA, NAHODIM
 0 6 |∆F| =
-(cid:12)
-(cid:12) (cid:12)
+
+ 
 Z x0+∆x
 f(t)dt
-(cid:12)
-(cid:12) (cid:12) 6
-(cid:12)
-(cid:12) (cid:12)
+
+  6
+
+ 
 Z x0+∆x
 |f(t)|dt
-(cid:12)
-(cid:12) (cid:12) 6 M|∆x|.
-(cid:12) (cid:12) (cid:12) (cid:12)
+
+  6 M|∆x|.
+   
 x0 x0
 uSTREMLQQ ∆x K NUL@, POLU^AEM lim ∆F = 0, ^TO I DOKAZYWAET NEPRERYWNOSTX
 ∆x→0
@@ -1224,22 +1224,22 @@ TO^KE x ∈ [a,b], TO FUNKCIQ (1) DIFFERENCIRUEMA W \TOJ TO^KE, PRI^EM F0(x ) =
 f(x ).
 0
 dOK–WO. iZ OPREDELENIQ FUNKCII F(x) I SWOJSTW INTEGRALA SLEDUET, ^TO
-F(x)−F(x ) 1 (cid:18)Z x Z x0 Z x (cid:19)
+F(x)−F(x ) 1 Z x Z x0 Z x 
 0
 −f(x ) = f(t)dt− f(t)dt− f(x )dt =
 0 0
 x−x x−x
 0 0 a a x0
-1 (cid:18)Z x Z x (cid:19) 1 Z x
-(cid:0) (cid:1)
+1 Z x Z x  1 Z x
+ 
 = f(t)dt− f(x )dt = f(t)−f(x ) dt.
 0 0
 x−x x−x
 0 x0 x0 0 x0
 pO TEOREME OB OCENKE MODULQ INTEGRALA
-(cid:12) (cid:12) (cid:12) 1 Z x (cid:0) f(t)−f(x ) (cid:1) dt (cid:12) (cid:12) (cid:12) 6 1 (cid:12) (cid:12) (cid:12) Z x (cid:12) (cid:12)f(t)−f(x ) (cid:12) (cid:12)dt (cid:12) (cid:12) (cid:12).
+   1 Z x  f(t)−f(x )  dt    6 1    Z x  f(t)−f(x )  dt   .
 0 0
-(cid:12)x−x (cid:12) |x−x |(cid:12) (cid:12)
+x−x  |x−x | 
 0 x0 0 x0
 pUSTX ε — PROIZWOLXNOE POLOVITELXNOE ^ISLO. tOGDA W SILU OPREDELENIQ NE-
 PRERYWNOSTI FUNKCII W TO^KE NAJDETSQ TAKOE δ = δ(ε) > 0, ^TO PRI USLOWII
@@ -1247,9 +1247,9 @@ PRERYWNOSTI FUNKCII W TO^KE NAJDETSQ TAKOE δ = δ(ε) > 0, ^TO PRI USLOWII
 |x−x | < δ I x ∈ [a,b] BUDET WYPOLNENO NERAWENSTWO |f(x)−f(x )| < ε. u^ITYWAQ
 0 0
 MONOTONNOSTX INTEGRALA, DLQ UKAZANNYH x IMEEM
-(cid:12) (cid:12) (cid:12) F(x)−F(x 0 ) −f(x ) (cid:12) (cid:12) (cid:12) 6 1 (cid:12) (cid:12) (cid:12) Z x (cid:12) (cid:12)f(t)−f(x ) (cid:12) (cid:12)dt (cid:12) (cid:12) (cid:12) 6 ε|x−x 0 | = ε.
+   F(x)−F(x 0 ) −f(x )    6 1    Z x  f(t)−f(x )  dt    6 ε|x−x 0 | = ε.
 0 0
-(cid:12) x−x (cid:12) |x−x |(cid:12) (cid:12) |x−x |
+ x−x  |x−x |  |x−x |
 0 0 x0 0
 pO\TOMU F0(x ) = f(x ). .
 0 0
@@ -1274,9 +1274,9 @@ Z x
 Φ(x) = C + f(t)dt.
 a
 pOLAGAQ ZDESX x = a I x = b, POLU^AEM UKAZANNU@ FORMULU. .
-(cid:12)b
-rAZNOSTX W PRAWOJ ^ASTI FORMULY nX@TONA — lEJBNICA OBOZNA^A@T Φ(x)(cid:12) .
-(cid:12)
+b
+rAZNOSTX W PRAWOJ ^ASTI FORMULY nX@TONA — lEJBNICA OBOZNA^A@T Φ(x) .
+
 a
 fORMULA nX@TONA — lEJBNICA DAET SWQZX OPREDELENNOGO I NEOPREDELENNOGO
 INTEGRALOW, METOD WY^ISLENIQ OPREDELENNOGO INTEGRALA, A TAKVE POZWOLQET USTA-
@@ -1285,9 +1285,9 @@ INTEGRIROWANIQ PO ^ASTQM.
 8.3 iNTEGRIROWANIE PO ^ASTQM
 tEOREMA 4. eSLI FUNKCII u(x) I v(x) NEPRERYWNO DIFFERENCIRUEMY NA OTREZKE
 [a,b], TO SPRAWEDLIWA FORMULA
-Z b (cid:12)b Z b
-u(x)dv(x) = u(x)v(x)(cid:12) − v(x)du(x).
-(cid:12)
+Z b b Z b
+u(x)dv(x) = u(x)v(x) − v(x)du(x).
+
 a a a
 dOK–WO.iSPOLXZUQFORMULUPROIZWODNOJPROIZWEDENIQIFORMULUnX@TONA—
 lEJBNICA, POLU^AEM
@@ -1295,15 +1295,15 @@ Z b
 u0(x)v(x)dx+
 Z b
 u(x)v0(x)dx =
-Z b (cid:0)
+Z b 
 u(x)v(x)
-(cid:1)0
+0
 dx = u(x)v(x)
-(cid:12)
-(cid:12)
+
+
 b
 . .
-(cid:12)
+
 a a a a
 23
 8.4 zAMENA PEREMENNOJ (PODSTANOWKA)
@@ -1311,11 +1311,11 @@ tEOREMA 5. eSLI FUNKCIQ f(x) NEPRERYWNA NA OTREZKE [a, b], A FUNKCIQ ϕ(t)
 NEPRERYWNO DIFFERENCIRUEMA NA OTREZKE [α, β], PRI^EM ϕ(α) = a, ϕ(β) = b I
 ϕ(t) ∈ [a, b] PRI t ∈ [α, β], TO SPRAWEDLIWO RAWENSTWO
 Z b Z β
-(cid:0) (cid:1)
+ 
 f(x)dx = f ϕ(t) ϕ0(t)dt.
 a α
 dOK–WO. tAK KAK FUNKCII f(x) I ϕ(t) NEPRERYWNY NA OTREZKAH [a, b] I [α, β]
-(cid:0) (cid:1)
+ 
 SOOTWETSTWENNO I ϕ(t) ∈ [a, b] PRI t ∈ [α, β], TO SLOVNAQ FUNKCIQ f ϕ(t) NEPRE-
 RYWNA NA [α, β]. wWIDU NEPRERYWNOSTI PODYNTEGRALXNYH FUNKCIJ SU]ESTWU@T
 OBA OPREDELENNYH INTEGRALA, A PO TEOREME O PROIZWODNOJ INTEGRALA S PEREMENNYM
@@ -1324,12 +1324,12 @@ WERHNIM PREDELOM FUNKCIQ F(x) = f(t)dt ESTX PERWOOBRAZNAQ FUNKCII f(x) NA
 a
 OTREZKE [a,b]. pO\TOMU
 d
-(cid:0) (cid:1) (cid:0) (cid:1) (cid:0) (cid:1)
+     
 F ϕ(t) = F0 ϕ(t) ϕ0(t) = f ϕ(t) ϕ0(t)
 dt
 I, ISPOLXZUQ DWAVDY FORMULU nX@TONA — lEJBNICA, POLU^AEM:
 Z β Z b
-(cid:0) (cid:1) (cid:0) (cid:1) (cid:0) (cid:1)
+     
 f ϕ(t) ϕ0(t)dt = F ϕ(β) −F ϕ(α) = F(b)−F(a) = f(x)dx. .
 α a
 zAME^ANIQ. 1. eSLI FUNKCIQ ϕ(t) MONOTONNA NA OTREZKE [α, β], USLOWIE ϕ(t) ∈
@@ -1362,7 +1362,7 @@ I GRAFIKAMI NEPRERYWNYH NA OTREZKE [a,b] FUNKCIJ f (x) I f (x), PRI^EM f (x) 6
 f (x) ∀x ∈ [a,b]. tOGDA PLO]ADX TAKOJ FIGURY RAWNA
 2
 Z b
-(cid:0) (cid:1)
+ 
 S = f (x)−f (x) dx.
 2 1
 a
@@ -1384,7 +1384,7 @@ GRAFIKOM FUNKCII g (x). iSPOLXZUQ GEOMETRI^ESKIJ SMYSL OPREDELENNOGO INTE-
 1
 GRALA KAK PLO]ADI KRIWOLINEJNOJ TRAPECII I LINEJNOSTX INTEGRALA, POLU^AEM
 Z b Z b
-(cid:0) (cid:1) (cid:0) (cid:1)
+   
 S = S0 = S −S = g (x)−g (x) dx = f (x)−f (x) dx. .
 2 1 2 1 2 1
 a a
@@ -1587,7 +1587,7 @@ bUDEM OTOVDESTWLQTX KAVDU@ TO^KU M PROSTRANSTWA Rm S EE RADIUS-WEKTOROM
 OM. oTOBRAVENIE ~r: [a,b] → Rm OTREZKA [a,b] W m–MERNOE PROSTRANSTWO Rm
 NAZYWA@TWEKTOR-FUNKCIEJ(ILIWEKTORNOJ FUNKCIEJ)SKALQRNOGOARGUMENTA
 t. eSLI
-(cid:0) (cid:1)
+ 
 ~r(t) = x (t),...,x (t) , t ∈ [a,b] , (1)
 1 m
 TO OTOBRAVENIE ~r OPREDELQETSQ DEJSTWITELXNYMI FUNKCIQMI x (t),...,x (t) OD-
@@ -1609,15 +1609,15 @@ i i
 t→t0
 v
 u m
-(cid:12) (cid:12) uX(cid:0) (cid:1)2
-dOK–WO: (cid:12)~r(t)−p~(cid:12) = t x (t)−p → 0 ⇔ x (t) → p i = 1,...,m,
+  uX 2
+dOK–WO: ~r(t)−p~ = t x (t)−p → 0 ⇔ x (t) → p i = 1,...,m,
 i i i i
 i=1
 29
 TAK KAK IZ NERAWENSTWA TREUGOLXNIKA DLQ DLIN WEKTOROW SLEDUET, ^TO
 v
 u m m
-∀j = 1,...,m (cid:12) (cid:12)x (t)−p (cid:12) (cid:12) 6 u t X(cid:0) x (t)−p (cid:1)2 6 X(cid:12) (cid:12)x (t)−p (cid:12) (cid:12). .
+∀j = 1,...,m  x (t)−p   6 u t X x (t)−p 2 6 X x (t)−p  . .
 j j i i i i
 i=1 i=1
 wEKTOR-FUNKCI@ ~r: [a,b] → Rm NAZYWA@T NEPRERYWNOJ W TO^KE t ∈ [a,b],
@@ -1695,7 +1695,7 @@ TO EGO NAZYWA@T PROIZWODNOJ WEKTORNOJ FUNKCII~r(t) W TO^KE t I OBOZNA^A@T
 0
 ~r0(t ).
 0
-(cid:0) (cid:1)
+ 
 tEOREMA 2. ~r0(t ) = x0(t ),...,x0 (t ) .
 0 1 0 m 0
 dOK–WO SLEDUET IZ OPREDELENIJ I TEOREMY 1.
@@ -1770,17 +1770,16 @@ FUNKCII f(t), TO
 1) (~r +~r )0 =~r 0 +~r 0, 2) (f~r )0 = f0~r +f~r 0,
 1 2 1 2 1 1 1
 3)
-(cid:0)
+
 ~r(f(t))
-(cid:1)0
+0
 = f0(t)~r0(f(t)), 4) (~r ,~r )0 = (~r 0,~r )+(~r ,~r 0),
 1 2 1 2 1 2
-5) PRI m = 3 : (~r ×~r )0 =~r 0 ×~r +~r ×~r 0.
 1 2 1 2 1 2
 dOKAZATELXSTWO \TIH FORMUL SLEDUET IZ OPREDELENIJ I TEOREMY 2.
 zADA^A 2. dOKAVITE FORMULU 4).
-(cid:12) (cid:12)
-sLEDSTWIE. eSLI (cid:12)~r(t)(cid:12) = const, TO WEKTORY ~r0(t) I ~r(t) ORTOGONALXNY.
+ 
+sLEDSTWIE. eSLI ~r(t) = const, TO WEKTORY ~r0(t) I ~r(t) ORTOGONALXNY.
 dOK–WO. 0 = (|~r|2)0 = (~r,~r)0 = (~r0,~r)+(~r,~r0) = 2(~r0,~r).
 gEOMETRI^ESKIJ SMYSL SLEDSTWIQ: KASATELXNAQ K L@BOJ TO^KE KRIWOJ, LE-
 VA]EJ NA SFERE, ORTOGONALXNA RADIUS-WEKTORU \TOJ TO^KI.
@@ -1811,21 +1810,21 @@ I KONE^NA.
 33
 tEOREMA 1 (DOSTATO^NOE USLOWIE SPRQMLQEMOSTI KRIWOJ). gLADKAQ KRI-
 WAQ SPRQMLQEMA. dLINA L(γ) GLADKOJ KRIWOJ γ S PARAMETRIZACIEJ
-(cid:0) (cid:1)
+ 
 ~r(t) = x (t),...,x (t) , t ∈ [a,b], a < b, WY^ISLQETSQ PO FORMULE
 1 m
 v
 Z b Z b u m
 L(γ) =
-(cid:12)
-(cid:12)~r0(t)
-(cid:12)
-(cid:12)dt =
+
+~r0(t)
+
+dt =
 u
 t
-X(cid:0)
+X
 x0(t)
-(cid:1)2
+2
 dt.
 i
 i=1
@@ -1836,17 +1835,17 @@ NIMATX KAK WEKTOR, SOSTOQ]IJ IZ OPREDELENNYH INTEGRALOW OT EE KOORDINATNYH
 FUNKCIJ.
 lEMMA (OCENKA MODULQ INTEGRALA WEKTORNOJ FUNKCII). dLQ NEPRERYW-
 NOJ NA OTREZKE [a,b],a < b, WEKTORNOJ FUNKCII ~r(t) SPRAWEDLIWO NERAWENSTWO
-(cid:12) (cid:12)
-(cid:12)Z b (cid:12) Z b
-(cid:12) (cid:12) ~r(t)dt (cid:12) (cid:12) 6 (cid:12) (cid:12)~r(t) (cid:12) (cid:12)dt.
-(cid:12) (cid:12)
-(cid:12) (cid:12)
+ 
+Z b  Z b
+  ~r(t)dt   6  ~r(t)  dt.
+ 
+ 
 a a
 dOK–WO LEMMY. pUSTX x (t),...,x (t) — KOORDINATNYE FUNKCII WEKTOR-
 1 m
 FUNKCII ~r(t). pO USLOWI@ WEKTORNAQ FUNKCIQ ~r(t) NEPRERYWNA NA OTREZKE [a,b],
-(cid:12) (cid:12)
-A ZNA^IT, NEPRERYWNY FUNKCII x (t),...,x (t) I (cid:12)~r(t)(cid:12). pO\TOMU OPREDELENY I
+ 
+A ZNA^IT, NEPRERYWNY FUNKCII x (t),...,x (t) I ~r(t). pO\TOMU OPREDELENY I
 1 m
 KONE^NY WSE INTEGRALY LEMMY, A ZNA^IT, SOOTWETSTWU@]IE INTEGRALXNYE SUMMY
 NE ZAWISQT OT WYBORA RAZBIENIJ, I DLQ DOKAZATELXSTWA NERAWENSTWA LEMMY MY MO-
@@ -1875,8 +1874,8 @@ n n u m u m n u m
 X XuX uX XuX
 6 t x2 i (t j1 )t x2 i (t j2 ) =  t x2 i (t j ) .
 j1=1j2=1 i=1 i=1 j=1 i=1
-(cid:12) (cid:12)
-tAKIM OBRAZOM, INTEGRALXNYE SUMMY DLQ FUNKCIJ x (t),...,x (t) I (cid:12)~r(t)(cid:12), SOOT-
+ 
+tAKIM OBRAZOM, INTEGRALXNYE SUMMY DLQ FUNKCIJ x (t),...,x (t) I ~r(t), SOOT-
 1 m
 WETSTWU@]IE RAZBIENI@ P = (t ,...,t ) S OTME^ENNYMI TO^KAMI ξ = t ,...,ξ =
 0 n 1 1 n
@@ -1897,12 +1896,12 @@ OTREZKA [a, b] I SOOTWETSTWU@]U@ LOMANU@~r(t )~r(t )...~r(t ), WPISANNU@ W KRIWU
 γ. dLQ DLINYL \TOJ LOMANNOJ, ISPOLXZUQ FORMULU nX@TONA— lEJBNICA, LEMMU
 P
 I ADDITIWNOSTX INTEGRALA, POLU^AEM
-(cid:12) (cid:12)
-n n (cid:12) Z ti (cid:12) n Z ti Z b
-L = X(cid:12) (cid:12)~r(t )−~r(t ) (cid:12) (cid:12) = X(cid:12) (cid:12) ~r0(t)dt (cid:12) (cid:12) 6 X |~r0(t)|dt = |~r0(t)|dt
+ 
+n n  Z ti  n Z ti Z b
+L = X ~r(t )−~r(t )   = X  ~r0(t)dt   6 X |~r0(t)|dt = |~r0(t)|dt
 P i i−1
-(cid:12) (cid:12)
-i=1 i=1 (cid:12) (cid:12) i=1
+ 
+i=1 i=1   i=1
 ti−1 ti−1 a
 tAKIM OBRAZOM, DLINA L@BOJ LOMANNOJ, WPISANNOJ W KRIWU@ γ, OGRANI^ENA SWERHU
 UKAZANNYM INTEGRALOM. pO TEOREME O TO^NYH GRANQH SU]ESTWUET I KONE^NA TO^NAQ
@@ -1919,7 +1918,7 @@ IZWODNAQ WEKTORNOJ FUNKCII ~r(t) NEPRERYWNA NA OTREZKE [a,b], TO NEPRERYWNY NA
 \TOM OTREZKE PROIZWODNYE x0(t),...,x0 (t) EE KOORDINATNYH FUNKCIJ. pO TEOREME
 1 m
 kANTORA \TI FUNKCII RAWNOMERNO NEPRERYWNY NA OTREZKE [a,b], A ZNA^IT, NAJDETSQ
-TAKOE ^ISLO δ > 0, ^TO (cid:12) (cid:12)~r0(t) −~r0(s) (cid:12) (cid:12) 6 Pm (cid:12) (cid:12)x0(t) − x0(s) (cid:12) (cid:12) < ε, ESLI |t − s| < δ.
+TAKOE ^ISLO δ > 0, ^TO  ~r0(t) −~r0(s)   6 Pm  x0(t) − x0(s)   < ε, ESLI |t − s| < δ.
 j=1 j j
 pUSTX PARAMETR RAZBIENIQ P MENX[E δ. eSLI t 6 t 6 t , TO |t−t | < δ I PO\TOMU
 i−1 i i
@@ -1930,44 +1929,44 @@ Z
 ti
 Z
 ti
-(cid:12) (cid:12)~r0(t) (cid:12) (cid:12)dt−ε∆t 6 (cid:0) |~r0(t )|+ε (cid:1) dt−ε∆t = |~r0(t )|∆t .
+ ~r0(t)  dt−ε∆t 6  |~r0(t )|+ε  dt−ε∆t = |~r0(t )|∆t .
 i i i i i
 ti−1 ti−1
 iSPOLXZUQ SWOJSTWA INTEGRALA, NERAWENSTWO TREUGOLXNIKA, LEMMU I DOKAZANNOE
-(cid:12) (cid:12)
-RANEE NERAWENSTWO (cid:12)~r0(t )−~r0(t)(cid:12) < ε, POLU^AEM
+ 
+RANEE NERAWENSTWO ~r0(t )−~r0(t) < ε, POLU^AEM
 i
-(cid:12) (cid:12)
-(cid:12)
-(cid:12) Z
-ti (cid:12)
-(cid:12)
-(cid:12)
-(cid:12) Z
+ 
+
+ Z
+ti 
+
+
+ Z
 ti
 Z
-ti (cid:12)
-(cid:12) (cid:12) Z
+ti 
+  Z
 ti
-(cid:12)
-|~r0(t )|∆t = (cid:12) ~r0(t )dt(cid:12) = (cid:12) ~r0(t)dt+ (cid:0) ~r0(t )−~r0(t) (cid:1) dt(cid:12) 6 (cid:12) (cid:12) ~r0(t)dt (cid:12) (cid:12)+
-i i (cid:12) i (cid:12) (cid:12) i (cid:12)
-(cid:12) (cid:12)
-(cid:12) (cid:12) (cid:12) (cid:12)
-(cid:12) (cid:12)
+
+|~r0(t )|∆t =  ~r0(t )dt =  ~r0(t)dt+  ~r0(t )−~r0(t)  dt 6   ~r0(t)dt  +
+i i  i   i 
+ 
+   
+ 
 ti−1 ti−1 ti−1 ti−1
-(cid:12) (cid:12)
-+ (cid:12) (cid:12) (cid:12) Z
+ 
++    Z
 ti
-(cid:0) ~r0(t )−~r0(t) (cid:1) dt (cid:12) (cid:12) (cid:12) 6 (cid:12) (cid:12) (cid:12) ~r(t) (cid:12) (cid:12) ti (cid:12) (cid:12) (cid:12)+ Z
+ ~r0(t )−~r0(t)  dt    6    ~r(t)   ti   + Z
 ti
-(cid:12) (cid:12)~r0(t )−~r0(t) (cid:12) (cid:12)dt 6 (cid:12) (cid:12)~r(t )−~r(t ) (cid:12) (cid:12)+ε∆t .
-i (cid:12) i i i−1 i
-(cid:12)
-(cid:12)
-(cid:12)
-(cid:12)
-(cid:12) ti−1 (cid:12)
+ ~r0(t )−~r0(t)  dt 6  ~r(t )−~r(t )  +ε∆t .
+i  i i i−1 i
+
+
+
+
+ ti−1 
 ti−1 ti−1
 sUMMIRUQ DOKAZANNYE NERAWENSTWA PO i = 1,...,n, POLU^AEM
 Z
@@ -1975,7 +1974,7 @@ b
 n Z
 ti
 n n
-|~r0(t)|dt = X (cid:12) (cid:12)~r0(t) (cid:12) (cid:12)dt 6 X (cid:12) (cid:12)~r(t )−~r(t ) (cid:12) (cid:12)+2ε X ∆t 6 L(γ)+2ε(b−a).
+|~r0(t)|dt = X  ~r0(t)  dt 6 X  ~r(t )−~r(t )  +2ε X ∆t 6 L(γ)+2ε(b−a).
 i i−1 i
 i=1 i=1 i=1
 a ti−1
@@ -1991,10 +1990,10 @@ s 7−→~r(s) OTREZKA [0,b] W Rm, ^TO ~r(0) ESTX KONCEWAQ TO^KA KRIWOJ γ, A DL
 MEVDUTO^KAMI~r(0)I~r(s)RAWNAs. nATURALXNYJ PARAMETROBOZNA^A@T^EREZs.
 sLEDSTWIE. 1. dLINA L@BOJ DUGI GLADKOJ KRIWOJ NE MENX[E DLINY OTREZKA,
 SOEDINQ@]EGO EE KONCEWYE TO^KI.
-(cid:12) (cid:12)
-(cid:12)d~r(cid:12)
-2. w REGULQRNOJ TO^KE (cid:12) (cid:12) = 1, GDE s — NATURALXNYJ PARAMETR KRIWOJ.
-(cid:12)ds(cid:12)
+ 
+d~r
+2. w REGULQRNOJ TO^KE   = 1, GDE s — NATURALXNYJ PARAMETR KRIWOJ.
+ds
 3. eSLI TO^KA M, DWIGAQSX PO GLADKOJ KRIWOJ γ, STREMITSQ K TO^KE M ∈ γ, TO
 0
 ˘
@@ -2013,10 +2012,10 @@ dOK–WO. 1. oTREZOK M M — ^ASTNYJ SLU^AJ LOMANNOJ, WPISANNOJ W KRIWU@
 M M, A PO OPREDELENI@ DLINA KRIWOJ NE MENX[E DLINY L@BOJ LOMANNOJ, WPISAN-
 0
 NOJ W NEE.
-(cid:12) (cid:12) (cid:12) (cid:12) (cid:12) (cid:12) (cid:12) (cid:12)(cid:30)(cid:12) (cid:12)
-(cid:12)ds(cid:12) (cid:12)d~r(cid:12) (cid:12)d~r(cid:12) (cid:12)d~r(cid:12) (cid:12)ds(cid:12)
-2. iZ TEOREMY 1 SLEDUET, ^TO (cid:12) (cid:12) = (cid:12) (cid:12). pO\TOMU (cid:12) (cid:12) = (cid:12) (cid:12) (cid:12) (cid:12) = 1.
-(cid:12)dt(cid:12) (cid:12)dt(cid:12) (cid:12)ds(cid:12) (cid:12)dt(cid:12) (cid:12)dt(cid:12)
+        
+ds d~r d~r d~r ds
+2. iZ TEOREMY 1 SLEDUET, ^TO   =  . pO\TOMU   =     = 1.
+dt dt ds dt dt
 ˘
 3. wYBEREMWKA^ESTWEPARAMETRAKRIWOJM M NATURALXNYJPARAMETR,PRI^EM
 0
@@ -2024,19 +2023,19 @@ NOJ W NEE.
 0 0 0
 v
 u m
-uX(cid:0) (cid:1)2
+uX 2
 t x i (s)−x i (s 0 ) v
 L(M 0 M) i=1
 u
 uX
-m (cid:18)
+m 
 ∆x i
-(cid:19)2 (cid:12)
-(cid:12)d~r
-(cid:12)
-(cid:12)
-lim = lim = lim t = (cid:12) (cid:12) = 1. .
-M→M0 L(M 0 ˘ M) s→s0 |s−s 0 | ∆s→0 i=1 ∆s (cid:12)ds(cid:12)
+2 
+d~r
+
+
+lim = lim = lim t =   = 1. .
+M→M0 L(M 0 ˘ M) s→s0 |s−s 0 | ∆s→0 i=1 ∆s ds
 11.3 fORMULY DLQ DLINY DUGI PLOSKOJ KRIWOJ
 pUSTX k — NATURALXNOE ^ISLO. fUNKCI@ f, OPREDELENNU@ NA MNOVESTWE A ⊆ R,
 NAZYWA@T k RAZ NEPRERYWNO DIFFERENCIRUEMOJ NA MNOVESTWE A, ESLI W
@@ -2049,20 +2048,20 @@ tEOREMA 2. A) eSLI FUNKCII x(t) I y(t) NEPRERYWNO DIFFERENCIRUEMY NA
 OTREZKE [a, b], TO PLOSKAQ KRIWAQ, ZADANNAQ PARAMETRI^ESKI URAWNENIQMI x =
 x(t),y = y(t),t ∈ [a, b], IMEET DLINU
 Z bq
-(cid:0) (cid:1)2 (cid:0) (cid:1)2
+ 2  2
 x0(t) + y0(t) dt.
 a
 36
 B) dLINA GRAFIKA NEPRERYWNO DIFFERENCIRUEMOJ NA OTREZKE [a,b] FUNKCII f(x)
 RAWNA
 Z bq
-(cid:0) (cid:1)2
+ 2
 1+ f0(x) dx.
 a
 W) eSLI FUNKCIQ ρ(ϕ) NEPRERYWNO DIFFERENCIRUEMA NA OTREZKE [α,β], TO DLINA
 KRIWOJ, ZADANNOJ W POLQRNOJ SISTEME KOORDINAT (ϕ,ρ) URAWNENIEM ρ = ρ(ϕ), RAWNA
 Z βq
-(cid:0) (cid:1)2 (cid:0) (cid:1)2
+ 2  2
 ρ(ϕ) + ρ0(ϕ) dϕ.
 α
 dOK–WO. uTWERVDENIE A) SLEDUET IZ TEOREMY 1 W SLU^AE m = 2. pOLAGAQ x =
@@ -2070,21 +2069,21 @@ t,y = f(t) POLU^AEM OTS@DA B). w POLQRNYH KOORDINATAH, S^ITAQ ϕ PARAMETROM,
 IMEEM PARAMETRIZACI@ x(ϕ) = ρ(ϕ)cosϕ, y(ϕ) = ρ(ϕ)sinϕ KRIWOJ. tAK KAK
 x0(ϕ) = ρ0(ϕ)cosϕ−ρ(ϕ)sinϕ, y0(ϕ) = ρ0(ϕ)sinϕ+ρ(ϕ)cosϕ,
 TO
-(cid:0)
+
 x0(ϕ)
-(cid:1)2
+2
 +
-(cid:0)
+
 y0(ϕ)
-(cid:1)2
+2
 =
-(cid:0)
+
 ρ(ϕ)
-(cid:1)2
+2
 +
-(cid:0)
+
 ρ0(ϕ)
-(cid:1)2
+2
 . a ZNA^IT, IZ A) POLU^AEM W). .
 zADA^A. nAJDITE DLINU KARDIOIDY ρ(ϕ) = a(1+cosϕ).
 12 kRIWIZNA KRIWOJ
@@ -2125,68 +2124,62 @@ M , PRI \TOM TO^KA M OSTAETSQ NA KRIWOJ γ.
 pRIMER 1. kRIWIZNA OKRUVNOSTI RADIUSA r W L@BOJ TO^KE RAWNA k = .
 r
 tEOREMA 1. kRIWIZNA KRIWOJ W R3, ZADANNOJ DWAVDY NEPRERYWNO DIFFEREN-
-(cid:12) (cid:12)
-CIRUEMOJ WEKTORNOJ FUNKCIEJ ~r(t), W REGULQRNOJ TO^KE ~r(t ) ((cid:12)~r0(t )(cid:12) 6= 0) WY^I-
+ 
+CIRUEMOJ WEKTORNOJ FUNKCIEJ ~r(t), W REGULQRNOJ TO^KE ~r(t ) (~r0(t ) 6= 0) WY^I-
 0 0
 SLQETSQ PO FORMULE
-(cid:12) (cid:12)
-(cid:12)~r0(t )×~r00(t )(cid:12)
+ 
 0 0
 k = .
-(cid:12) (cid:12)3
-(cid:12)~r0(t )(cid:12)
+ 3
+~r0(t )
 0
 37
 dOK–WO. pUSTX M = ~r(t ), M = ~r(t) — TO^KI KRIWOJ, M — REGULQRNAQ
 0 0 0
-TO^KA, θ — UGOL SMEVNOSTI DUGI M ˘ M, ∆t = t−t . w WIDU NERAWENSTWA (cid:12) (cid:12)~r0(t ) (cid:12) (cid:12) 6=
+TO^KA, θ — UGOL SMEVNOSTI DUGI M ˘ M, ∆t = t−t . w WIDU NERAWENSTWA  ~r0(t )   6=
 0 0 0
-(cid:12) (cid:12)
-0 I NEPRERYWNOSTI ~r0 PRI MALYH OTKLONENIQH ∆t IMEEM TAKVE (cid:12)~r0(t)(cid:12) 6= 0. iZ
+ 
+0 I NEPRERYWNOSTI ~r0 PRI MALYH OTKLONENIQH ∆t IMEEM TAKVE ~r0(t) 6= 0. iZ
 OPREDELENIQ θ, GEOMETRI^ESKOGO SMYSLA PROIZWODNOJ, FORMULY tEJLORA DLQ ~r0(t)
 I SWOJSTW WEKTORNOGO PROIZWEDENIQ POLU^AEM
-(cid:12) (cid:12)
-(cid:0) (cid:1)
-(cid:12) (cid:12)~r0(t )×~r0(t) (cid:12) (cid:12) (cid:12) (cid:12) ~r0(t 0 )× ~r0(t 0 )+∆t ~r00(t 0 )+o(∆t) (cid:12) (cid:12)
+ 
+ 
 0
 sinθ = = =
-(cid:12) (cid:12)(cid:12) (cid:12) (cid:12) (cid:12)(cid:12) (cid:12)
-(cid:12)~r0(t )(cid:12)(cid:12)~r0(t)(cid:12) (cid:12)~r0(t )(cid:12)(cid:12)~r0(t)(cid:12)
+     
+~r0(t )~r0(t) ~r0(t )~r0(t)
 0 0
-(cid:12) (cid:12)
-(cid:12)~r0(t )×~r00(t )(cid:12)
+ 
 0 0
 = |∆t| +o(∆t).
-(cid:12) (cid:12)(cid:12) (cid:12)
-(cid:12)~r0(t )(cid:12)(cid:12)~r0(t)(cid:12)
+  
+~r0(t )~r0(t)
 0
 oTS@DA, IZ PERWOGO ZAME^ATELXNOGO PREDELA I NEPRERYWNOSTI ~r0(t) SLEDUET
-(cid:12) (cid:12) ! (cid:12) (cid:12)
-θ θ sinθ (cid:12)~r0(t )×~r00(t )(cid:12) o(∆t) (cid:12)~r0(t )×~r00(t )(cid:12)
+  !  
 0 0 0 0
 lim = lim lim = lim + = .
-∆t→0 |∆t| ∆t→0 sinθ ∆t→0 |∆t| ∆t→0 (cid:12) (cid:12)~r0(t 0 ) (cid:12) (cid:12) (cid:12) (cid:12)~r0(t) (cid:12) (cid:12) |∆t| (cid:12) (cid:12)~r0(t 0 ) (cid:12) (cid:12) 2
+∆t→0 |∆t| ∆t→0 sinθ ∆t→0 |∆t| ∆t→0  ~r0(t 0 )    ~r0(t)   |∆t|  ~r0(t 0 )   2
 nAKONEC, IZ OPREDELENIQ KRIWIZNY I FORMULY DLQ DLINY KRIWOJ POLU^AEM
-(cid:12) (cid:12)
-θ θ |∆t| (cid:12)~r0(t )×~r00(t )(cid:12) 1
+ 
 0 0
 k = lim = lim lim = . .
-M→M0 L(M 0 ˘ M) ∆t→0 |∆t| ∆t→0 L(M 0 ˘ M) (cid:12) (cid:12)~r0(t 0 ) (cid:12) (cid:12) 2 (cid:12) (cid:12)~r0(t 0 ) (cid:12) (cid:12)
+M→M0 L(M 0 ˘ M) ∆t→0 |∆t| ∆t→0 L(M 0 ˘ M)  ~r0(t 0 )   2  ~r0(t 0 )  
 tEOREMA 2 (KRIWIZNA GRAFIKA FUNKCII). eSLI FUNKCIQ y = f(x) DWAVDY
 NEPRERYWNO DIFFERENCIRUEMA W TO^KE x, TO KRIWIZNA GRAFIKA \TOJ FUNKCII W
-(cid:0) (cid:1)
+ 
 TO^KE x,f(x) RAWNA
-(cid:12) (cid:12)
-(cid:12)f00(x)(cid:12)
+ 
+f00(x)
 k(x) = .
-(cid:16)
-(cid:0) (cid:1)2
-(cid:17)3/2
+
+ 2
+3/2
 1+ f0(x)
 dOK–WO. s^ITAQ x PARAMETROM, PREDSTAWIM KRIWU@ y = f(x) WEKTORNOJ FUNK-
 CIEJ ~r(x) = x~i+f(x)~j. tOGDA ~r0(x) =~i+f0(x)~j, ~r00(x) = f00(x)~j,
 q
-(cid:12) (cid:12)~r0(x)×~r00(x) (cid:12) (cid:12) = (cid:12) (cid:12)f00(x)~i×~j (cid:12) (cid:12) = (cid:12) (cid:12)f00(x) (cid:12) (cid:12), (cid:12) (cid:12)~r0(x) (cid:12) (cid:12) = 1+ (cid:0) f0(x) (cid:1)2 ,
 I IZ TEOREMY 1 SLEDUET DANNAQ TEOREMA.
 12.2 cENTR KRIWIZNY. |WOL@TA I \WOLXWENTA
 pUSTX k — KRIWIZNA PLOSKOJ KRIWOJ γ W TO^KE M ∈ γ. wELI^INU R = 1/k,
@@ -2219,8 +2212,8 @@ FERENCIRUEMYMI WEKTORNYMI FUNKCIQMI.
 tEOREMA 3 (GEOMETRI^ESKIJ SMYSL OKRUVNOSTI KRIWIZNY). oKRUV-
 NOSTX KRIWIZNY PLOSKOJ GLADKOJ KRIWOJ γ ∈ C2 W TO^KE M — \TO EDINSTWENNAQ
 OKRUVNOSTX, KOTORAQ KASAETSQ KRIWOJ W TO^KE M S PORQDKOM 2, T.E.
-(cid:12) (cid:12)
-(cid:12)f(x)−g(x)(cid:12)
+ 
+f(x)−g(x)
 lim = 0,
 x→x0 |x−x 0 |2
 GDE f(x) I g(x) — FUNKCII, GRAFIKI KOTORYH W OKRESTNOSTI TO^KI x SOWPADA@T
@@ -2237,13 +2230,13 @@ TAK KAK SOWPADA@T KASATELXNYE K GRAFIKAM \TIH FUNKCIJ. pROIZWODNYE f00(x )
 I g00(x ) IME@T ODINAKOWYE ZNAKI, POSKOLXKU WYPUKLOSTX \TIH FUNKCIJ SOWPADA-
 0
 ET. nAKONEC, IZ FORMULY DLQ KRIWIZNY TEOREMY 2, RAWENSTWA KRIWIZN I PERWYH
-(cid:12) (cid:12) (cid:12) (cid:12)
-PROIZWODNYH FUNKCIJ f I g W TO^KE x POLU^AEM RAWENSTWO (cid:12)f00(x )(cid:12) = (cid:12)g00(x )(cid:12). tA-
+   
+PROIZWODNYH FUNKCIJ f I g W TO^KE x POLU^AEM RAWENSTWO f00(x ) = g00(x ). tA-
 0 0 0
 KIM OBRAZOM, MNOGO^LENY tEJLORA PORQDKA 2 DLQ FUNKCIJ f(x) I g(x) W TO^KE x
 0
 SOWPADA@T. iZ FORMULY tEJLORA S OSTATO^NYM ^LENOM W FORME pEANO POLU^AEM
-(cid:0) (cid:1)
+ 
 f(x)−g(x) = o |x−x |2 , A ZNA^IT, GRAFIKI FUNKCIJ f(x) I g(x) KASA@TSQ W TO^KE
 0
 M S PORQDKOM 2.
@@ -2253,17 +2246,17 @@ I KRIWIZNOJ (RADIUSOM). .
 tEOREMA 4 (KOORDINATY CENTRA KRIWIZNY). eSLI FUNKCIQ f(x) DWAVDY
 NEPRERYWNO DIFFERENCIRUEMA W OKRESTNOSTI TO^KI x , I f00(x ) 6= 0, TO KOORDINA-
 0 0
-(cid:0) (cid:1)
+ 
 TY ξ,η CENTRA KRIWIZNY GRAFIKA \TOJ FUNKCII W TO^KE x ,y = f(x ) RAWNY
 0 0 0
 1+
-(cid:0)
+
 f0(x )
-(cid:1)2
+2
 1+
-(cid:0)
+
 f0(x )
-(cid:1)2
+2
 ξ = x −f0(x ) 0 I η = y + 0 . (1)
 0 0 f00(x ) 0 f00(x )
 0 0
@@ -2306,38 +2299,38 @@ iZ (2) SLEDUET ξ−x = −(η−y )f0(x ). pODSTAWLQQ \TO WYRAVENIE I FORMULU D
 k(x ) IZ TEOREMY 2 W (3), NAHODIM
 0
 q
-(cid:16)
+
 1+
-(cid:0)
+
 f0(x )
-(cid:1)2
-(cid:17)3/2
-(cid:0) (cid:1)2 0
+2
+3/2
+ 2 0
 (η −y )2 f0(x ) +(η −y )2 = .
 0 0 0 |f00(x )|
 0
 oTS@DA
 1+
-(cid:0)
+
 f0(x )
-(cid:1)2
+2
 0
 |η −y | = . (4)
-0 (cid:12) (cid:12)
-(cid:12)f00(x )(cid:12)
+0  
+f00(x )
 0
 eSLI f00(x ) > 0, TO FUNKCIQ f(x) STROGO WYPUKLA WNIZ. w \TOM SLU^AE η > y
 0 0
 (SM. RIS. 8) I POSKOLXKU |f00(x )| = f00(x ), TO
 0 0
 1+
-(cid:0)
+
 f0(x )
-(cid:1)2
+2
 1+
-(cid:0)
+
 f0(x )
-(cid:1)2
+2
 η −y = 0 , ξ −x = −f0(x ) 0 .
 0 f00(x ) 0 0 f00(x )
 0 0
@@ -2487,13 +2480,13 @@ NII K KOTORYM PODYNTEGRALXNAQ FUNKCIQ NE OGRANI^ENA, ILI +∞, ILI −∞ BUDEM
 NAZYWATX OSOBENNOSTQMI NESOBSTWENNOGO INTEGRALA.
 nESOBSTWENNYJ INTEGRAL OT NEOGRANI^ENNOJ FUNKCII SLEDU@]IM OBRAZOM SWO-
 DITSQ K NESOBSTWENNOMU INTEGRALU PO BESKONE^NOMU PROMEVUTKU:
-Z b Z η (cid:12) (cid:12) 1 1 1 (cid:12) (cid:12)
-f(x)dx = lim f(x)dx = (cid:12) x = b− , dx = dz, z = (cid:12) =
-η→b− (cid:12) z z2 b−x (cid:12)
+Z b Z η   1 1 1  
+f(x)dx = lim f(x)dx =  x = b− , dx = dz, z =  =
+η→b−  z z2 b−x 
 a a
-Z 1/(b−η) f(b−1/z)dz (cid:12) (cid:12) f(b−1/z) 1 (cid:12) (cid:12) Z +∞
-= lim = (cid:12) g(z) = , c = (cid:12) = g(z)dz.
-η→b− z2 (cid:12) z2 b−a (cid:12)
+Z 1/(b−η) f(b−1/z)dz   f(b−1/z) 1   Z +∞
+= lim =  g(z) = , c =  = g(z)dz.
+η→b− z2  z2 b−a 
 1/(b−a) c
 dAJTE GEOMETRI^ESKU@ INTERPRETACI@ DANNYH PREOBRAZOWANIJ.
 wYWOD: L@BOE UTWERVDENIE O NESOBSTWENNOM INTEGRALE 1 RODA IMEET ANALOG
@@ -2527,23 +2520,23 @@ CIQ ϕ(t) NEPRERYWNO DIFFERENCIRUEMA I STROGO MONOTONNA NA POLUINTERWALE
 [α, β) (WOZMOVNO β = +∞), PRI^EM ϕ(α) = a, I ϕ(t) → +∞ PRI t → β−, TO
 SPRAWEDLIWO RAWENSTWO
 Z +∞ Z β
-(cid:0) (cid:1)
+ 
 f(x)dx = f ϕ(t) ϕ0(t)dt (ZAMENA PEREMENNOJ).
 a α
 44
 G) eSLI FUNKCIQ f(x) NEPRERYWNA NA POLUINTERWALE [a,+∞), A F(x) — ODNA IZ EE
 PERWOOBRAZNYH NA \TOM POLUINTERWALE, TO
-Z +∞ (cid:12)+∞
-f(x)dx = lim F(b)−F(a) = F(x)(cid:12) (FORMULA nX@TONA — lEJBNICA).
-(cid:12)
+Z +∞ +∞
+f(x)dx = lim F(b)−F(a) = F(x) (FORMULA nX@TONA — lEJBNICA).
+
 a b→+∞ a
 D) eSLI f,g ∈ C1[a,+∞) I SU]ESTWUET PREDEL lim (fg)(x), TO NESOBSTWENNYE
 x→+∞
 INTEGRALY OT FUNKCIJ fg0 I f0g PO PROMEVUTKU [a,+∞) LIBO OBA SHODQTSQ, LIBO
 OBA RASHODQTSQ. w SLU^AE IH SHODIMOSTI WERNO RAWENSTWO
-Z +∞ (cid:12)+∞ Z +∞
-f(x)g0(x)dx = (fg)(x)(cid:12) − f0(x)g(x)dx (INTEGRIROWANIE PO ^ASTQM).
-(cid:12)
+Z +∞ +∞ Z +∞
+f(x)g0(x)dx = (fg)(x) − f0(x)g(x)dx (INTEGRIROWANIE PO ^ASTQM).
+
 a a a
 dOK–WO SLEDUET IZ OPREDELENIJ I SOOTWETSTWU@]IH SWOJSTW OPREDELENNOGO IN-
 TEGRALA (SM. [z: STR. 390]). dOKAVITE B). .
@@ -2682,7 +2675,7 @@ TEGRALA (SM. TEOREMU 1 IZ §13 UTWERVDENIE a) SHODITSQ I INTEGRAL PO \TOMU VE
 PROMEVUTKU OT FUNKCII 2|f(x)|, A TOGDA, SOGLASNO TEOREME 1, SHODITSQ I INTEGRAL
 OT FUNKCII f(x)+|f(x)|. nA OSNOWANII SWOJSTWA LINEJNOSTI ZAPI[EM
 Z +∞ Z +∞ Z +∞
-(cid:0) (cid:1)
+ 
 f(x)dx = f(x)+|f(x)| dx− |f(x)|dx.
 a a a
 pOSKOLXKU SHODQTSQ INTEGRALY W PRAWOJ ^ASTI \TOGO RAWENSTWA, TO SHODITSQ I
