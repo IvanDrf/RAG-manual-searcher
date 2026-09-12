@@ -7,7 +7,7 @@ from src.domain.rules import UserRole, decode_jwt
 
 
 @handle_errors
-def admin_middleware(access_token: Annotated[str, Cookie(alias="access-token")]) -> None:
+async def admin_middleware(access_token: Annotated[str, Cookie(alias="access-token")]) -> None:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="access токен отсутствует")
 
@@ -23,7 +23,7 @@ def admin_middleware(access_token: Annotated[str, Cookie(alias="access-token")])
 
 
 @handle_errors
-def auth_middleware(access_token: Annotated[str, Cookie(alias="access-token")]) -> None:
+async def auth_middleware(access_token: Annotated[str, Cookie(alias="access-token")]) -> None:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="access токен отсутствует")
 

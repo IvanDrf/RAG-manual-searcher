@@ -2,6 +2,7 @@ from datetime import datetime
 from functools import wraps
 
 from fastapi import HTTPException, Response, status
+from httpx import ConnectError, NetworkError, TimeoutException
 from loguru import logger
 from sqlalchemy.exc import DBAPIError, SQLAlchemyError
 
@@ -23,6 +24,11 @@ def handle_errors(func):
             logger.exception("External error", error=e)
 
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+        except (TimeoutError, NetworkError, TimeoutException, ConnectError) as e:
+            logger.exception("Network error", error=e)
+
+            raise HTTPException(status_code=status.HTTP_408_REQUEST_TIMEOUT, detail="не удалось получить ответ от модели")
 
     return wrapper
 

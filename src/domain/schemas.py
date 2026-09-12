@@ -32,3 +32,8 @@ class ChangeUserRoleSchema(BaseModel):
 
 class LLMPromtSchema(BaseModel):
     message: str = Field(min_length=1, max_length=MAX_PROMT_LENGTH)
+
+
+class LLMResponseSchema(BaseModel):
+    model: str
+    response: str

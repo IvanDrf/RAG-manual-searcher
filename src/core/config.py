@@ -40,6 +40,7 @@ class PostgreSQLConfig(BaseConfig):
 class LLMConfig(BaseConfig):
     llm_url: str = Field(default="", min_length=1, validation_alias="LLM_URL")
     llm_timeout: int = Field(default=10, gt=0, validation_alias="LLM_REQUEST_TIMEOUT")
+    llm_api_key: str = Field(default="", validation_alias="LLM_API_KEY")
 
 
 class Config(AppConfig, PostgreSQLConfig, JWTConfig, LLMConfig):
