@@ -9,9 +9,7 @@ def rag(text: str, k: int) -> str:
         raise TypeError("k must be int")
 
     array_chunks: list[str] = start_bm25(text, k)
-    context_block = "\n\n".join(
-        f"[CHUNK {i+1}]\n{chunk}" for i, chunk in enumerate(array_chunks)
-    )
+    context_block = "\n\n".join(f"[CHUNK {i + 1}]\n{chunk}" for i, chunk in enumerate(array_chunks))
 
     prompt = f"""Ты — ассистент по вузовским конспектам по математике.
 
@@ -31,5 +29,6 @@ CONTEXT:
 """
     return prompt
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print(rag("что такое дисперсия?", 2))
