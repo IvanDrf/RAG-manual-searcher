@@ -33,4 +33,10 @@ line-length = 140
 exclude = ["alembic"]
 
 [dependency-groups]
-dev = ["ipykernel>=7.3.0", "pre-commit>=4.6.2", "ruff>=0.16.6"]
+dev = [
+    "hypothesis>=6.168.0",
+    "ipykernel>=7.3.0",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "ruff>=0.16.6",
+]
