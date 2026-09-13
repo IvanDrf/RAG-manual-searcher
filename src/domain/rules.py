@@ -29,8 +29,8 @@ class UserRole(Enum):
     USER = "user"
 
 
-def hash_password(password: str) -> str:
-    return hashpw(password.encode(), _PASSWORD_SALT).decode()
+def hash_password(password: str, salt: bytes = _PASSWORD_SALT) -> str:
+    return hashpw(password.encode(), salt).decode()
 
 
 def is_passwords_are_same(password: str, hashed_password: str) -> bool:
