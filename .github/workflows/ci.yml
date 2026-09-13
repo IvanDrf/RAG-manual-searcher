@@ -24,6 +24,9 @@ jobs:
             - name: Install deps
               run: uv sync --locked --all-extras --dev
 
+            - name: Create env
+              run: cat .env.example > .env
+
             - name: Run ruff check
               run: uv run ruff check
 
