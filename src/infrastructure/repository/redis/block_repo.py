@@ -9,7 +9,7 @@ async def add_user_id(redis: Redis, user_id: str, ttl: timedelta) -> None:
     await redis.set(name=user_id, value=EXISTS_VALUE, ex=ttl)
 
 
-async def is_user_exists(redis: Redis, user_id: str) -> bool:
+async def is_user_in_block_list(redis: Redis, user_id: str) -> bool:
     res = await redis.get(user_id)
 
     return res is not None and res == EXISTS_VALUE

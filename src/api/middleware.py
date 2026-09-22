@@ -6,7 +6,7 @@ from redis.asyncio import Redis
 from src.api.dependencies import get_redis
 from src.api.utils import handle_errors
 from src.domain.rules import UserRole, decode_jwt
-from src.infrastructure.repository.redis.user_repo import is_user_exists
+from src.infrastructure.repository.redis.block_repo import is_user_in_block_list
 
 
 @handle_errors
@@ -36,5 +36,5 @@ async def auth_middleware(access_token: Annotated[str, Cookie(alias="access-toke
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="отсутствует user_id")
 
     # if user in block list
-    if is_user_exists(redis, user_id):
+    if await is_user_in_block_list(redis, user_id):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
