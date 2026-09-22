@@ -23,6 +23,7 @@ dependencies = [
     "pymorphy3>=2.0.6",
     "pystemmer>=3.1.0",
     "python-dotenv>=1.2.3",
+    "redis>=8.1.0",
     "requests>=2.34.2",
     "sqlalchemy>=2.0.52",
     "uvicorn>=0.52.4",
