@@ -96,7 +96,7 @@ async def refresh_tokens(
             status_code=status.HTTP_404_NOT_FOUND, detail="не удалось идентифицировать пользователя, обратитесь к администратору"
         )
 
-    payload["user_role"] = u.user_role.value
+    payload["user_role"] = u.user_role.value  # обнволяем роль пользователя из бд
 
     try:
         UUID(user_id)
