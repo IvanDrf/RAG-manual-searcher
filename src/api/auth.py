@@ -2,16 +2,14 @@ from typing import Annotated
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
-from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.dependencies import get_redis, get_session
+from src.api.dependencies import get_session
 from src.api.utils import create_jwt_tokens, handle_errors, set_jwt_in_cookies
 from src.domain.models import UserORM
 from src.domain.rules import UserRole, decode_jwt, hash_password, is_passwords_are_same
 from src.domain.schemas import LoginUserSchema, RegisterUserSchema, UserInfoSchema
 from src.infrastructure.repository.postgresql.user_repo import add_user, find_user_by_user_id, find_user_by_username
-from src.infrastructure.repository.redis.block_repo import is_user_in_block_list
 
 auth_router = APIRouter(prefix="/api/v1/auth", tags=["authorization"])
 
@@ -45,6 +43,9 @@ async def login_user(user: LoginUserSchema, response: Response, session: Annotat
     u = await find_user_by_username(session, user.username)
     if u is None or not is_passwords_are_same(password=user.password, hashed_password=u.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="неправильный логин или пароль")
+
+    if u.is_blocked:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
 
     payload = {"user_id": str(u.user_id), "user_role": u.user_role.value}
     access, refresh = create_jwt_tokens(payload)
@@ -82,7 +83,6 @@ async def get_user_info(access_token: Annotated[str, Cookie(alias="access-token"
 async def refresh_tokens(
     refresh_token: Annotated[str, Cookie(alias="refresh-token")],
     session: Annotated[AsyncSession, Depends(get_session)],
-    redis: Annotated[Redis, Depends(get_redis)],
     response: Response,
 ) -> None:
     """Сессия нужна, чтобы проверять не поменялась ли роль пользователя за время access токена"""
@@ -95,14 +95,14 @@ async def refresh_tokens(
     if not user_id or not user_role:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный refresh токен")
 
-    if await is_user_in_block_list(redis, user_id):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
-
     u = await find_user_by_user_id(session, user_id)
     if u is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="не удалось идентифицировать пользователя, обратитесь к администратору"
         )
+
+    if u.is_blocked:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
 
     payload["user_role"] = u.user_role.value  # обнволяем роль пользователя из бд
 

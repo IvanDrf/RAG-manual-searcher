@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from sqlalchemy import UUID as SqlUUID
-from sqlalchemy import VARCHAR, ForeignKey, Text, UniqueConstraint
+from sqlalchemy import VARCHAR, Boolean, ForeignKey, Text, UniqueConstraint
 from sqlalchemy import Enum as SqlEnum
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -48,3 +48,4 @@ class UserORM(BaseORM):
     username: Mapped[str] = mapped_column(VARCHAR(length=MAX_USERNAME_LENGTH), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(VARCHAR(length=2 * MAX_PASSWORD_LENGTH), nullable=False)
     user_role: Mapped[UserRole] = mapped_column(SqlEnum(UserRole, name="UserRoles"), default=UserRole.USER, nullable=False)
+    is_blocked: Mapped[bool] = mapped_column(Boolean(), nullable=False, default=False, server_default="false")
