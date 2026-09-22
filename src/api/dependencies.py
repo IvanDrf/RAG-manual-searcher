@@ -2,12 +2,15 @@ from collections.abc import AsyncGenerator
 from typing import Protocol
 
 from httpx import AsyncClient
+from redis.asyncio import Redis
 from sqlalchemy import text
 
 from src.core.config import CONFIG
 from src.infrastructure.repository.postgresql.connection import connect_to_postgresql
+from src.infrastructure.repository.redis.connection import connect_to_redis
 
 engine, session_maker = connect_to_postgresql(CONFIG)
+redis = connect_to_redis(CONFIG)
 
 
 class ISession(Protocol):
@@ -27,6 +30,7 @@ async def ping_database() -> None:
 
 async def close_dependencies() -> None:
     await engine.dispose()
+    await redis.aclose()
 
 
 async def get_http_client() -> AsyncGenerator[AsyncClient, None]:
@@ -40,3 +44,7 @@ async def get_llm_api_key() -> str:
 
 async def get_llm_url() -> str:
     return CONFIG.llm_url
+
+
+async def get_redis() -> Redis:
+    return redis
