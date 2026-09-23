@@ -2,11 +2,13 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from httpx import AsyncClient
+from loguru import logger
+from pydantic import ValidationError
 
 from src.api.dependencies import get_http_client, get_llm_api_key, get_llm_url
 from src.api.middleware import auth_middleware
 from src.api.utils import handle_errors
-from src.domain.schemas import LLMPromtSchema, LLMResponseSchema
+from src.domain.schemas import ChatCompletion, LLMPromtSchema, LLMResponseSchema
 from src.infrastructure.rag import rag
 
 chat_router = APIRouter(prefix="/api/v1/chat", tags=["chat"], dependencies=[Depends(auth_middleware)])
@@ -34,7 +36,16 @@ async def send_promt_to_llm(
         },
     )
 
-    if content := response.json():
-        return LLMResponseSchema(model=MODEL, response=content["choices"][0]["message"]["content"])
+    if response.status_code != status.HTTP_200_OK:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="LLM не вернула ответ")
 
-    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="пустой ответ от модели")
+    try:
+        content = ChatCompletion.model_validate_json(response.text)
+    except ValidationError as e:
+        logger.critical("invalid llm response", error=e)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="LLM вернула некорректный ответ")
+
+    if not content.choices:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="LLM вернула некорректный ответ")
+
+    return LLMResponseSchema(model=MODEL, response=content.choices[0].message.content)

@@ -35,6 +35,5 @@ async def auth_middleware(access_token: Annotated[str, Cookie(alias="access-toke
     if not user_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="отсутствует user_id")
 
-    # if user in block list
     if await is_user_in_block_list(redis, user_id):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")

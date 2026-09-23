@@ -1,0 +1,688 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "RAG-research app",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/api/v1/auth/register": {
+            "post": {
+                "tags": [
+                    "authorization"
+                ],
+                "summary": "Register User",
+                "description": "Метод для регистрации пользователя со стандартной ролью - пользователь",
+                "operationId": "register_user_api_v1_auth_register_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterUserSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "authorization"
+                ],
+                "summary": "Login User",
+                "description": "Логин пользователя",
+                "operationId": "login_user_api_v1_auth_login_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginUserSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "authorization"
+                ],
+                "summary": "Logout User",
+                "description": "Выйти из аккаунта",
+                "operationId": "logout_user_api_v1_auth_logout_post",
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/me": {
+            "get": {
+                "tags": [
+                    "authorization"
+                ],
+                "summary": "Get User Info",
+                "description": "Информация о пользователе",
+                "operationId": "get_user_info_api_v1_auth_me_get",
+                "parameters": [
+                    {
+                        "name": "access-token",
+                        "in": "cookie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Access-Token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserInfoSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/refresh": {
+            "post": {
+                "tags": [
+                    "authorization"
+                ],
+                "summary": "Refresh Tokens",
+                "description": "Обнволение токенов по refresh токену",
+                "operationId": "refresh_tokens_api_v1_auth_refresh_post",
+                "parameters": [
+                    {
+                        "name": "refresh-token",
+                        "in": "cookie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Refresh-Token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/users": {
+            "get": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Get Users",
+                "description": "Получение списка пользователей для админа",
+                "operationId": "get_users_api_v1_admin_users_get",
+                "parameters": [
+                    {
+                        "name": "user_role",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "$ref": "#/components/schemas/UserRole"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "User Role"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 40,
+                            "minimum": 1,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "title": "Offset"
+                        }
+                    },
+                    {
+                        "name": "access-token",
+                        "in": "cookie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Access-Token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserForAdminSchema"
+                                    },
+                                    "title": "Response Get Users Api V1 Admin Users Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/users/role": {
+            "patch": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Change User Role",
+                "description": "Изменить роль пользователю",
+                "operationId": "change_user_role_api_v1_admin_users_role_patch",
+                "parameters": [
+                    {
+                        "name": "access-token",
+                        "in": "cookie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Access-Token"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangeUserRoleSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/users/block": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Block User",
+                "description": "Заблокировать пользователя",
+                "operationId": "block_user_api_v1_admin_users_block_post",
+                "parameters": [
+                    {
+                        "name": "access-token",
+                        "in": "cookie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Access-Token"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BlockUserSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Unblock User",
+                "description": "Разблокировать пользователя",
+                "operationId": "unblock_user_api_v1_admin_users_block_delete",
+                "parameters": [
+                    {
+                        "name": "access-token",
+                        "in": "cookie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Access-Token"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BlockUserSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/chat/promt": {
+            "post": {
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Send Promt To Llm",
+                "description": "Отправить запрос в чат с LLM",
+                "operationId": "send_promt_to_llm_api_v1_chat_promt_post",
+                "parameters": [
+                    {
+                        "name": "access-token",
+                        "in": "cookie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Access-Token"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LLMPromtSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LLMResponseSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "description": "health check для проверки сервера на работоспособность",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "type": "object",
+                                    "title": "Response Health Health Get"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "BlockUserSchema": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 4,
+                        "title": "Username"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username"
+                ],
+                "title": "BlockUserSchema"
+            },
+            "ChangeUserRoleSchema": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 4,
+                        "title": "Username"
+                    },
+                    "user_role": {
+                        "$ref": "#/components/schemas/UserRole"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "user_role"
+                ],
+                "title": "ChangeUserRoleSchema"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "LLMPromtSchema": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "title": "Message"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "message"
+                ],
+                "title": "LLMPromtSchema"
+            },
+            "LLMResponseSchema": {
+                "properties": {
+                    "model": {
+                        "type": "string",
+                        "title": "Model"
+                    },
+                    "response": {
+                        "type": "string",
+                        "title": "Response"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "model",
+                    "response"
+                ],
+                "title": "LLMResponseSchema"
+            },
+            "LoginUserSchema": {
+                "properties": {
+                    "password": {
+                        "type": "string",
+                        "maxLength": 30,
+                        "minLength": 5,
+                        "title": "Password"
+                    },
+                    "username": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 4,
+                        "title": "Username"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "password",
+                    "username"
+                ],
+                "title": "LoginUserSchema"
+            },
+            "RegisterUserSchema": {
+                "properties": {
+                    "password": {
+                        "type": "string",
+                        "maxLength": 30,
+                        "minLength": 5,
+                        "title": "Password"
+                    },
+                    "username": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 4,
+                        "title": "Username"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "password",
+                    "username"
+                ],
+                "title": "RegisterUserSchema"
+            },
+            "UserForAdminSchema": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 4,
+                        "title": "Username"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "User Id"
+                    },
+                    "user_role": {
+                        "$ref": "#/components/schemas/UserRole"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "user_id",
+                    "user_role"
+                ],
+                "title": "UserForAdminSchema"
+            },
+            "UserInfoSchema": {
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "User Id"
+                    },
+                    "user_role": {
+                        "$ref": "#/components/schemas/UserRole"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "user_id",
+                    "user_role"
+                ],
+                "title": "UserInfoSchema"
+            },
+            "UserRole": {
+                "type": "string",
+                "enum": [
+                    "admin",
+                    "user"
+                ],
+                "title": "UserRole"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    },
+                    "input": {
+                        "title": "Input"
+                    },
+                    "ctx": {
+                        "type": "object",
+                        "title": "Context"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

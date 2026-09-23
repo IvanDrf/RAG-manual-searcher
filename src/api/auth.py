@@ -104,7 +104,7 @@ async def refresh_tokens(
     if u.is_blocked:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
 
-    payload["user_role"] = u.user_role.value  # обнволяем роль пользователя из бд
+    payload["user_role"] = u.user_role.value
 
     try:
         UUID(user_id)

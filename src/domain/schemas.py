@@ -46,3 +46,15 @@ class LLMPromtSchema(BaseModel):
 class LLMResponseSchema(BaseModel):
     model: str
     response: str
+
+
+class Message(BaseModel):
+    content: str
+
+
+class Choice(BaseModel):
+    message: Message
+
+
+class ChatCompletion(BaseModel):
+    choices: list[Choice]
