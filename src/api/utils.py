@@ -2,7 +2,9 @@ from datetime import datetime
 from functools import wraps
 
 from fastapi import HTTPException, Response, status
+from httpx import ConnectError, NetworkError, TimeoutException
 from loguru import logger
+from redis import ConnectionError, RedisError
 from sqlalchemy.exc import DBAPIError, SQLAlchemyError
 
 from src.core.exc import ExternalError
@@ -14,7 +16,7 @@ def handle_errors(func):
     async def wrapper(*args, **kwargs):
         try:
             return await func(*args, **kwargs)
-        except (SQLAlchemyError, ConnectionRefusedError, DBAPIError) as e:
+        except (SQLAlchemyError, ConnectionRefusedError, DBAPIError, RedisError, ConnectionError) as e:
             logger.exception("Internal error", error=e)
 
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="ошибка на стороне сервера")
@@ -23,6 +25,11 @@ def handle_errors(func):
             logger.exception("External error", error=e)
 
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+        except (TimeoutError, NetworkError, TimeoutException, ConnectError) as e:
+            logger.exception("Network error", error=e)
+
+            raise HTTPException(status_code=status.HTTP_408_REQUEST_TIMEOUT, detail="не удалось получить ответ от модели")
 
     return wrapper
 
