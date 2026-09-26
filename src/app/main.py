@@ -10,7 +10,8 @@ from src.api.admin import admin_router
 from src.api.auth import auth_router
 from src.api.books import books_router
 from src.api.chat import chat_router
-from src.api.dependencies import close_dependencies, ping_database
+from src.api.dependencies import check_health, close_dependencies, ping_database
+from src.api.utils import handle_errors
 from src.core.config import CONFIG
 from src.core.logger import configure_logger
 
@@ -33,7 +34,9 @@ PrometheusFastApiInstrumentator().instrument(app).expose(app)
 
 
 @app.get("/health", status_code=status.HTTP_200_OK, description="health check для проверки сервера на работоспособность")
-def health() -> dict[str, str]:
+@handle_errors
+async def health() -> dict[str, str]:
+    await check_health()
     return {"status": "AVAILABLE"}
 
 

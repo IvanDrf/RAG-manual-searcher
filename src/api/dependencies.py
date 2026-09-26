@@ -1,3 +1,4 @@
+from asyncio import gather
 from collections.abc import AsyncGenerator
 from typing import Protocol
 
@@ -48,3 +49,14 @@ async def get_llm_url() -> str:
 
 async def get_redis() -> Redis:
     return redis
+
+
+async def check_health() -> None:
+    async def ping_postgresql() -> None:
+        async with session_maker() as session:
+            await session.execute(text("SELECT 1"))
+
+    async def ping_redis() -> None:
+        await redis.ping()
+
+    await gather(*[ping_postgresql(), ping_redis()])
