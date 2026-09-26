@@ -1,11 +1,12 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.common_params import get_limit_and_offset
 from src.api.dependencies import get_redis, get_session
+from src.api.limiter import limiter
 from src.api.middleware import admin_middleware
 from src.api.utils import handle_errors
 from src.domain.rules import JWT_ACCESS_EXP, UserRole
@@ -17,8 +18,10 @@ admin_router = APIRouter(prefix="/api/v1/admin", tags=["admin"], dependencies=[D
 
 
 @admin_router.get("/users", status_code=status.HTTP_200_OK, description="Получение списка пользователей для админа")
+@limiter.limit("60/minute")
 @handle_errors
 async def get_users(
+    request: Request,
     limit_offset: Annotated[tuple[int, int], Depends(get_limit_and_offset)],
     session: Annotated[AsyncSession, Depends(get_session)],
     user_role: Annotated[UserRole | None, Query()] = None,
@@ -35,8 +38,10 @@ async def get_users(
 
 
 @admin_router.patch("/users/role", status_code=status.HTTP_204_NO_CONTENT, description="Изменить роль пользователю")
+@limiter.limit("60/minute")
 @handle_errors
 async def change_user_role(
+    request: Request,
     user: ChangeUserRoleSchema,
     session: Annotated[AsyncSession, Depends(get_session)],
 ) -> None:
@@ -49,9 +54,13 @@ async def change_user_role(
 
 
 @admin_router.post("/users/block", status_code=status.HTTP_204_NO_CONTENT, description="Заблокировать пользователя")
+@limiter.limit("60/minute")
 @handle_errors
 async def block_user(
-    user: BlockUserSchema, session: Annotated[AsyncSession, Depends(get_session)], redis: Annotated[Redis, Depends(get_redis)]
+    request: Request,
+    user: BlockUserSchema,
+    session: Annotated[AsyncSession, Depends(get_session)],
+    redis: Annotated[Redis, Depends(get_redis)],
 ) -> None:
     u = await find_user_by_username(session, user.username)
     if u is None:
@@ -66,9 +75,13 @@ async def block_user(
 
 
 @admin_router.delete("/users/block", status_code=status.HTTP_204_NO_CONTENT, description="Разблокировать пользователя")
+@limiter.limit("60/minute")
 @handle_errors
 async def unblock_user(
-    user: BlockUserSchema, session: Annotated[AsyncSession, Depends(get_session)], redis: Annotated[Redis, Depends(get_redis)]
+    request: Request,
+    user: BlockUserSchema,
+    session: Annotated[AsyncSession, Depends(get_session)],
+    redis: Annotated[Redis, Depends(get_redis)],
 ) -> None:
     u = await find_user_by_username(session, user.username)
     if u is None:

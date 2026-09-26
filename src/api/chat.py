@@ -1,11 +1,12 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from httpx import AsyncClient
 from loguru import logger
 from pydantic import ValidationError
 
 from src.api.dependencies import get_http_client, get_llm_api_key, get_llm_url
+from src.api.limiter import limiter
 from src.api.middleware import auth_middleware
 from src.api.utils import handle_errors
 from src.domain.schemas import ChatCompletion, LLMPromtSchema, LLMResponseSchema
@@ -15,8 +16,11 @@ chat_router = APIRouter(prefix="/api/v1/chat", tags=["chat"], dependencies=[Depe
 
 
 @chat_router.post("/promt", status_code=status.HTTP_200_OK, description="Отправить запрос в чат с LLM")
+@limiter.limit("5/minute")
+@limiter.limit("100/day")
 @handle_errors
 async def send_promt_to_llm(
+    request: Request,
     promt: LLMPromtSchema,
     client: Annotated[AsyncClient, Depends(get_http_client)],
     llm_url: Annotated[str, Depends(get_llm_url)],

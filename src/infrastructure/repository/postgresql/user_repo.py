@@ -35,13 +35,13 @@ async def find_user_by_user_id(session: AsyncSession, user_id: str, block: bool 
 async def find_users(
     session: AsyncSession, *, limit: int, offset: int, user_role: UserRole | None = None, block: bool = False
 ) -> list[UserORM]:
-    query = select(UserORM).limit(limit).offset(offset)
+    query = select(UserORM).order_by(UserORM.username).limit(limit).offset(offset)
 
     if user_role:
         query = query.where(UserORM.user_role == user_role)
 
     if block:
-        query = query.order_by(UserORM.user_id).with_for_update()
+        query = query.with_for_update()
 
     res = await session.execute(query)
     return list(res.scalars().all())

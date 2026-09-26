@@ -1,10 +1,11 @@
 from typing import Annotated
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dependencies import get_session
+from src.api.limiter import limiter
 from src.api.utils import create_jwt_tokens, handle_errors, set_jwt_in_cookies
 from src.domain.models import UserORM
 from src.domain.rules import UserRole, decode_jwt, hash_password, is_passwords_are_same
@@ -19,8 +20,11 @@ auth_router = APIRouter(prefix="/api/v1/auth", tags=["authorization"])
     status_code=status.HTTP_204_NO_CONTENT,
     description="Метод для регистрации пользователя со стандартной ролью - пользователь",
 )
+@limiter.limit("10/minute")
 @handle_errors
-async def register_user(user: RegisterUserSchema, response: Response, session: Annotated[AsyncSession, Depends(get_session)]) -> None:
+async def register_user(
+    request: Request, user: RegisterUserSchema, response: Response, session: Annotated[AsyncSession, Depends(get_session)]
+) -> None:
     u = await find_user_by_username(session, user.username)
     if u is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="пользователь с таким именем уже существует")
@@ -38,8 +42,11 @@ async def register_user(user: RegisterUserSchema, response: Response, session: A
 
 
 @auth_router.post("/login", status_code=status.HTTP_204_NO_CONTENT, description="Логин пользователя")
+@limiter.limit("10/minute")
 @handle_errors
-async def login_user(user: LoginUserSchema, response: Response, session: Annotated[AsyncSession, Depends(get_session)]) -> None:
+async def login_user(
+    request: Request, user: LoginUserSchema, response: Response, session: Annotated[AsyncSession, Depends(get_session)]
+) -> None:
     u = await find_user_by_username(session, user.username)
     if u is None or not is_passwords_are_same(password=user.password, hashed_password=u.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="неправильный логин или пароль")
@@ -53,14 +60,16 @@ async def login_user(user: LoginUserSchema, response: Response, session: Annotat
 
 
 @auth_router.post("/logout", status_code=status.HTTP_204_NO_CONTENT, description="Выйти из аккаунта")
-async def logout_user(response: Response) -> None:
+@limiter.limit("10/minute")
+async def logout_user(request: Request, response: Response) -> None:
     response.delete_cookie(key="access-token", httponly=True, secure=True, samesite="lax")
     response.delete_cookie(key="refresh-token", httponly=True, secure=True, samesite="lax")
 
 
 @auth_router.get("/me", status_code=status.HTTP_200_OK, description="Информация о пользователе")
+@limiter.limit("60/minute")
 @handle_errors
-async def get_user_info(access_token: Annotated[str, Cookie(alias="access-token")]) -> UserInfoSchema:
+async def get_user_info(request: Request, access_token: Annotated[str, Cookie(alias="access-token")]) -> UserInfoSchema:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="отсутствует access токен")
 
@@ -79,8 +88,10 @@ async def get_user_info(access_token: Annotated[str, Cookie(alias="access-token"
 
 
 @auth_router.post("/refresh", status_code=status.HTTP_204_NO_CONTENT, description="Обнволение токенов по refresh токену")
+@limiter.limit("10/minute")
 @handle_errors
 async def refresh_tokens(
+    request: Request,
     refresh_token: Annotated[str, Cookie(alias="refresh-token")],
     session: Annotated[AsyncSession, Depends(get_session)],
     response: Response,
