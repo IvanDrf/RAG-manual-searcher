@@ -8,6 +8,7 @@ from uvicorn import run
 
 from src.api.admin import admin_router
 from src.api.auth import auth_router
+from src.api.books import books_router
 from src.api.chat import chat_router
 from src.api.dependencies import close_dependencies, ping_database
 from src.core.config import CONFIG
@@ -26,6 +27,7 @@ app = FastAPI(title="RAG-research app", lifespan=lifespan)
 app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(chat_router)
+app.include_router(books_router)
 
 PrometheusFastApiInstrumentator().instrument(app).expose(app)
 

@@ -58,3 +58,7 @@ class Choice(BaseModel):
 
 class ChatCompletion(BaseModel):
     choices: list[Choice]
+
+
+class BookSchema(BaseModel):
+    title: str

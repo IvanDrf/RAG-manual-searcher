@@ -1,9 +1,10 @@
-from typing import Annotated, Final
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.common_params import get_limit_and_offset
 from src.api.dependencies import get_redis, get_session
 from src.api.middleware import admin_middleware
 from src.api.utils import handle_errors
@@ -15,22 +16,10 @@ from src.infrastructure.repository.redis.block_repo import add_user_in_block_lis
 admin_router = APIRouter(prefix="/api/v1/admin", tags=["admin"], dependencies=[Depends(admin_middleware)])
 
 
-MIN_LIMIT: Final[int] = 1
-MAX_LIMIT: Final[int] = 40
-
-MIN_OFFSET: Final[int] = 0
-
-
-def limit_and_offset(
-    limit: Annotated[int, Query(ge=MIN_LIMIT, le=MAX_LIMIT)], offset: Annotated[int, Query(ge=MIN_OFFSET)]
-) -> tuple[int, int]:
-    return limit, offset
-
-
 @admin_router.get("/users", status_code=status.HTTP_200_OK, description="Получение списка пользователей для админа")
 @handle_errors
 async def get_users(
-    limit_offset: Annotated[tuple[int, int], Depends(limit_and_offset)],
+    limit_offset: Annotated[tuple[int, int], Depends(get_limit_and_offset)],
     session: Annotated[AsyncSession, Depends(get_session)],
     user_role: Annotated[UserRole | None, Query()] = None,
 ) -> list[UserForAdminSchema]:
