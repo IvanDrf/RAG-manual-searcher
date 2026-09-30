@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import Cookie, Depends, HTTPException, status
 from redis.asyncio import Redis
@@ -26,7 +27,7 @@ async def admin_middleware(access_token: Annotated[str, Cookie(alias="access-tok
 
 
 @handle_errors
-async def auth_middleware(access_token: Annotated[str, Cookie(alias="access-token")], redis: Annotated[Redis, Depends(get_redis)]) -> None:
+async def auth_middleware(access_token: Annotated[str, Cookie(alias="access-token")], redis: Annotated[Redis, Depends(get_redis)]) -> UUID:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="access токен отсутствует")
 
@@ -37,3 +38,8 @@ async def auth_middleware(access_token: Annotated[str, Cookie(alias="access-toke
 
     if await is_user_in_block_list(redis, user_id):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
+
+    try:
+        return UUID(user_id)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="невалидный user_id")
