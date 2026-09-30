@@ -4,7 +4,6 @@ services:
   database:
     image: postgres:17.10
     container_name: rag_searcher_postgresql
-    restart: always
 
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -28,7 +27,6 @@ services:
   redis_db:
     image: redis:8.6
     container_name: rag_searcher_redis
-    restart: always
     ports:
       - "${REDIS_OUTPUT_PORT}:6379"
     volumes:

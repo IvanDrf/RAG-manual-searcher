@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Final, Literal
 
 from pydantic import Field
@@ -16,6 +17,11 @@ class AppConfig(BaseConfig):
 
     app_loger_level: LoggerLevel = Field(default="info", validation_alias="APP_LOGGER_LEVEL")
     app_password_salt: str = Field(default="", min_length=1, validation_alias="APP_PASSWORD_SALT")
+
+
+class BooksConfig(BaseConfig):
+    books_dir: Path = Field(default=Path("./student_book_pdf"), validation_alias="BOOKS_DIR")
+    books_ext: str = Field(default=".pdf", validation_alias="BOOKS_EXT")
 
 
 class JWTConfig(BaseConfig):
@@ -49,7 +55,7 @@ class LLMConfig(BaseConfig):
     llm_api_key: str = Field(default="", validation_alias="LLM_API_KEY")
 
 
-class Config(AppConfig, PostgreSQLConfig, RedisConfig, JWTConfig, LLMConfig):
+class Config(AppConfig, BooksConfig, PostgreSQLConfig, RedisConfig, JWTConfig, LLMConfig):
     pass
 
 
