@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -62,3 +63,9 @@ class ChatCompletion(BaseModel):
 
 class BookSchema(BaseModel):
     title: str
+
+
+class HistorySchema(BaseModel):
+    user_request: str
+    llm_response: str
+    dialog_time: datetime

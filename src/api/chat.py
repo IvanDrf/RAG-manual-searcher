@@ -7,14 +7,15 @@ from loguru import logger
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.common_params import get_limit_and_offset
 from src.api.dependencies import get_http_client, get_llm_api_key, get_llm_url, get_session
 from src.api.limiter import limiter
 from src.api.middleware import auth_middleware
 from src.api.utils import handle_errors
 from src.domain.models import HistoryORM
-from src.domain.schemas import ChatCompletion, LLMPromtSchema, LLMResponseSchema
+from src.domain.schemas import ChatCompletion, HistorySchema, LLMPromtSchema, LLMResponseSchema
 from src.infrastructure.rag import rag
-from src.infrastructure.repository.postgresql.history_repo import add_history
+from src.infrastructure.repository.postgresql.history_repo import add_history, find_history_for_user
 
 chat_router = APIRouter(prefix="/api/v1/chat", tags=["chat"])
 
@@ -71,3 +72,25 @@ async def save_dialog_in_history(session: AsyncSession, user_id: UUID, user_requ
         await add_history(session, history, commit=True)
     except ConnectionRefusedError as e:
         logger.critical("can't save history in database", error=e)
+
+
+@chat_router.get("/history", status_code=status.HTTP_200_OK, description="Получить историю переписки пользователя с LLM")
+@limiter.limit("5/minute")
+@limiter.limit("100/day")
+@handle_errors
+async def get_user_history(
+    request: Request,
+    limit_offset: Annotated[tuple[int, int], Depends(get_limit_and_offset)],
+    session: Annotated[AsyncSession, Depends(get_session)],
+    user_id: Annotated[UUID, Depends(auth_middleware)],
+) -> list[HistorySchema]:
+    limit, offset = limit_offset
+
+    histories = await find_history_for_user(session, user_id, limit=limit, offset=offset, order_by="time")
+    if not histories:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="не удалось найти историю для данного пользователя")
+
+    return [
+        HistorySchema(user_request=history.user_request, llm_response=history.llm_response, dialog_time=history.dialog_time)
+        for history in histories
+    ]
