@@ -11,7 +11,7 @@ from src.api.common_params import get_limit_and_offset
 from src.api.dependencies import get_http_client, get_llm_api_key, get_llm_url, get_session
 from src.api.limiter import limiter
 from src.api.middleware import auth_middleware
-from src.api.utils import handle_errors
+from src.api.utils import circuit_breaker, handle_errors
 from src.domain.models import HistoryORM
 from src.domain.schemas import ChatCompletion, HistorySchema, LLMPromtSchema, LLMResponseSchema
 from src.infrastructure.rag import rag
@@ -36,33 +36,40 @@ async def send_promt_to_llm(
 ) -> LLMResponseSchema:
     promt_with_context = rag(promt.message, k=3)
 
-    MODEL = "nvidia/nemotron-3.5-lightning:free"
+    MODEL = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
+    llm_response = await send_request_to_llm(client, model=MODEL, llm_url=llm_url, api_key=llm_api_key, promt=promt_with_context)
+
+    backgorund_tasks.add_task(save_dialog_in_history, session, user_id, promt.message, llm_response)
+    return LLMResponseSchema(model=MODEL, response=llm_response)
+
+
+@circuit_breaker(exc=HTTPException, attempts=3, base_delay=0.5)
+async def send_request_to_llm(client: AsyncClient, model: str, llm_url: str, api_key: str, promt: str) -> str:
     response = await client.post(
         url=llm_url,
         headers={
-            "Authorization": f"Bearer {llm_api_key}",
+            "Authorization": f"Bearer {api_key}",
         },
         json={
-            "model": MODEL,
-            "messages": [{"role": "user", "content": promt_with_context}],
+            "model": model,
+            "messages": [{"role": "user", "content": promt}],
         },
     )
 
     if response.status_code != status.HTTP_200_OK:
+        logger.error("invalid LLM status code", status_code=response.status_code, content=response.json())
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="LLM не вернула ответ")
 
     try:
         content = ChatCompletion.model_validate_json(response.text)
     except ValidationError as e:
-        logger.critical("invalid llm response", error=e)
+        logger.critical("invalid LLM response", error=e)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="LLM вернула некорректный ответ")
 
     if not content.choices:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="LLM вернула некорректный ответ")
 
-    llm_response = content.choices[0].message.content
-    backgorund_tasks.add_task(save_dialog_in_history, session, user_id, promt.message, llm_response)
-    return LLMResponseSchema(model=MODEL, response=llm_response)
+    return content.choices[0].message.content
 
 
 async def save_dialog_in_history(session: AsyncSession, user_id: UUID, user_request: str, llm_response: str) -> None:

@@ -11,7 +11,7 @@ from src.infrastructure.repository.redis.block_repo import is_user_in_block_list
 
 
 @handle_errors
-async def admin_middleware(access_token: Annotated[str, Cookie(alias="access-token")]) -> None:
+async def admin_middleware(access_token: Annotated[str | None, Cookie(alias="access-token")] = None) -> None:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="access токен отсутствует")
 
@@ -27,7 +27,10 @@ async def admin_middleware(access_token: Annotated[str, Cookie(alias="access-tok
 
 
 @handle_errors
-async def auth_middleware(access_token: Annotated[str, Cookie(alias="access-token")], redis: Annotated[Redis, Depends(get_redis)]) -> UUID:
+async def auth_middleware(
+    redis: Annotated[Redis, Depends(get_redis)],
+    access_token: Annotated[str | None, Cookie(alias="access-token")] = None,
+) -> UUID:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="access токен отсутствует")
 
