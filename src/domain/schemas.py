@@ -68,4 +68,6 @@ class BookSchema(BaseModel):
 class HistorySchema(BaseModel):
     user_request: str
     llm_response: str
+    llm_model: str
+
     dialog_time: datetime

@@ -39,7 +39,7 @@ async def send_promt_to_llm(
     MODEL = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
     llm_response = await send_request_to_llm(client, model=MODEL, llm_url=llm_url, api_key=llm_api_key, promt=promt_with_context)
 
-    backgorund_tasks.add_task(save_dialog_in_history, session, user_id, promt.message, llm_response)
+    backgorund_tasks.add_task(save_dialog_in_history, session, user_id, promt.message, llm_response, MODEL)
     return LLMResponseSchema(model=MODEL, response=llm_response)
 
 
@@ -72,8 +72,8 @@ async def send_request_to_llm(client: AsyncClient, model: str, llm_url: str, api
     return content.choices[0].message.content
 
 
-async def save_dialog_in_history(session: AsyncSession, user_id: UUID, user_request: str, llm_response: str) -> None:
-    history = HistoryORM(record_id=uuid4(), user_id=user_id, user_request=user_request, llm_response=llm_response)
+async def save_dialog_in_history(session: AsyncSession, user_id: UUID, user_request: str, llm_response: str, llm_model: str) -> None:
+    history = HistoryORM(record_id=uuid4(), user_id=user_id, user_request=user_request, llm_response=llm_response, llm_model=llm_model)
 
     try:
         await add_history(session, history, commit=True)
@@ -98,6 +98,11 @@ async def get_user_history(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="не удалось найти историю для данного пользователя")
 
     return [
-        HistorySchema(user_request=history.user_request, llm_response=history.llm_response, dialog_time=history.dialog_time)
+        HistorySchema(
+            user_request=history.user_request,
+            llm_response=history.llm_response,
+            llm_model=history.llm_model,
+            dialog_time=history.dialog_time,
+        )
         for history in histories
     ]
