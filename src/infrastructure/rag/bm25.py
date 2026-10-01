@@ -1,24 +1,32 @@
-import bm25s
-import pandas as pd
+import numpy as np
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.infrastructure.rag.chuncking import tokinizing_text_from_LLM
+from src.infrastructure.repository.postgresql.chunk_repo import get_all_chanks
 
 
-def start_bm25(text: str, k: int = 3) -> list[str]:
-    """Text tokinize in function"""
-    corpus = list(pd.read_csv("database.csv")["lemma_text"].dropna())
-    corpus_tokens = bm25s.tokenize(corpus, stopwords=[])
+class BM25:
+    """Реализауция BM25 и TF-iDF"""
 
-    retriever = bm25s.BM25()
-    retriever.index(corpus_tokens)
+    def __init__(self):
+        # Массив уникальных слов (столбцы матрицы)
+        self._words_in_db: list[str] = []
+        # количество сторок
+        self._count_texts: int = 0
+        self._matrix: np.ndarray | None = None
 
-    text = tokinizing_text_from_LLM(text)
-    query_tokens = bm25s.tokenize(text, stopwords=[])
+    async def make_matrix(self, session: AsyncSession):
+        """Функция для инициализации матрицы"""
+        # Получаю чанки из бд асинхронно через генератор
+        iter_db_chunk = get_all_chanks(session)
+        counter_row = 0
+        unique_words: set[str] = set()
 
-    results, _ = retriever.retrieve(query_tokens, k=k)
+        async for chunk in iter_db_chunk:
+            counter_row += 1
+            unique_words.update(tokinizing_text_from_LLM(chunk.content).split())
 
-    answer: list[str] = []
-    for i in range(results.shape[1]):  # type: ignore
-        answer.append(corpus[results[0, i]])  # type: ignore
+        self._words_in_db = sorted(unique_words)
+        self._matrix = np.zeros((len(self._words_in_db), counter_row))
 
-    return answer
+    # def TF-iDF(self):
