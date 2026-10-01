@@ -3,7 +3,7 @@ version: '3.8'
 services:
   database:
     image: postgres:17.10
-    container_name: rag_search_pstgresql_db
+    container_name: rag_search_postgresql_db
     restart: always
 
     environment:
@@ -23,7 +23,25 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 5s
+      
+  redis:
+    image: redis:8.6
+    container_name: rag_search_redis_db
+    restart: always
+    ports:
+      - "${REDIS_OUTPUT_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - rag_search_network
 
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
 networks:
   rag_search_network:
@@ -33,3 +51,4 @@ networks:
 
 volumes:
   pgdata:
+  redis_data:

@@ -20,7 +20,7 @@ MAX_PROMT_LENGTH: Final[int] = 100
 _PASSWORD_SALT: Final[bytes] = CONFIG.app_password_salt.encode()
 
 _JWT_SECRET: Final[str] = CONFIG.jwt_secret
-_JWT_ACCESS_EXP: Final[timedelta] = timedelta(minutes=CONFIG.jwt_access_exp)
+JWT_ACCESS_EXP: Final[timedelta] = timedelta(minutes=CONFIG.jwt_access_exp)
 _JWT_REFRESH_EXP: Final[timedelta] = timedelta(minutes=CONFIG.jwt_refresh_exp)
 
 
@@ -29,8 +29,8 @@ class UserRole(Enum):
     USER = "user"
 
 
-def hash_password(password: str) -> str:
-    return hashpw(password.encode(), _PASSWORD_SALT).decode()
+def hash_password(password: str, salt: bytes = _PASSWORD_SALT) -> str:
+    return hashpw(password.encode(), salt).decode()
 
 
 def is_passwords_are_same(password: str, hashed_password: str) -> bool:
@@ -43,7 +43,7 @@ class TokenType(Enum):
 
 
 def create_jwt(payload: dict, *, token_type: TokenType) -> tuple[str, datetime]:
-    payload["exp"] = datetime.now(UTC) + (_JWT_ACCESS_EXP if token_type == TokenType.ACCESS else _JWT_REFRESH_EXP)
+    payload["exp"] = datetime.now(UTC) + (JWT_ACCESS_EXP if token_type == TokenType.ACCESS else _JWT_REFRESH_EXP)
 
     return encode(payload=payload, key=_JWT_SECRET, algorithm="HS256"), payload["exp"]
 

@@ -1,13 +1,16 @@
 from typing import Annotated
 
-from fastapi import Cookie, HTTPException, status
+from fastapi import Cookie, Depends, HTTPException, status
+from redis.asyncio import Redis
 
+from src.api.dependencies import get_redis
 from src.api.utils import handle_errors
 from src.domain.rules import UserRole, decode_jwt
+from src.infrastructure.repository.redis.block_repo import is_user_in_block_list
 
 
 @handle_errors
-def admin_middleware(access_token: Annotated[str, Cookie(alias="access-token")]) -> None:
+async def admin_middleware(access_token: Annotated[str, Cookie(alias="access-token")]) -> None:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="access токен отсутствует")
 
@@ -23,8 +26,14 @@ def admin_middleware(access_token: Annotated[str, Cookie(alias="access-token")])
 
 
 @handle_errors
-def auth_middleware(access_token: Annotated[str, Cookie(alias="access-token")]) -> None:
+async def auth_middleware(access_token: Annotated[str, Cookie(alias="access-token")], redis: Annotated[Redis, Depends(get_redis)]) -> None:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="access токен отсутствует")
 
-    decode_jwt(access_token)
+    payload = decode_jwt(access_token)
+    user_id = payload.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="отсутствует user_id")
+
+    if await is_user_in_block_list(redis, user_id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")

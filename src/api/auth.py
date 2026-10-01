@@ -44,6 +44,9 @@ async def login_user(user: LoginUserSchema, response: Response, session: Annotat
     if u is None or not is_passwords_are_same(password=user.password, hashed_password=u.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="неправильный логин или пароль")
 
+    if u.is_blocked:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
+
     payload = {"user_id": str(u.user_id), "user_role": u.user_role.value}
     access, refresh = create_jwt_tokens(payload)
     set_jwt_in_cookies(response, *access, *refresh)
@@ -78,7 +81,9 @@ async def get_user_info(access_token: Annotated[str, Cookie(alias="access-token"
 @auth_router.post("/refresh", status_code=status.HTTP_204_NO_CONTENT, description="Обнволение токенов по refresh токену")
 @handle_errors
 async def refresh_tokens(
-    refresh_token: Annotated[str, Cookie(alias="refresh-token")], session: Annotated[AsyncSession, Depends(get_session)], response: Response
+    refresh_token: Annotated[str, Cookie(alias="refresh-token")],
+    session: Annotated[AsyncSession, Depends(get_session)],
+    response: Response,
 ) -> None:
     """Сессия нужна, чтобы проверять не поменялась ли роль пользователя за время access токена"""
 
@@ -95,6 +100,9 @@ async def refresh_tokens(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="не удалось идентифицировать пользователя, обратитесь к администратору"
         )
+
+    if u.is_blocked:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
 
     payload["user_role"] = u.user_role.value
 
