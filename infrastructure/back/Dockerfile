@@ -7,14 +7,17 @@ ENV UV_NO_DEV=1
 
 WORKDIR /app
 
-COPY .python-version .
-COPY pyproject.toml .
-COPY uv.lock .
+COPY back/pyproject.toml back/uv.lock ./
 RUN uv sync --locked --no-dev
 
-COPY . .
+COPY back/ .
+
+COPY data/ ./data/
+
+COPY .env .
+
 RUN chmod +x shell/entry.sh shell/dependencies.sh
 
 EXPOSE 8080
 
-ENTRYPOINT [ "./shell/entry.sh" ]
+ENTRYPOINT ["./shell/entry.sh"]

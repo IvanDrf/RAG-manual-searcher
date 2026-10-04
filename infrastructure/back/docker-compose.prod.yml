@@ -68,7 +68,9 @@ services:
 
   rag_searcher_app:
     container_name: rag_searcher_app
-    build: .
+    build:
+      context: ../..
+      dockerfile: infrastructure/back/Dockerfile
     ports:
       - "${APP_OUTPUT_PORT}:8080"
     depends_on:

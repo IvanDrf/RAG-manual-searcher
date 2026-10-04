@@ -21,7 +21,7 @@ def lemman_text_and_write_to_csv() -> None:
     cache: dict[str, str] = {}  # кэш для леммантизированных слов
     lemmen_text: list[str] = []  # массив лемантизированных слов
     for idx in range(len(df)):
-        chunk: str = df.iloc[idx]["chunc_text"]
+        chunk = df.iloc[idx]["chunc_text"]
         chunk: list[str] = word_tokenize(chunk, language="russian")
         new_string = [word for word in chunk if word.isalpha() and word not in stopwords_russian]
 
