@@ -17,7 +17,7 @@ cat .env.example > env
 Запустить необходимые контейнеры с помощью ```docker-compose```
 
 ```bash
-docker-compose up -d
+docker-compose -f docker-compose.dev.yml up -d
 ```
 
 Для поддержания актуальной версии СУБД, в данном случае PostgreSQL, применить все миграции к базе данных
