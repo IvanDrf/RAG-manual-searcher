@@ -8,7 +8,8 @@ on:
         branches: ["**"]
 
 defaults:
-    working-directory: ./back
+    run:
+        working-directory: ./back
 
 jobs:
     test:
