@@ -1,7 +1,7 @@
 # --- Project data (local only) ---
 #student_book_pdf/
 #student_book_txt/
-*.pdf
+# *.pdf
 
 # --- Secrets / local config ---
 .env
