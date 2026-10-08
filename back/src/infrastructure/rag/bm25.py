@@ -6,7 +6,7 @@ from src.infrastructure.rag.chuncking import tokinizing_text_from_LLM
 
 def start_bm25(text: str, k: int = 3) -> list[str]:
     """Text tokinize in function"""
-    corpus = list(pd.read_csv("database.csv")["lemma_text"].dropna())
+    corpus = list(pd.read_csv("../data/temp/database.csv")["lemma_text"].dropna())
     corpus_tokens = bm25s.tokenize(corpus, stopwords=[])
 
     retriever = bm25s.BM25()
