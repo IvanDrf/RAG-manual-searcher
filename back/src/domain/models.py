@@ -1,12 +1,15 @@
 from datetime import datetime, timedelta, timezone
 from uuid import UUID
 
+import numpy as np
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import TIMESTAMP, VARCHAR, Boolean, ForeignKey, Index, Text
 from sqlalchemy import UUID as SqlUUID
 from sqlalchemy import Enum as SqlEnum
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from src.core.config import CONFIG
 from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, UserRole
 
 MAX_BOOK_NAME_LENGTH = 100
@@ -29,6 +32,7 @@ class ChunkORM(BaseORM):
     chunk_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True, index=True)
     book_id: Mapped[UUID] = mapped_column(ForeignKey("books.book_id", ondelete="CASCADE"), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
+    embedding: Mapped[np.ndarray] = mapped_column(Vector(dim=CONFIG.app_embedding_size))
 
 
 class UserORM(BaseORM):

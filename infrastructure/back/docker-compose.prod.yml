@@ -2,8 +2,8 @@ version: '3.9'
 
 services:
   database:
-    image: postgres:17.10
-    container_name: rag_searcher_postgresql
+    image: pgvector/pgvector:pg17-trixie
+    container_name: rag_search_postgresql_vector_prod
 
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -14,6 +14,7 @@ services:
       - "${POSTGRES_OUTPUT_PORT}:5432"
     volumes: 
       - pgdata:/var/lib/postgresql/data
+      - ../../back/scripts/data:/docker-entrypoint-initdb.d
 
     networks:
     - rag_search_network
@@ -26,7 +27,7 @@ services:
       
   redis_db:
     image: redis:8.6
-    container_name: rag_searcher_redis
+    container_name: rag_searcher_redis_prod
     ports:
       - "${REDIS_OUTPUT_PORT}:6379"
     volumes:
@@ -43,7 +44,7 @@ services:
 
   prometheus:
     image: prom/prometheus:v3
-    container_name: rag_searcher_prometheus
+    container_name: rag_searcher_prometheus_prod
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml 
     ports:
@@ -53,7 +54,7 @@ services:
 
   grafana:
     image: grafana/grafana:nightly-slim
-    container_name: rag_searcher_grafana
+    container_name: rag_searcher_grafana_prod
     environment:
       - "GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}"
       - "GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}"
@@ -67,7 +68,7 @@ services:
       - rag_search_network
 
   rag_searcher_app:
-    container_name: rag_searcher_app
+    container_name: rag_searcher_app_prod
     build:
       context: ../..
       dockerfile: infrastructure/back/Dockerfile
