@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   database:
-    image: postgres:17.10
-    container_name: rag_search_postgresql_db
+    image: pgvector/pgvector:pg17-trixie
+    container_name: rag_search_postgresql_vector
 
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -14,6 +14,7 @@ services:
       - "${POSTGRES_OUTPUT_PORT}:5432"
     volumes: 
       - pgdata:/var/lib/postgresql/data
+      - ../../back/scripts/data:/docker-entrypoint-initdb.d
 
     networks:
     - rag_search_network
