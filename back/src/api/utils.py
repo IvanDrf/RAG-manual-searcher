@@ -1,4 +1,3 @@
-from asyncio import sleep
 from datetime import datetime
 from functools import wraps
 
@@ -18,49 +17,21 @@ def handle_errors(func):
         try:
             return await func(*args, **kwargs)
         except (SQLAlchemyError, ConnectionRefusedError, DBAPIError, RedisError, ConnectionError) as e:
-            logger.exception("Internal error", error=e)
+            logger.critical("Internal error", error=e)
 
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="ошибка на стороне сервера")
 
         except ExternalError as e:
-            logger.exception("External error", error=e)
+            logger.error("External error", error=e)
 
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
         except (TimeoutError, NetworkError, TimeoutException, ConnectError) as e:
-            logger.exception("Network error", error=e)
+            logger.critical("Network error", error=e)
 
             raise HTTPException(status_code=status.HTTP_408_REQUEST_TIMEOUT, detail="не удалось получить ответ от модели")
 
     return wrapper
-
-
-type Seconds = float
-
-
-def circuit_breaker(exc: tuple[type[Exception]] | type[Exception], attempts: int, base_delay: Seconds):
-    def decorator(func):
-        @wraps(func)
-        async def wrapper(*args, **kwargs):
-            last_exc = None
-            delay = base_delay
-
-            for attempt in range(1, attempts + 1):
-                try:
-                    return await func(*args, **kwargs)
-                except exc as e:
-                    logger.error("circuit_breaker", func=func.__name__, attempt=attempt, error=e)
-                    await sleep(delay)
-
-                    last_exc = e
-                    delay = 0.5 + delay
-
-            if last_exc:
-                raise last_exc
-
-        return wrapper
-
-    return decorator
 
 
 def create_jwt_tokens(payload: dict) -> tuple[tuple[str, datetime], tuple[str, datetime]]:

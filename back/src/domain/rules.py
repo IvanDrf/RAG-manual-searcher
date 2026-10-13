@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 from enum import Enum
 from typing import Final
 
@@ -17,6 +17,8 @@ MAX_PASSWORD_LENGTH: Final[int] = 30
 
 MAX_PROMT_LENGTH: Final[int] = 100
 
+MAX_CHAT_NAME_LENGTH: Final[int] = 30
+
 _PASSWORD_SALT: Final[bytes] = CONFIG.app_password_salt.encode()
 
 _JWT_SECRET: Final[str] = CONFIG.jwt_secret
@@ -27,6 +29,13 @@ _JWT_REFRESH_EXP: Final[timedelta] = timedelta(minutes=CONFIG.jwt_refresh_exp)
 class UserRole(Enum):
     ADMIN = "admin"
     USER = "user"
+
+
+MOSCOW_TIMEZONE = timezone(offset=timedelta(hours=3), name="МСК")
+
+
+def get_current_time() -> datetime:
+    return datetime.now(MOSCOW_TIMEZONE)
 
 
 def hash_password(password: str, salt: bytes = _PASSWORD_SALT) -> str:

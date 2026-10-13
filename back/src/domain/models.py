@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from uuid import UUID
 
 import numpy as np
@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from src.core.config import CONFIG
-from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, UserRole
+from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, UserRole, get_current_time
 
 MAX_BOOK_NAME_LENGTH = 100
 
@@ -51,6 +51,7 @@ class ChatORM(BaseORM):
 
     chat_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
     name: Mapped[str] = mapped_column(Text, nullable=False)
+    edited_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), default=get_current_time, nullable=False)
 
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.user_id", ondelete="CASCADE"))
 
@@ -65,8 +66,4 @@ class HistoryORM(BaseORM):
     llm_response: Mapped[str] = mapped_column(Text, nullable=False)
     llm_model: Mapped[str] = mapped_column(Text, nullable=False)
 
-    dialog_time: Mapped[datetime] = mapped_column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        default=datetime.now(timezone(offset=timedelta(hours=3), name="МСК")),
-    )
+    dialog_time: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), nullable=False, default=get_current_time)

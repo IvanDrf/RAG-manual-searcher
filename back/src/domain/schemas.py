@@ -1,9 +1,18 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_serializer
 
-from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_PROMT_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH, UserRole
+from src.domain.rules import (
+    MAX_CHAT_NAME_LENGTH,
+    MAX_PASSWORD_LENGTH,
+    MAX_PROMT_LENGTH,
+    MAX_USERNAME_LENGTH,
+    MIN_PASSWORD_LENGTH,
+    MIN_USERNAME_LENGTH,
+    MOSCOW_TIMEZONE,
+    UserRole,
+)
 
 
 class Username(BaseModel):
@@ -45,6 +54,8 @@ class LLMPromtSchema(BaseModel):
 
 
 class LLMResponseSchema(BaseModel):
+    chat_id: UUID
+
     model: str
     response: str
 
@@ -71,3 +82,13 @@ class HistorySchema(BaseModel):
     llm_model: str
 
     dialog_time: datetime
+
+    @field_serializer("dialog_time")
+    def to_msk(self, dt: datetime) -> str:
+
+        return dt.astimezone(MOSCOW_TIMEZONE).isoformat()
+
+
+class ChatSchema(BaseModel):
+    chat_id: UUID
+    name: str = Field(max_length=MAX_CHAT_NAME_LENGTH)
