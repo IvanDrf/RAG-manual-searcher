@@ -1,0 +1,176 @@
+* {
+    color: #ffffff;
+    font-family:
+        "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.work-space {
+    margin: 0;
+    background-color: #000000;
+}
+
+.header {
+    box-sizing: border-box;
+    width: 100%;
+    height: 10%;
+    background-color: #000000;
+}
+
+.promo-section {
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+.reg-container {
+    width: 50%;
+    height: 80%;
+}
+
+.logo-container {
+    padding-top: 1%;
+    padding-left: 3%;
+    padding-bottom: 1%;
+    display: flex;
+    align-items: center;
+}
+
+.logo-text {
+    font-size: xx-large;
+}
+
+.logo-img {
+    width: 4%;
+    height: 4%;
+}
+
+.reg-card {
+    background: linear-gradient(
+        130deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.18) 90%
+    );
+    border-radius: 30px;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-width: 1%;
+    border-style: solid;
+    width: 45%;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    padding: 2%;
+    margin-top: 20%;
+    padding-bottom: 1%;
+    margin-left: 25%;
+}
+
+.login-card {
+    background: linear-gradient(
+        130deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 56%,
+        rgba(255, 255, 255, 0.18) 90%
+    );
+    border-radius: 30px;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-width: 1%;
+    border-style: solid;
+    width: 45%;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    padding: 2%;
+    margin-top: 20%;
+    padding-bottom: 1%;
+    margin-left: 25%;
+}
+
+.prompt {
+    margin-top: 3%;
+    margin-bottom: 0;
+    margin-left: 4%;
+    font-size: medium;
+}
+
+.reg-input-field {
+    height: 40px;
+    background-color: #0d0d0d;
+    margin-top: 0%;
+    margin-bottom: 1%;
+    margin-left: 4%;
+    margin-right: 4%;
+    padding-left: 3%;
+    border-style: solid;
+    border-width: 3px;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: large;
+}
+
+.reg-input-field:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.reg-input-field:not(:placeholder-shown) {
+    border-color: #918361;
+}
+
+.reg-input-button {
+    height: 40px;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.2) 50%
+    );
+    margin-top: 3%;
+    margin-bottom: 1%;
+    margin-left: 4%;
+    margin-right: 4%;
+    border-style: solid;
+    border-width: 3px;
+    border-color: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    font-size: large;
+}
+
+.reg-input-button:hover {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.2) 70%
+    );
+    border-color: rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+}
+
+.form-switch {
+    margin-top: 2%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.button-switch {
+    margin-left: 1%;
+    background-color: rgba(255, 255, 255, 0);
+    color: #ffffff;
+    cursor: pointer;
+    border: none;
+    font-size: medium;
+}
+
+.button-switch:hover {
+    text-decoration: underline;
+}
+
+.video-conteiner {
+    height: 650px;
+    margin-left: 8%;
+    border-radius: 40px;
+}
