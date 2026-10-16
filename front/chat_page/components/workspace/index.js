@@ -1,11 +1,10 @@
-export class PromoSection {
+export class WorkSpace {
     constructor(parent) {
         this.parent = parent;
     }
 
     getHTML() {
-        return `<div id="promo-section" class="promo-section">
-        <div id="reg-container" class="reg-container"></div>
+        return `<div id="workspace" class="workspace">
         </div>`;
     }
 
