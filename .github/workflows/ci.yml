@@ -7,6 +7,10 @@ on:
     pull_request:
         branches: ["**"]
 
+defaults:
+    run:
+        working-directory: ./back
+
 jobs:
     test:
         name: Run tests
@@ -25,7 +29,7 @@ jobs:
               run: uv sync --locked --all-extras --dev
 
             - name: Create env
-              run: cat .env.example > .env
+              run: cat ../.env.example > ../.env
 
             - name: Run ruff check
               run: uv run ruff check
