@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 
-def lemman_text_and_write_to_csv() -> None:
+def lemman_text_and_write_to_bd() -> None:
     """Лемматизация чанков"""
     nltk.download("punkt_tab")
     nltk.download("stopwords")

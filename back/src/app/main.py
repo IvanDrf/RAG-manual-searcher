@@ -42,6 +42,7 @@ async def health() -> dict[str, str]:
 
 @app.middleware("http")
 async def measure_response_time(request: Request, call_next):
+    logger.info("Request", method=request.method, url=request.url)
     start = perf_counter()
     response = await call_next(request)
     end = perf_counter()

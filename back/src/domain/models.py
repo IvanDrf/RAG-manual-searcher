@@ -1,16 +1,16 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from uuid import UUID
 
 import numpy as np
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import TIMESTAMP, VARCHAR, Boolean, ForeignKey, Index, Text
+from sqlalchemy import TIMESTAMP, VARCHAR, Boolean, ForeignKey, Text
 from sqlalchemy import UUID as SqlUUID
 from sqlalchemy import Enum as SqlEnum
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from src.core.config import CONFIG
-from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, UserRole
+from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, UserRole, get_current_time
 
 MAX_BOOK_NAME_LENGTH = 100
 
@@ -46,20 +46,24 @@ class UserORM(BaseORM):
     is_blocked: Mapped[bool] = mapped_column(Boolean(), nullable=False, default=False, server_default="false")
 
 
+class ChatORM(BaseORM):
+    __tablename__ = "chats"
+
+    chat_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
+    name: Mapped[str] = mapped_column(Text, nullable=False)
+    edited_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), default=get_current_time, nullable=False)
+
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.user_id", ondelete="CASCADE"))
+
+
 class HistoryORM(BaseORM):
     __tablename__ = "histories"
-    __table_args__ = (Index("ix_histories_user_id_dialog_time", "user_id", "dialog_time"),)
 
     record_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
-
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    chat_id: Mapped[UUID] = mapped_column(ForeignKey("chats.chat_id", ondelete="CASCADE"), nullable=False, index=True)
 
     user_request: Mapped[str] = mapped_column(Text, nullable=False)
     llm_response: Mapped[str] = mapped_column(Text, nullable=False)
     llm_model: Mapped[str] = mapped_column(Text, nullable=False)
 
-    dialog_time: Mapped[datetime] = mapped_column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        default=datetime.now(timezone(offset=timedelta(hours=3), name="МСК")),
-    )
+    dialog_time: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), nullable=False, default=get_current_time)
