@@ -417,6 +417,132 @@
                 }
             }
         },
+        "/api/v1/chat": {
+            "get": {
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Get User Chats",
+                "description": "Получение названий чатов и их id",
+                "operationId": "get_user_chats_api_v1_chat_get",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 40,
+                            "minimum": 1,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "title": "Offset"
+                        }
+                    },
+                    {
+                        "name": "access-token",
+                        "in": "cookie",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Access-Token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ChatSchema"
+                                    },
+                                    "title": "Response Get User Chats Api V1 Chat Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Delete Chat With Llm",
+                "description": "Удаление чата с LLM",
+                "operationId": "delete_chat_with_llm_api_v1_chat_delete",
+                "parameters": [
+                    {
+                        "name": "chat_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Chat Id"
+                        }
+                    },
+                    {
+                        "name": "access-token",
+                        "in": "cookie",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Access-Token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/chat/promt": {
             "post": {
                 "tags": [
@@ -426,6 +552,23 @@
                 "description": "Отправить запрос в чат с LLM",
                 "operationId": "send_promt_to_llm_api_v1_chat_promt_post",
                 "parameters": [
+                    {
+                        "name": "chat_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "format": "uuid"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Chat Id"
+                        }
+                    },
                     {
                         "name": "access-token",
                         "in": "cookie",
@@ -483,9 +626,19 @@
                     "chat"
                 ],
                 "summary": "Get User History",
-                "description": "Получить историю переписки пользователя с LLM",
+                "description": "Получить историю переписки пользователя с LLM для чата",
                 "operationId": "get_user_history_api_v1_chat_history_get",
                 "parameters": [
+                    {
+                        "name": "chat_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Chat Id"
+                        }
+                    },
                     {
                         "name": "limit",
                         "in": "query",
@@ -717,6 +870,26 @@
                 ],
                 "title": "ChangeUserRoleSchema"
             },
+            "ChatSchema": {
+                "properties": {
+                    "chat_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Chat Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 30,
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "chat_id",
+                    "name"
+                ],
+                "title": "ChatSchema"
+            },
             "HTTPValidationError": {
                 "properties": {
                     "detail": {
@@ -746,7 +919,6 @@
                     },
                     "dialog_time": {
                         "type": "string",
-                        "format": "date-time",
                         "title": "Dialog Time"
                     }
                 },
@@ -776,6 +948,11 @@
             },
             "LLMResponseSchema": {
                 "properties": {
+                    "chat_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Chat Id"
+                    },
                     "model": {
                         "type": "string",
                         "title": "Model"
@@ -787,6 +964,7 @@
                 },
                 "type": "object",
                 "required": [
+                    "chat_id",
                     "model",
                     "response"
                 ],
