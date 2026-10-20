@@ -3,11 +3,11 @@ from collections.abc import AsyncGenerator
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.models import BookORM, ChunkORM
+from src.domain.models.postgresql import BookORM, ChunkORM
 
 
 async def add_books(session: AsyncSession, books: list[BookORM]) -> None:
-    await session.add_all(books)
+    session.add_all(books)
 
 
 async def get_all_chunks(session: AsyncSession) -> AsyncGenerator[ChunkORM, None]:

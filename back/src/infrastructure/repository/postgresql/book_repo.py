@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.models import BookORM
+from src.domain.models.postgresql import BookORM
 
 
 async def find_books(session: AsyncSession, *, limit: int, offset: int) -> list[BookORM]:

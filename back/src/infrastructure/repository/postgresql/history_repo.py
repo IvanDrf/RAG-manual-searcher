@@ -3,7 +3,7 @@ from uuid import UUID
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.models import ChatORM, HistoryORM
+from src.domain.models.postgresql import ChatORM, HistoryORM
 
 
 async def add_history(session: AsyncSession, history: HistoryORM, commit: bool = False) -> None:

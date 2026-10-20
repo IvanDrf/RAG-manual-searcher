@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.models import UserORM
+from src.domain.models.postgresql import UserORM
 from src.domain.rules import UserRole
 
 

@@ -3,7 +3,7 @@ from uuid import UUID
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.models import ChatORM
+from src.domain.models.postgresql import ChatORM
 
 
 async def find_chats_for_user(session: AsyncSession, *, user_id: UUID, limit: int, offset: int) -> list[ChatORM] | None:

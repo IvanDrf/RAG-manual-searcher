@@ -58,7 +58,10 @@ class ClickHouseConfig(BaseConfig):
     clickhouse_password: str = Field(default="password", validation_alias="CLICKHOUSE_PASSWORD")
 
     clickhouse_db: str = Field(default="RAG-manual-searcher", validation_alias="CLICKHOUSE_DB")
-    clickhouse_table: str = Field(default="llm_statistics", validation_alias="CLICKHOUSE_TABLE")
+
+    @property
+    def clickhouse_dsn(self) -> str:
+        return f"clickhousedb+async://{self.clickhouse_user}:{self.clickhouse_password}@{self.clickhouse_host}:{self.clickhouse_port}/{self.clickhouse_db}"
 
 
 class LLMConfig(BaseConfig):
