@@ -46,8 +46,19 @@ class PostgreSQLConfig(BaseConfig):
 
 class RedisConfig(BaseConfig):
     redis_host: str = Field(default="localhost", validation_alias="REDIS_HOST")
-    redis_port: int = Field(default=6379, validation_alias="REDIS_PORT")
+    redis_port: int = Field(default=6379, gt=0, validation_alias="REDIS_PORT")
     redis_db: int = Field(default=0, ge=0, validation_alias="REDIS_DB")
+
+
+class ClickHouseConfig(BaseConfig):
+    clickhouse_host: str = Field(default="localhost", validation_alias="CLICKHOUSE_HOST")
+    clickhouse_port: int = Field(default=9000, gt=0, validation_alias="CLICKHOUSE_PORT")
+
+    clickhouse_user: str = Field(default="user", validation_alias="CLICKHOUSE_USER")
+    clickhouse_password: str = Field(default="password", validation_alias="CLICKHOUSE_PASSWORD")
+
+    clickhouse_db: str = Field(default="RAG-manual-searcher", validation_alias="CLICKHOUSE_DB")
+    clickhouse_table: str = Field(default="llm_statistics", validation_alias="CLICKHOUSE_TABLE")
 
 
 class LLMConfig(BaseConfig):
