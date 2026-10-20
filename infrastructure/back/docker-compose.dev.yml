@@ -51,8 +51,8 @@ services:
       CLICKHOUSE_DB: ${CLICKHOUSE_DB}
 
     ports:
-      - "${CLICKHOUSE_PORT}:9000"
-      - "${CLICKHOUSE_OUTPUT_PORT}:8123"
+      - "${CLICKHOUSE_PORT}:8123"
+      - "${CLICKHOUSE_OUTPUT_PORT}:9000"
 
     volumes:
       - clickhouse_data:/var/lib/clickhouse

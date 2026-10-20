@@ -13,7 +13,7 @@ from src.api.limiter import limiter
 from src.api.middleware import auth_middleware
 from src.api.utils import handle_errors
 from src.core.exc import ExternalError
-from src.domain.models import ChatORM, HistoryORM
+from src.domain.models.postgresql import ChatORM, HistoryORM
 from src.domain.rules import MAX_CHAT_NAME_LENGTH, get_current_time
 from src.domain.schemas import ChatSchema, HistorySchema, LLMPromtSchema, LLMResponseSchema
 from src.infrastructure.clients.llm_clients import send_request_to_llm

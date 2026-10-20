@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.dependencies import get_redis, get_session
 from src.api.limiter import limiter
 from src.api.utils import create_jwt_tokens, handle_errors, set_jwt_in_cookies
-from src.domain.models import UserORM
+from src.domain.models.postgresql import UserORM
 from src.domain.rules import UserRole, decode_jwt, hash_password, is_passwords_are_same
 from src.domain.schemas import LoginUserSchema, RegisterUserSchema, UserInfoSchema
 from src.infrastructure.repository.postgresql.user_repo import add_user, find_user_by_user_id, find_user_by_username

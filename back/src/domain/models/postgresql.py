@@ -66,4 +66,4 @@ class HistoryORM(BaseORM):
     llm_response: Mapped[str] = mapped_column(Text, nullable=False)
     llm_model: Mapped[str] = mapped_column(Text, nullable=False)
 
-    dialog_time: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), nullable=False, default=get_current_time)
+    dialog_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), nullable=False, default=get_current_time)
