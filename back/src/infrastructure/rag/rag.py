@@ -1,4 +1,7 @@
-from src.infrastructure.rag.bm25 import start_bm25
+# from src.infrastructure.rag.bm25 import start_bm25
+
+# TODO:нужно реализовать класс BM25
+def start_bm25(*args, **kwargs) -> list: ...
 
 
 def rag(text: str, k: int = 3) -> str:

@@ -2,6 +2,7 @@ from typing import Annotated
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.responses import JSONResponse
 from httpx import AsyncClient
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,10 +28,12 @@ chat_router = APIRouter(prefix="/api/v1/chat", tags=["chat"])
 
 
 @chat_router.get("", status_code=status.HTTP_200_OK, description="Получение названий чатов и их id")
+@limiter.limit("20/minute")
 async def get_user_chats(
     session: Annotated[AsyncSession, Depends(get_session)],
     user_id: Annotated[UUID, Depends(auth_middleware)],
     limit_offset: Annotated[tuple[int, int], Depends(get_limit_and_offset)],
+    request: Request,
 ) -> list[ChatSchema]:
     limit, offset = limit_offset
 
@@ -54,7 +57,7 @@ async def send_promt_to_llm(
     session: Annotated[AsyncSession, Depends(get_session)],
     user_id: Annotated[UUID, Depends(auth_middleware)],
     chat_id: UUID | None = None,
-) -> LLMResponseSchema:
+):
     if not chat_id:
         chat = ChatORM(chat_id=uuid4(), name=create_chat_name(promt.message), user_id=user_id)
         await add_chat(session, chat)
@@ -77,7 +80,8 @@ async def send_promt_to_llm(
 
     chat_id = chat.chat_id
     await session.commit()
-    return LLMResponseSchema(chat_id=chat_id, model=model, response=llm_response)
+
+    return JSONResponse(content=LLMResponseSchema(chat_id=chat_id, model=model, response=llm_response), status_code=status.HTTP_200_OK)
 
 
 async def send_request_to_llm_fallback(
@@ -129,10 +133,12 @@ async def get_user_history(
 
 
 @chat_router.delete("", status_code=status.HTTP_204_NO_CONTENT, description="Удаление чата с LLM")
+@limiter.limit("20/minute")
 async def delete_chat_with_llm(
     session: Annotated[AsyncSession, Depends(get_session)],
     user_id: Annotated[UUID, Depends(auth_middleware)],
     chat_id: UUID,
+    request: Request,
 ) -> None:
     chat = await find_chat_for_user(session, user_id=user_id, chat_id=chat_id, block=True)
     if not chat:
