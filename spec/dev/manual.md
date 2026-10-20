@@ -44,10 +44,16 @@ make back-dev-up
 cd back/
 ```
 
-Примените миграции
+Примените миграции для `PostgreSQL`
 
 ```bash
-uv run alembic upgrade head
+uv run alembic -c migrations/postgresql upgrade head
+```
+
+Примените миграции для `ClickHouse`
+
+```bash
+uv run alembic -c migrations/clickhouse upgrade head
 ```
 
 Запускать различные скрипты или сам backend сервер, нужно из директории `back/`:
