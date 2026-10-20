@@ -67,7 +67,7 @@ class LLMConfig(BaseConfig):
     llm_api_key: str = Field(default="", validation_alias="LLM_API_KEY")
 
 
-class Config(AppConfig, BooksConfig, PostgreSQLConfig, RedisConfig, JWTConfig, LLMConfig):
+class Config(AppConfig, BooksConfig, PostgreSQLConfig, RedisConfig, ClickHouseConfig, JWTConfig, LLMConfig):
     pass
 
 
