@@ -43,6 +43,7 @@ async def get_users(
 async def change_user_role(
     request: Request,
     user: ChangeUserRoleSchema,
+    redis: Annotated[Redis, Depends(get_redis)],
     session: Annotated[AsyncSession, Depends(get_session)],
 ) -> None:
     u = await find_user_by_username(session, user.username, block=True)
@@ -50,6 +51,8 @@ async def change_user_role(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"не удалось найти пользователля с username{user.username}")
 
     u.user_role = user.user_role
+
+    await add_user_in_block_list(redis, str(u.user_id), ttl=JWT_ACCESS_EXP)  # чтобы пользователь не мог после смены роли что-то делать
     await session.commit()
 
 
