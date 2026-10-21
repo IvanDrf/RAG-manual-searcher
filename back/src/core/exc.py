@@ -4,3 +4,7 @@ class BaseError(Exception):
 
 class ExternalError(BaseError):
     pass
+
+
+class InternalError(BaseError):
+    pass
