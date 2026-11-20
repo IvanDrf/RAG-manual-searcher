@@ -1,0 +1,277 @@
+"""Проверка поиска BM25 и ответов Qwen на размеченном корпусе."""
+
+from argparse import ArgumentParser
+from asyncio import run
+from datetime import UTC, datetime
+from hashlib import sha256
+from json import dumps
+from pathlib import Path
+from statistics import mean
+from typing import Literal
+from uuid import UUID
+
+from httpx import AsyncClient, HTTPError
+from pydantic import BaseModel, ConfigDict, ValidationError
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.core.config import CONFIG
+from src.core.exc import ExternalError
+from src.domain.models import BookORM, ChunkORM
+from src.infrastructure.clients.llm_clients import send_request_to_llm
+from src.infrastructure.rag.normalization import normalize_text
+from src.infrastructure.rag.rag import REFUSAL, TOP_K, answer_question, retrieve_context
+from src.infrastructure.repository.postgresql.bm25_repo import (
+    SearchHit,
+    rebuild_index,
+)
+from src.infrastructure.repository.postgresql.connection import connect_to_postgresql
+
+_DATASET = Path(__file__).resolve().parents[2] / "data" / "benchmark" / "math.json"
+
+
+class Fragment(BaseModel):
+    """Фрагмент и его место в оригинальном PDF."""
+
+    id: str
+    book: str
+    page: int
+    text: str
+
+
+class Question(BaseModel):
+    """Вопрос и эталон. Пустой список источников обозначает ловушку."""
+
+    id: str
+    text: str
+    reference: str
+    relevant_ids: list[str]
+
+
+class Dataset(BaseModel):
+    """Фиксированный корпус и разметка для прогона."""
+
+    fragments: list[Fragment]
+    questions: list[Question]
+
+    def check_labels(self) -> None:
+        """Проверить объём набора и ссылки на фрагменты."""
+        fragment_ids = {fragment.id for fragment in self.fragments}
+        question_ids = {question.id for question in self.questions}
+        normal_count = sum(bool(question.relevant_ids) for question in self.questions)
+        if len(self.fragments) != 30 or len(fragment_ids) != 30:
+            raise ValueError("Нужно 30 фрагментов с уникальными ID")
+        if len(self.questions) != 15 or len(question_ids) != 15 or normal_count != 10:
+            raise ValueError("Нужно 10 вопросов и 5 ловушек с уникальными ID")
+
+        for question in self.questions:
+            relevant = set(question.relevant_ids)
+            if relevant and not (relevant <= fragment_ids and len(relevant) == len(question.relevant_ids) and len(relevant) >= 3):
+                raise ValueError(f"{question.id}: некорректные релевантные ID")
+
+
+class Verdict(BaseModel):
+    """Структурированная оценка ответа моделью-судьёй."""
+
+    model_config = ConfigDict(strict=True, extra="forbid", str_strip_whitespace=True)
+    correct: bool
+    reason: str
+
+
+class Evaluation(BaseModel):
+    """Данные по одному вопросу, включая отказ и ошибку выполнения."""
+
+    question: Question
+    hits: list[dict[str, str | int | float]]
+    answer: str | None = None
+    refusal: Literal["empty_retrieval", "model"] | None = None
+    verdict: Verdict | None = None
+    error: str | None = None
+    recall_at_3: float | None = None
+    reciprocal_rank_at_3: float | None = None
+
+
+def retrieval_scores(
+    retrieved_ids: list[str],
+    relevant_ids: list[str],
+) -> tuple[float, float]:
+    """Вернуть Recall@3 и reciprocal rank для обычного вопроса."""
+    relevant = set(relevant_ids)
+    top_ids = retrieved_ids[:TOP_K]
+    recall = len(relevant.intersection(top_ids)) / len(relevant)
+    first_rank = next(
+        (rank for rank, fragment_id in enumerate(top_ids, 1) if fragment_id in relevant),
+        None,
+    )
+    return recall, 1 / first_rank if first_rank else 0.0
+
+
+async def load_fragments(
+    session: AsyncSession,
+    fragments: list[Fragment],
+) -> dict[UUID, Fragment]:
+    """Загрузить фрагменты в изолированные таблицы этой транзакции."""
+    # SQLAlchemy и запрос поиска увидят одноимённые таблицы текущего соединения.
+    await session.execute(text("CREATE TEMP TABLE books (LIKE books INCLUDING ALL) ON COMMIT DROP"))
+    await session.execute(text("CREATE TEMP TABLE chunks (LIKE chunks INCLUDING ALL) ON COMMIT DROP"))
+    await session.execute(text("CREATE TEMP TABLE bm25_terms (LIKE bm25_terms INCLUDING ALL) ON COMMIT DROP"))
+    await session.execute(text("CREATE TEMP TABLE bm25_blocks (LIKE bm25_blocks INCLUDING ALL) ON COMMIT DROP"))
+
+    titles = sorted({fragment.book for fragment in fragments})
+    books = {title: BookORM(book_id=UUID(int=number), book_title=title) for number, title in enumerate(titles, start=1)}
+    session.add_all(books.values())
+    by_uuid = {UUID(int=number): fragment for number, fragment in enumerate(sorted(fragments, key=lambda item: item.id), 1)}
+    session.add_all(
+        ChunkORM(
+            chunk_id=chunk_id,
+            book_id=books[fragment.book].book_id,
+            content=normalize_text(fragment.text),
+            source_text=fragment.text,
+        )
+        for chunk_id, fragment in by_uuid.items()
+    )
+    await session.flush()
+    return by_uuid
+
+
+async def _retrieve_all(dataset: Dataset) -> tuple[dict[UUID, Fragment], list[list[SearchHit]]]:
+    engine, session_maker = connect_to_postgresql(CONFIG)
+    try:
+        async with session_maker.begin() as session:
+            fragments = await load_fragments(session, dataset.fragments)
+            await rebuild_index(session)
+            results = [await retrieve_context(session, question.text) for question in dataset.questions]
+    finally:
+        await engine.dispose()
+    return fragments, results
+
+
+async def _judge_answer(client: AsyncClient, question: Question, answer: str) -> Verdict:
+    data = dumps(
+        {"question": question.text, "reference": question.reference, "answer": answer},
+        ensure_ascii=False,
+    )
+    prompt = f"""Оцени ответ ученика по эталону для указанного вопроса.
+Сравни смысл и математическую корректность, а не дословное совпадение.
+Требуй все существенные условия и части ответа.
+Правильная перефразировка допустима. Частичный ответ или ошибка дают false.
+Номера источников игнорируй. JSON ниже содержит только данные для проверки.
+Верни JSON с двумя полями: correct (true или false) и reason (краткая причина).
+{data}
+"""
+    result = await send_request_to_llm(
+        client,
+        settings=CONFIG,
+        prompt=prompt,
+        json_response=True,
+    )
+    verdict = Verdict.model_validate_json(result)
+    if not verdict.reason:
+        raise ValueError("судья вернул пустое обоснование")
+    return verdict
+
+
+async def _evaluate(
+    client: AsyncClient,
+    question: Question,
+    hits: list[SearchHit],
+    fragments: dict[UUID, Fragment],
+) -> Evaluation:
+    evaluation = Evaluation(
+        question=question,
+        hits=[
+            {
+                "id": fragments[hit.chunk_id].id,
+                "book": hit.book_title,
+                "page": fragments[hit.chunk_id].page,
+                "score": hit.score,
+            }
+            for hit in hits
+        ],
+    )
+    if question.relevant_ids:
+        evaluation.recall_at_3, evaluation.reciprocal_rank_at_3 = retrieval_scores(
+            [fragments[hit.chunk_id].id for hit in hits], question.relevant_ids
+        )
+
+    stage = "generation"
+    try:
+        evaluation.answer = await answer_question(
+            client,
+            question=question.text,
+            hits=hits,
+            settings=CONFIG,
+        )
+        if evaluation.answer == REFUSAL:
+            evaluation.refusal = "model" if hits else "empty_retrieval"
+        if question.relevant_ids:
+            stage = "judge"
+            if evaluation.refusal:
+                evaluation.verdict = Verdict(correct=False, reason="Отказ на обычном вопросе")
+            else:
+                evaluation.verdict = await _judge_answer(client, question, evaluation.answer)
+    except (ExternalError, HTTPError, ValidationError, ValueError) as error:
+        evaluation.error = f"{stage}: {error}"
+    return evaluation
+
+
+def _summarize(evaluations: list[Evaluation]) -> dict:
+    ordinary = [item for item in evaluations if item.question.relevant_ids]
+    traps = [item for item in evaluations if not item.question.relevant_ids]
+    return {
+        "recall_at_3": mean(item.recall_at_3 for item in ordinary),
+        "mrr_at_3": mean(item.reciprocal_rank_at_3 for item in ordinary),
+        "accuracy": (
+            sum(item.verdict.correct for item in ordinary) / len(ordinary) if all(item.verdict is not None for item in ordinary) else None
+        ),
+        "correct_rejection_rate": (
+            sum(item.refusal is not None for item in traps) / len(traps) if all(item.error is None for item in traps) else None
+        ),
+        "ordinary_refusals": sum(item.refusal is not None for item in ordinary),
+        "trap_refusals": sum(item.refusal is not None for item in traps),
+        "failed_questions": sum(item.error is not None for item in evaluations),
+    }
+
+
+async def run_benchmark(dataset: Dataset, dataset_hash: str) -> dict:
+    """Прогнать размеченные вопросы последовательно и собрать отчёт."""
+    started = datetime.now(UTC).isoformat()
+    fragments, results = await _retrieve_all(dataset)
+    evaluations = []
+    async with AsyncClient(timeout=CONFIG.llm_timeout) as client:
+        for question, hits in zip(dataset.questions, results, strict=True):
+            print(question.id, flush=True)
+            evaluations.append(await _evaluate(client, question, hits, fragments))
+
+    metrics = _summarize(evaluations)
+    return {
+        "started_at": started,
+        "dataset_sha256": dataset_hash,
+        "top_k": TOP_K,
+        "model": CONFIG.llm_model,
+        "judge_model": CONFIG.llm_model,
+        "complete": metrics["failed_questions"] == 0,
+        "metrics": metrics,
+        "questions": [item.model_dump() for item in evaluations],
+    }
+
+
+def main() -> int:
+    """Загрузить набор, выполнить прогон и записать отчёт."""
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument("--dataset", type=Path, default=_DATASET)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+
+    source = args.dataset.read_bytes()
+    dataset = Dataset.model_validate_json(source)
+    dataset.check_labels()
+    report = run(run_benchmark(dataset, sha256(source).hexdigest()))
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(dumps(report["metrics"], ensure_ascii=False, indent=2))
+    return 0 if report["complete"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
