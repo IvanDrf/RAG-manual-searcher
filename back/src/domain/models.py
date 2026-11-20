@@ -1,8 +1,14 @@
+"""Декларативные модели PostgreSQL."""
+
+# SQLAlchemy records describe columns and relationships.
+# pylint: disable=too-few-public-methods
+
 from datetime import datetime
 from uuid import UUID
 
 import numpy as np
-from pgvector.sqlalchemy import Vector
+from pgvector import SparseVector
+from pgvector.sqlalchemy import SPARSEVEC, Vector
 from sqlalchemy import TIMESTAMP, VARCHAR, Boolean, ForeignKey, Text
 from sqlalchemy import UUID as SqlUUID
 from sqlalchemy import Enum as SqlEnum
@@ -11,15 +17,18 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from src.core.config import CONFIG
 from src.domain.rules import MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, UserRole, get_current_time
+from src.infrastructure.rag.bm25 import BLOCK_SIZE
 
 MAX_BOOK_NAME_LENGTH = 100
 
 
 class BaseORM(DeclarativeBase, AsyncAttrs):
-    pass
+    """Базовый класс для асинхронных моделей SQLAlchemy."""
 
 
 class BookORM(BaseORM):
+    """Математическая книга в поисковом корпусе."""
+
     __tablename__ = "books"
 
     book_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
@@ -27,15 +36,44 @@ class BookORM(BaseORM):
 
 
 class ChunkORM(BaseORM):
+    """Исходный фрагмент книги и его поисковый текст."""
+
     __tablename__ = "chunks"
 
     chunk_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True, index=True)
     book_id: Mapped[UUID] = mapped_column(ForeignKey("books.book_id", ondelete="CASCADE"), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
-    embedding: Mapped[np.ndarray] = mapped_column(Vector(dim=CONFIG.app_embedding_size))
+    source_text: Mapped[str | None] = mapped_column(Text)
+    embedding: Mapped[np.ndarray | None] = mapped_column(Vector(dim=CONFIG.app_embedding_size))
+
+
+class BM25TermORM(BaseORM):
+    """Координата терма в сохранённом словаре."""
+
+    __tablename__ = "bm25_terms"
+
+    term: Mapped[str] = mapped_column(Text, primary_key=True)
+    block: Mapped[int]
+    coordinate: Mapped[int]
+
+
+class BM25BlockORM(BaseORM):
+    """Один заполненный блок весов документа."""
+
+    __tablename__ = "bm25_blocks"
+
+    block: Mapped[int] = mapped_column(primary_key=True)
+    chunk_id: Mapped[UUID] = mapped_column(
+        ForeignKey("chunks.chunk_id", ondelete="CASCADE"),
+        primary_key=True,
+        index=True,
+    )
+    weights: Mapped[SparseVector] = mapped_column(SPARSEVEC(BLOCK_SIZE))
 
 
 class UserORM(BaseORM):
+    """Учётная запись пользователя."""
+
     __tablename__ = "users"
 
     user_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
@@ -47,6 +85,8 @@ class UserORM(BaseORM):
 
 
 class ChatORM(BaseORM):
+    """Диалог одного пользователя."""
+
     __tablename__ = "chats"
 
     chat_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
@@ -57,6 +97,8 @@ class ChatORM(BaseORM):
 
 
 class HistoryORM(BaseORM):
+    """Сохранённый вопрос, ответ и модель."""
+
     __tablename__ = "histories"
 
     record_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
