@@ -1,1 +1,5 @@
-"""Поиск и формирование контекста для языковой модели."""
+from src.infrastructure.rag.rag import rag
+
+__all__ = [
+    "rag",
+]
