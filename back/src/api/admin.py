@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,6 +22,7 @@ admin_router = APIRouter(prefix="/api/v1/admin", tags=["admin"], dependencies=[D
 @handle_errors
 async def get_users(
     request: Request,
+    response: Response,
     limit_offset: Annotated[tuple[int, int], Depends(get_limit_and_offset)],
     session: Annotated[AsyncSession, Depends(get_session)],
     user_role: Annotated[UserRole | None, Query()] = None,
@@ -42,6 +43,7 @@ async def get_users(
 @handle_errors
 async def change_user_role(
     request: Request,
+    response: Response,
     user: ChangeUserRoleSchema,
     redis: Annotated[Redis, Depends(get_redis)],
     session: Annotated[AsyncSession, Depends(get_session)],
@@ -61,6 +63,7 @@ async def change_user_role(
 @handle_errors
 async def block_user(
     request: Request,
+    response: Response,
     user: BlockUserSchema,
     session: Annotated[AsyncSession, Depends(get_session)],
     redis: Annotated[Redis, Depends(get_redis)],
@@ -82,6 +85,7 @@ async def block_user(
 @handle_errors
 async def unblock_user(
     request: Request,
+    response: Response,
     user: BlockUserSchema,
     session: Annotated[AsyncSession, Depends(get_session)],
     redis: Annotated[Redis, Depends(get_redis)],

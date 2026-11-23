@@ -79,7 +79,7 @@ async def logout_user(request: Request, response: Response) -> None:
 @auth_router.get("/me", status_code=status.HTTP_200_OK, description="Информация о пользователе")
 @limiter.limit("60/minute")
 @handle_errors
-async def get_user_info(request: Request, access_token: Annotated[str, Cookie(alias="access-token")]) -> UserInfoSchema:
+async def get_user_info(request: Request, response: Response, access_token: Annotated[str, Cookie(alias="access-token")]) -> UserInfoSchema:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="отсутствует access токен")
 

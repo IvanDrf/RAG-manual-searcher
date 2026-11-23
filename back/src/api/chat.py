@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
 from httpx import AsyncClient
 from loguru import logger
@@ -31,10 +31,11 @@ chat_router = APIRouter(prefix="/api/v1/chat", tags=["chat"])
 @chat_router.get("", status_code=status.HTTP_200_OK, description="Получение названий чатов и их id")
 @limiter.limit("20/minute")
 async def get_user_chats(
+    request: Request,
+    response: Response,
     session: Annotated[AsyncSession, Depends(get_session)],
     user_id: Annotated[UUID, Depends(auth_middleware)],
     limit_offset: Annotated[tuple[int, int], Depends(get_limit_and_offset)],
-    request: Request,
 ) -> list[ChatSchema]:
     limit, offset = limit_offset
 
@@ -131,6 +132,7 @@ def create_chat_name(user_request: str, max_name_length: int = MAX_CHAT_NAME_LEN
 @handle_errors
 async def get_user_history(
     request: Request,
+    response: Response,
     chat_id: UUID,
     limit_offset: Annotated[tuple[int, int], Depends(get_limit_and_offset)],
     session: Annotated[AsyncSession, Depends(get_session)],
@@ -156,10 +158,11 @@ async def get_user_history(
 @chat_router.delete("", status_code=status.HTTP_204_NO_CONTENT, description="Удаление чата с LLM")
 @limiter.limit("20/minute")
 async def delete_chat_with_llm(
+    request: Request,
+    response: Response,
+    chat_id: UUID,
     session: Annotated[AsyncSession, Depends(get_session)],
     user_id: Annotated[UUID, Depends(auth_middleware)],
-    chat_id: UUID,
-    request: Request,
 ) -> None:
     chat = await find_chat_for_user(session, user_id=user_id, chat_id=chat_id, block=True)
     if not chat:

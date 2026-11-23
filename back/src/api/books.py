@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.common_params import get_limit_and_offset
@@ -19,6 +19,7 @@ books_router = APIRouter(prefix="/api/v1/books", tags=["books"], dependencies=[D
 @handle_errors
 async def get_books(
     request: Request,
+    response: Response,
     limit_offset: Annotated[tuple[int, int], Depends(get_limit_and_offset)],
     session: Annotated[AsyncSession, Depends(get_session)],
 ) -> list[BookSchema]:
