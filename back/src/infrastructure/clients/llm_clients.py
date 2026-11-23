@@ -38,7 +38,7 @@ async def send_request_to_llm(
             scraper.save(model=model, promt=promt, is_success=False, error_type=ExternalError.__name__, error_message=response.text)
         )
 
-        logger.error("invalid LLM status code", status_code=response.status_code, content=response.json())
+        logger.error("invalid LLM status code", status_code=response.status_code, content=response.text)
         raise ExternalError("LLM не вернула ответ")
 
     try:

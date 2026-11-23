@@ -36,11 +36,21 @@ dependencies = [
 line-length = 140
 exclude = ["alembic"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-m 'not integration' --strict-markers"
+markers = ["integration: requires isolated services from docker-compose.test.yml"]
+
 [dependency-groups]
 dev = [
+    "fakeredis>=2.40.0",
     "hypothesis>=6.168.0",
     "ipykernel>=7.3.0",
     "pre-commit>=4.6.2",
     "pytest>=9.1.1",
+    "pytest-asyncio>=1.5.0",
     "ruff>=0.16.6",
 ]

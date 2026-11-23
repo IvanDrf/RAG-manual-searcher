@@ -1,4 +1,4 @@
-name: Run Ruff-Linter
+name: Backend checks
 
 on:
     push:
@@ -15,6 +15,7 @@ jobs:
     test:
         name: Run tests
         runs-on: ubuntu-latest
+        timeout-minutes: 20
 
         steps:
             - name: Checkout code
@@ -28,11 +29,17 @@ jobs:
             - name: Install deps
               run: uv sync --locked --all-extras --dev
 
-            - name: Create env
-              run: cat ../.env.example > ../.env
-
             - name: Run ruff check
               run: uv run ruff check
 
-            - name: Run tests
-              run: uv run -m pytest tests/
+            - name: Check formatting
+              run: uv run ruff format --check .
+
+            - name: Run unit and integration tests
+              working-directory: .
+              run: make run-test
+
+            - name: Stop test services
+              if: always()
+              working-directory: .
+              run: docker compose -f infrastructure/back/docker-compose.test.yml down --remove-orphans

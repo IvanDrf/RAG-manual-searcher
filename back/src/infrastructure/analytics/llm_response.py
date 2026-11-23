@@ -53,7 +53,7 @@ class LLMStatisticsScraper:
                 self._batch.append(None)  # add additional slot for new record, don't increment size
 
         self._batch[self._pos] = LLMResponseORM(
-            record_id=uuid4(),
+            response_id=uuid4(),
             model=model,
             promt=promt,
             is_success=is_success,

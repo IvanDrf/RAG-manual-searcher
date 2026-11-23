@@ -1,0 +1,47 @@
+name: rag-manual-searcher-test
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17-trixie
+    environment:
+      POSTGRES_USER: rag_test
+      POSTGRES_PASSWORD: rag_test
+      POSTGRES_DB: rag_test
+    ports:
+      - "127.0.0.1:25432:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rag_test -d rag_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:8.6
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1:26379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  clickhouse:
+    image: clickhouse:26.6
+    environment:
+      CLICKHOUSE_USER: rag_test
+      CLICKHOUSE_PASSWORD: rag_test
+      CLICKHOUSE_DB: rag_test
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    ports:
+      - "127.0.0.1:28123:8123"
+    tmpfs:
+      - /var/lib/clickhouse
+      - /var/log/clickhouse-server
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--user", "rag_test", "--password", "rag_test", "--query", "SELECT 1"]
+      interval: 2s
+      timeout: 3s
+      retries: 30

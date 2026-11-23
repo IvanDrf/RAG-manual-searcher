@@ -97,7 +97,10 @@ async def send_promt_to_llm(
     chat_id = chat.chat_id
     await session.commit()
 
-    return JSONResponse(content=LLMResponseSchema(chat_id=chat_id, model=model, response=llm_response), status_code=status.HTTP_200_OK)
+    return JSONResponse(
+        content=LLMResponseSchema(chat_id=chat_id, model=model, response=llm_response).model_dump(mode="json"),
+        status_code=status.HTTP_200_OK,
+    )
 
 
 async def send_request_to_llm_fallback(
