@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from time import perf_counter
 
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, HTTPException, Request, status
 from loguru import logger
 from prometheus_fastapi_instrumentator.instrumentation import PrometheusFastApiInstrumentator
 from uvicorn import run
@@ -36,7 +36,12 @@ PrometheusFastApiInstrumentator().instrument(app).expose(app)
 @app.get("/health", status_code=status.HTTP_200_OK, description="health check для проверки сервера на работоспособность")
 @handle_errors
 async def health() -> dict[str, str]:
-    await check_health()
+    results = await check_health()
+    errors = [error for error in results if error]
+
+    if errors:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail={"errors": errors})
+
     return {"status": "AVAILABLE"}
 
 

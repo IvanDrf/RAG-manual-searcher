@@ -18,6 +18,7 @@ class AppConfig(BaseConfig):
     app_loger_level: LoggerLevel = Field(default="info", validation_alias="APP_LOGGER_LEVEL")
     app_password_salt: str = Field(default="", min_length=1, validation_alias="APP_PASSWORD_SALT")
     app_embedding_size: int = Field(default=0, gt=0, validation_alias="APP_EMBEDDING_SIZE")
+    app_statistics_batch_size: int = Field(default=5, gt=0, validation_alias="APP_STATISTICS_BATCH_SIZE")
 
 
 class BooksConfig(BaseConfig):
