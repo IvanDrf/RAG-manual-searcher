@@ -8,7 +8,7 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.common_params import get_limit_and_offset
-from src.api.dependencies import get_http_client, get_llm_api_key, get_llm_url, get_session
+from src.api.dependencies import get_http_client, get_llm_api_key, get_llm_scraper, get_llm_url, get_session
 from src.api.limiter import limiter
 from src.api.middleware import auth_middleware
 from src.api.utils import handle_errors
@@ -16,6 +16,7 @@ from src.core.exc import ExternalError
 from src.domain.models.postgresql import ChatORM, HistoryORM
 from src.domain.rules import MAX_CHAT_NAME_LENGTH, get_current_time
 from src.domain.schemas import ChatSchema, HistorySchema, LLMPromtSchema, LLMResponseSchema
+from src.infrastructure.analytics.llm_response import LLMStatisticsScraper
 from src.infrastructure.clients.llm_clients import send_request_to_llm
 from src.infrastructure.rag import rag
 from src.infrastructure.repository.postgresql.chat_repo import add_chat, delete_chat, find_chat_for_user, find_chats_for_user
@@ -56,6 +57,7 @@ async def send_promt_to_llm(
     llm_api_key: Annotated[str, Depends(get_llm_api_key)],
     session: Annotated[AsyncSession, Depends(get_session)],
     user_id: Annotated[UUID, Depends(auth_middleware)],
+    scraper: Annotated[LLMStatisticsScraper, Depends(get_llm_scraper)],
     chat_id: UUID | None = None,
 ):
     if not chat_id:
@@ -72,10 +74,23 @@ async def send_promt_to_llm(
     promt_with_context = rag(promt.message, k=3)
 
     llm_response, model = await send_request_to_llm_fallback(
-        client, llm_url=llm_url, api_key=llm_api_key, promt=promt_with_context, models=MODELS
+        client,
+        llm_url=llm_url,
+        api_key=llm_api_key,
+        promt=promt_with_context,
+        models=MODELS,
+        scraper=scraper,
     )
 
-    history = HistoryORM(record_id=uuid4(), chat_id=chat.chat_id, user_request=promt.message, llm_response=llm_response, llm_model=model)
+    history = HistoryORM(
+        record_id=uuid4(),
+        chat_id=chat.chat_id,
+        user_request=promt.message,
+        llm_response=llm_response,
+        llm_model=model,
+        dialog_at=chat.edited_at,
+    )
+
     await add_history(session, history)
 
     chat_id = chat.chat_id
@@ -85,11 +100,17 @@ async def send_promt_to_llm(
 
 
 async def send_request_to_llm_fallback(
-    client: AsyncClient, *, llm_url: str, api_key: str, promt: str, models: tuple[str, ...]
+    client: AsyncClient,
+    *,
+    llm_url: str,
+    api_key: str,
+    promt: str,
+    models: tuple[str, ...],
+    scraper: LLMStatisticsScraper,
 ) -> tuple[str, str]:
     for model in models:
         try:
-            llm_response = await send_request_to_llm(client, model=model, llm_url=llm_url, api_key=api_key, promt=promt)
+            llm_response = await send_request_to_llm(client, model=model, llm_url=llm_url, api_key=api_key, promt=promt, scraper=scraper)
             return llm_response, model
         except ExternalError as e:
             logger.error("model returned error", error=e, model=model)
@@ -126,7 +147,7 @@ async def get_user_history(
             user_request=history.user_request,
             llm_response=history.llm_response,
             llm_model=history.llm_model,
-            dialog_time=history.dialog_time,
+            dialog_time=history.dialog_at,
         )
         for history in histories
     ]
