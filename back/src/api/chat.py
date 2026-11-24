@@ -1,3 +1,4 @@
+from tempfile import NamedTemporaryFile
 from typing import Annotated
 from uuid import UUID, uuid4
 
@@ -5,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from httpx import AsyncClient
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.concurrency import run_in_threadpool
 
 from src.api.common_params import get_limit_and_offset
 from src.api.dependencies import get_http_client, get_llm_api_key, get_llm_url, get_session
@@ -15,15 +17,51 @@ from src.core.exc import ExternalError
 from src.domain.models import ChatORM, HistoryORM
 from src.domain.rules import MAX_CHAT_NAME_LENGTH, get_current_time
 from src.domain.schemas import ChatSchema, HistorySchema, LLMPromtSchema, LLMResponseSchema
+from src.infrastructure.classifier.classifier_teacher_by_photo import InvalidTeacherPhoto, predict_teacher
 from src.infrastructure.clients.llm_clients import send_request_to_llm
-from src.infrastructure.rag import rag
 from src.infrastructure.repository.postgresql.chat_repo import add_chat, delete_chat, find_chat_for_user, find_chats_for_user
 from src.infrastructure.repository.postgresql.history_repo import add_history, find_history_for_user
 
 MODELS = ("nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", "meta-llama/llama-3.3-70b-instruct:free")
+MAX_PHOTO_BYTES = 10 * 1024 * 1024
+PHOTO_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"}
 
 
 chat_router = APIRouter(prefix="/api/v1/chat", tags=["chat"])
+
+
+def classify_chat_photo(photo: bytearray) -> str | None:
+    with NamedTemporaryFile() as image_file:
+        image_file.write(photo)
+        image_file.flush()
+        return predict_teacher(image_file.name)
+
+
+@chat_router.post("/teacher-photo", description="Распознать преподавателя на фото")
+async def identify_teacher(
+    request: Request,
+    _user_id: Annotated[UUID, Depends(auth_middleware)],
+) -> dict[str, str]:
+    content_type = request.headers.get("content-type", "").split(";", 1)[0].lower()
+    if content_type not in PHOTO_TYPES:
+        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Выберите фото в поддерживаемом формате.")
+
+    photo = bytearray()
+    async for chunk in request.stream():
+        if len(photo) + len(chunk) > MAX_PHOTO_BYTES:
+            raise HTTPException(status_code=status.HTTP_413_CONTENT_TOO_LARGE, detail="Размер фото не должен превышать 10 МБ.")
+        photo.extend(chunk)
+    if not photo:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Файл фото пуст.")
+
+    try:
+        teacher = await run_in_threadpool(classify_chat_photo, photo)
+    except InvalidTeacherPhoto as error:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(error)) from error
+
+    if teacher is None:
+        return {"response": "Не удалось распознать преподавателя на фото."}
+    return {"response": f"На фото изображён {teacher}."}
 
 
 @chat_router.get("", status_code=status.HTTP_200_OK, description="Получение названий чатов и их id")
@@ -65,6 +103,8 @@ async def send_promt_to_llm(
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Не удалось найти чат с {chat_id}")
 
     chat.edited_at = get_current_time()
+
+    from src.infrastructure.rag.rag import rag
 
     promt_with_context = rag(promt.message, k=3)
 
