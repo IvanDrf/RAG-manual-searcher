@@ -5,6 +5,7 @@ from unittest.mock import AsyncMock, MagicMock
 import httpx
 import pytest
 
+from src.core.config import LLMConfig
 from src.core.exc import ExternalError
 from src.infrastructure.clients import llm_clients, utils
 
@@ -124,3 +125,24 @@ async def test_network_error_is_propagated(scraper: MagicMock, statistics_tasks:
             )
 
     assert not statistics_tasks
+
+
+async def test_benchmark_completion_uses_configured_model_and_json_mode() -> None:
+    def respond(request: httpx.Request) -> httpx.Response:
+        assert str(request.url) == "https://llm.invalid"
+        assert json.loads(request.content) == {
+            "model": "benchmark-model",
+            "messages": [{"role": "user", "content": "judge"}],
+            "temperature": 0,
+            "response_format": {"type": "json_object"},
+        }
+        return httpx.Response(200, json={"choices": [{"message": {"content": "  answer  "}}]})
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:
+        answer = await llm_clients.request_completion(
+            client,
+            settings=LLMConfig(LLM_URL="https://llm.invalid", LLM_MODEL="benchmark-model"),
+            prompt="judge",
+            json_response=True,
+        )
+    assert answer == "answer"

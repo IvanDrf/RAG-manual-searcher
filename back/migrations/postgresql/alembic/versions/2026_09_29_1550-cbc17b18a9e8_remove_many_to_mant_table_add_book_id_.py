@@ -33,7 +33,8 @@ def downgrade() -> None:
     # WARNING: constraint name is None; this directive will fail as
     # rendered.  Add a name, or use a naming convention; see
     # https://alembic.sqlalchemy.org/en/latest/naming.html
-    op.drop_constraint(None, 'chunks', type_='foreignkey')
+    # Сохраняем код исторической миграции; ограничение downgrade описано выше.
+    op.drop_constraint(None, 'chunks', type_='foreignkey')  # ty: ignore[invalid-argument-type]
     op.drop_column('chunks', 'book_id')
     op.create_table('chunks_to_books',
     sa.Column('record_id', sa.UUID(), autoincrement=False, nullable=False),

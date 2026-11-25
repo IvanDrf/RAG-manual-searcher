@@ -4,13 +4,14 @@ from unittest.mock import AsyncMock, MagicMock
 from uuid import uuid4
 
 import pytest
+from sqlalchemy import insert
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import Select
 
 from src.domain.models.postgresql import BookORM, ChatORM, ChunkORM, HistoryORM, UserORM
-from src.domain.rules import UserRole
+from src.domain.rules import UserRole, get_current_time
 from src.infrastructure.repository.postgresql import book_repo, chat_repo, chunk_repo, history_repo, user_repo
 
 
@@ -152,7 +153,7 @@ async def test_history_filters_owner_and_orders_by_existing_timestamp(session: A
     sql, params = compiled_query(session_mock)
     assert "JOIN chats ON chats.chat_id = histories.chat_id" in sql
     assert "chats.user_id =" in sql and "AND histories.chat_id =" in sql
-    assert "ORDER BY histories.dialog_at DESC" in sql
+    assert "ORDER BY histories.dialog_time DESC" in sql
     assert user_id in params.values() and chat_id in params.values()
     assert params["param_1"] == 3 and params["param_2"] == 1
 
@@ -200,3 +201,20 @@ async def test_repository_propagates_database_failure(session: AsyncSession, ses
 
     with pytest.raises(SQLAlchemyError, match="database unavailable"):
         await user_repo.find_user_by_username(session, "alice")
+
+
+def test_history_insert_uses_migrated_timestamp_column() -> None:
+    timestamp = get_current_time()
+    statement = insert(HistoryORM).values(
+        record_id=uuid4(),
+        chat_id=uuid4(),
+        user_request="question",
+        llm_response="answer",
+        llm_model="model",
+        dialog_at=timestamp,
+    )
+    compiled = statement.compile(dialect=postgresql.dialect())
+
+    assert "dialog_time" in str(compiled)
+    assert "dialog_at" not in str(compiled)
+    assert compiled.params["dialog_time"] == timestamp

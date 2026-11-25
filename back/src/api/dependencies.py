@@ -76,7 +76,7 @@ async def get_llm_scraper() -> LLMStatisticsScraper:
     return LLMStatisticsScraper(batch_size=CONFIG.app_statistics_batch_size, statistics_repo=statistics_repo)
 
 
-async def check_health() -> list[BaseException | None]:
+async def check_health() -> tuple[BaseException | None, ...]:
     async def ping_postgresql() -> None:
         try:
             async with session_maker() as session:

@@ -29,6 +29,7 @@ dependencies = [
     "redis>=8.1.0",
     "slowapi>=0.1.10",
     "sqlalchemy>=2.0.52",
+    "ty>=0.0.110",
     "uvicorn>=0.52.4",
 ]
 

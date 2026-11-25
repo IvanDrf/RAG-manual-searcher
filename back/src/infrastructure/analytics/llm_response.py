@@ -66,4 +66,4 @@ class LLMStatisticsScraper:
         self._pos += 1
 
     def is_found_context(self, llm_response: str) -> bool:
-        return "Недостаточно данных в конспекте" not in llm_response
+        return all(refusal not in llm_response for refusal in ("Недостаточно данных в конспекте", "Нет ответа в прикреплённых данных"))

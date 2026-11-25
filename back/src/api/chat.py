@@ -18,7 +18,7 @@ from src.domain.rules import MAX_CHAT_NAME_LENGTH, get_current_time
 from src.domain.schemas import ChatSchema, HistorySchema, LLMPromtSchema, LLMResponseSchema
 from src.infrastructure.analytics.llm_response import LLMStatisticsScraper
 from src.infrastructure.clients.llm_clients import send_request_to_llm
-from src.infrastructure.rag import rag
+from src.infrastructure.rag.rag import REFUSAL, build_prompt, retrieve_context
 from src.infrastructure.repository.postgresql.chat_repo import add_chat, delete_chat, find_chat_for_user, find_chats_for_user
 from src.infrastructure.repository.postgresql.history_repo import add_history, find_history_for_user
 
@@ -72,16 +72,18 @@ async def send_promt_to_llm(
 
     chat.edited_at = get_current_time()
 
-    promt_with_context = rag(promt.message, k=3)
-
-    llm_response, model = await send_request_to_llm_fallback(
-        client,
-        llm_url=llm_url,
-        api_key=llm_api_key,
-        promt=promt_with_context,
-        models=MODELS,
-        scraper=scraper,
-    )
+    hits = await retrieve_context(session, promt.message)
+    if hits:
+        llm_response, model = await send_request_to_llm_fallback(
+            client,
+            llm_url=llm_url,
+            api_key=llm_api_key,
+            promt=build_prompt(promt.message, hits),
+            models=MODELS,
+            scraper=scraper,
+        )
+    else:
+        llm_response, model = REFUSAL, MODELS[0]
 
     history = HistoryORM(
         record_id=uuid4(),

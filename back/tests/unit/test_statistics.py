@@ -92,3 +92,8 @@ def test_context_presence(answer: str, found: bool) -> None:
     scraper = LLMStatisticsScraper(batch_size=1, statistics_repo=MagicMock())
 
     assert scraper.is_found_context(answer) is found
+
+
+def test_incoming_rag_refusal_is_not_found_context() -> None:
+    scraper = LLMStatisticsScraper(batch_size=1, statistics_repo=MagicMock())
+    assert not scraper.is_found_context("Нет ответа в прикреплённых данных")

@@ -14,6 +14,7 @@ from src.api import chat
 from src.core.exc import ExternalError
 from src.domain.models.postgresql import ChatORM, HistoryORM
 from src.domain.schemas import LLMPromtSchema
+from src.infrastructure.repository.postgresql.bm25_repo import SearchHit
 
 rag_module = import_module("src.infrastructure.rag.rag")
 
@@ -55,23 +56,26 @@ async def test_fallback_reports_exhaustion(monkeypatch: pytest.MonkeyPatch, mode
     assert send.await_count == len(models)
 
 
-def test_prompt_contains_question_numbered_context_and_no_data_rule(monkeypatch: pytest.MonkeyPatch) -> None:
-    search = MagicMock(return_value=["Первый фрагмент", "Второй фрагмент"])
-    monkeypatch.setattr(rag_module, "start_bm25", search)
+def test_prompt_contains_question_numbered_context_and_no_data_rule() -> None:
+    hits = [SearchHit(uuid4(), "Учебник", "Первый фрагмент", 1.0), SearchHit(uuid4(), "Конспект", "Второй фрагмент", 0.5)]
+    prompt = rag_module.build_prompt("Что такое интеграл?", hits)
 
-    prompt = rag_module.rag("Что такое интеграл?", k=2)
-
-    search.assert_called_once_with("Что такое интеграл?", 2)
-    assert "QUESTION:\nЧто такое интеграл?" in prompt
-    assert "[CHUNK 1]\nПервый фрагмент" in prompt
-    assert "[CHUNK 2]\nВторой фрагмент" in prompt
-    assert "Недостаточно данных в конспекте" in prompt
+    assert "ВОПРОС\nЧто такое интеграл?" in prompt
+    assert "[CHUNK 1] Учебник\nПервый фрагмент" in prompt
+    assert "[CHUNK 2] Конспект\nВторой фрагмент" in prompt
+    assert rag_module.REFUSAL in prompt
 
 
-@pytest.mark.parametrize(("text", "k"), [(None, 3), (42, 3), ("q", "3")])
-def test_rag_rejects_wrong_argument_types(text: object, k: object) -> None:
-    with pytest.raises(TypeError):
-        rag_module.rag(text, k)
+async def test_retrieval_normalizes_question_and_queries_index(monkeypatch: pytest.MonkeyPatch) -> None:
+    normalize = MagicMock(return_value="интеграл функция")
+    rank = AsyncMock(return_value=[])
+    monkeypatch.setattr(rag_module, "normalize_text", normalize)
+    monkeypatch.setattr(rag_module, "rank_chunks", rank)
+    session = MagicMock()
+
+    assert await rag_module.retrieve_context(session, "Об интегралах функций") == []
+    normalize.assert_called_once_with("Об интегралах функций")
+    rank.assert_awaited_once_with(session, ["интеграл", "функция"], 3)
 
 
 @pytest.mark.parametrize("found", [False, True])
@@ -104,9 +108,10 @@ async def test_send_prompt_saves_chat_and_history_and_returns_json(
     user_id = uuid4()
     stored_chat = ChatORM(chat_id=uuid4(), user_id=user_id, name="old name")
     monkeypatch.setattr(chat, "find_chat_for_user", AsyncMock(return_value=stored_chat))
-    search = MagicMock(return_value="question with context")
+    hits = [SearchHit(uuid4(), "Учебник", "Исходный текст", 1.0)]
+    search = AsyncMock(return_value=hits)
     send = AsyncMock(return_value=("answer", "model"))
-    monkeypatch.setattr(chat, "rag", search)
+    monkeypatch.setattr(chat, "retrieve_context", search)
     monkeypatch.setattr(chat, "send_request_to_llm_fallback", send)
 
     response = await unwrap(chat.send_promt_to_llm)(
@@ -135,8 +140,8 @@ async def test_send_prompt_saves_chat_and_history_and_returns_json(
     assert response.status_code == 200
     assert json.loads(response.body) == {"chat_id": str(history.chat_id), "model": "model", "response": "answer"}
     assert send.await_args is not None
-    assert send.await_args.kwargs["promt"] == "question with context"
-    search.assert_called_once_with("question", k=3)
+    assert send.await_args.kwargs["promt"] == rag_module.build_prompt("question", hits)
+    search.assert_awaited_once_with(session, "question")
     session_mock.commit.assert_awaited_once()
 
 
@@ -167,3 +172,28 @@ async def test_prompt_to_unknown_or_foreign_chat_never_calls_llm(
     send.assert_not_awaited()
     session_mock.add.assert_not_called()
     session_mock.commit.assert_not_awaited()
+
+
+async def test_empty_context_saves_refusal_without_llm(
+    session: AsyncSession, session_mock: MagicMock, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(chat, "retrieve_context", AsyncMock(return_value=[]))
+    send = AsyncMock()
+    monkeypatch.setattr(chat, "send_request_to_llm_fallback", send)
+
+    response = await unwrap(chat.send_promt_to_llm)(
+        request=None,
+        promt=LLMPromtSchema(message="question"),
+        client=MagicMock(),
+        llm_url="https://llm.invalid",
+        llm_api_key="test-key",
+        session=session,
+        user_id=uuid4(),
+        scraper=MagicMock(),
+    )
+
+    assert json.loads(response.body)["response"] == rag_module.REFUSAL
+    send.assert_not_awaited()
+    history = next(call.args[0] for call in session_mock.add.call_args_list if isinstance(call.args[0], HistoryORM))
+    assert history.llm_response == rag_module.REFUSAL
+    session_mock.commit.assert_awaited_once()
