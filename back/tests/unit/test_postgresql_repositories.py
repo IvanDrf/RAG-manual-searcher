@@ -1,9 +1,14 @@
 from collections.abc import AsyncGenerator, Callable
+from io import StringIO
+from pathlib import Path
+from runpy import run_path
 from typing import cast
 from unittest.mock import AsyncMock, MagicMock
 from uuid import uuid4
 
 import pytest
+from alembic.migration import MigrationContext
+from alembic.operations import Operations
 from sqlalchemy import insert
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import SQLAlchemyError
@@ -218,3 +223,21 @@ def test_history_insert_uses_migrated_timestamp_column() -> None:
     assert "dialog_time" in str(compiled)
     assert "dialog_at" not in str(compiled)
     assert compiled.params["dialog_time"] == timestamp
+
+
+def test_history_timestamp_matches_existing_migration() -> None:
+    migration_path = (
+        Path(__file__).resolve().parents[2] / "migrations/postgresql/alembic/versions/2026_09_30_2333-34ec2aecf8b5_add_historyorm_model.py"
+    )
+    migration = run_path(str(migration_path))
+    upgrade = migration["upgrade"]
+    assert callable(upgrade)
+
+    output = StringIO()
+    context = MigrationContext.configure(dialect_name="postgresql", opts={"as_sql": True, "output_buffer": output})
+    with Operations.context(context):
+        upgrade()
+
+    column = HistoryORM.dialog_at.property.columns[0]
+    assert column.name == "dialog_time"
+    assert f"{column.name} TIMESTAMP WITH TIME ZONE NOT NULL" in output.getvalue()

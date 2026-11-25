@@ -18,12 +18,10 @@ MAX_BOOK_NAME_LENGTH = 100
 
 
 class BaseORM(DeclarativeBase, AsyncAttrs):
-    """Базовый класс для асинхронных моделей SQLAlchemy."""
+    pass
 
 
 class BookORM(BaseORM):
-    """Математическая книга в поисковом корпусе."""
-
     __tablename__ = "books"
 
     book_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
@@ -31,8 +29,6 @@ class BookORM(BaseORM):
 
 
 class ChunkORM(BaseORM):
-    """Исходный фрагмент книги и его поисковый текст."""
-
     __tablename__ = "chunks"
 
     chunk_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True, index=True)
@@ -43,8 +39,6 @@ class ChunkORM(BaseORM):
 
 
 class BM25TermORM(BaseORM):
-    """Координата терма в сохранённом словаре."""
-
     __tablename__ = "bm25_terms"
 
     term: Mapped[str] = mapped_column(Text, primary_key=True)
@@ -53,8 +47,6 @@ class BM25TermORM(BaseORM):
 
 
 class BM25BlockORM(BaseORM):
-    """Один заполненный блок весов документа."""
-
     __tablename__ = "bm25_blocks"
 
     block: Mapped[int] = mapped_column(primary_key=True)
@@ -67,8 +59,6 @@ class BM25BlockORM(BaseORM):
 
 
 class UserORM(BaseORM):
-    """Учётная запись пользователя."""
-
     __tablename__ = "users"
 
     user_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
@@ -80,8 +70,6 @@ class UserORM(BaseORM):
 
 
 class ChatORM(BaseORM):
-    """Диалог одного пользователя."""
-
     __tablename__ = "chats"
 
     chat_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
@@ -92,8 +80,6 @@ class ChatORM(BaseORM):
 
 
 class HistoryORM(BaseORM):
-    """Сохранённый вопрос, ответ и модель."""
-
     __tablename__ = "histories"
 
     record_id: Mapped[UUID] = mapped_column(SqlUUID, primary_key=True)
@@ -103,5 +89,4 @@ class HistoryORM(BaseORM):
     llm_response: Mapped[str] = mapped_column(Text, nullable=False)
     llm_model: Mapped[str] = mapped_column(Text, nullable=False)
 
-    # Имя колонки задано существующими миграциями PostgreSQL.
     dialog_at: Mapped[datetime] = mapped_column("dialog_time", TIMESTAMP(timezone=True), nullable=False, default=get_current_time)

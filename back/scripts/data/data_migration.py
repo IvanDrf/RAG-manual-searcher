@@ -56,7 +56,6 @@ async def import_book(
 
 
 async def migrate_books(books_path: Path) -> None:
-    """Обработать PDF и опубликовать индекс одновременно с импортом."""
     paths = sorted(books_path.glob(f"*{CONFIG.books_ext}"))
     paths = [path for path in paths if path.is_file()]
     if not paths:
@@ -84,7 +83,6 @@ async def migrate_books(books_path: Path) -> None:
 
 
 async def rebuild_books_index() -> None:
-    """Перестроить индекс по существующим чанкам с исходниками."""
     engine, session_maker = connect_to_postgresql(CONFIG)
     try:
         async with session_maker.begin() as session:
@@ -95,7 +93,6 @@ async def rebuild_books_index() -> None:
 
 
 def main() -> None:
-    """Запустить импорт или перестроение индекса."""
     parser = ArgumentParser(description=__doc__)
     parser.add_argument("--books-dir", type=Path, default=CONFIG.books_dir)
     parser.add_argument("--reindex", action="store_true")

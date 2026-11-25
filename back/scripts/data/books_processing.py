@@ -1,5 +1,3 @@
-"""Извлечение исходных страниц и подготовка поискового текста."""
-
 from asyncio import get_running_loop
 from concurrent.futures import ProcessPoolExecutor
 from io import BytesIO
@@ -18,7 +16,6 @@ _POOL = ProcessPoolExecutor(max_workers=6)
 
 
 async def process_book(book: Path | UploadFile) -> tuple[BookORM, list[ChunkORM]]:
-    """Извлечь страницы локального или загруженного PDF."""
     if isinstance(book, Path):
         return await process_book_by_filepath(book)
 
@@ -26,7 +23,6 @@ async def process_book(book: Path | UploadFile) -> tuple[BookORM, list[ChunkORM]
 
 
 async def process_book_by_upload_file(book: UploadFile) -> tuple[BookORM, list[ChunkORM]]:
-    """Извлечь страницы загруженной книги."""
     title = book.filename
     if not title:
         raise ValueError("book name is empty")
@@ -37,7 +33,6 @@ async def process_book_by_upload_file(book: UploadFile) -> tuple[BookORM, list[C
 
 
 async def process_book_by_filepath(book: Path) -> tuple[BookORM, list[ChunkORM]]:
-    """Извлечь страницы из локального PDF."""
     if not book.is_file():
         raise ValueError("book is not a file")
 
@@ -56,7 +51,6 @@ def _parse_book(book: bytes | Path, title: str) -> tuple[BookORM, list[ChunkORM]
 
 
 def create_chunks_from_book(book: PDF, book_id: UUID) -> list[ChunkORM]:
-    """Сохранить извлечённую страницу и поисковый текст отдельно."""
     chunks: list[ChunkORM] = []
     for page in book.pages:
         source_text = page.extract_text() or ""

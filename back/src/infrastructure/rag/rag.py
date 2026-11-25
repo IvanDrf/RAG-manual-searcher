@@ -1,5 +1,3 @@
-"""Общий промпт и генерация ответа с найденными фрагментами."""
-
 from asyncio import to_thread
 from collections.abc import Sequence
 
@@ -16,13 +14,11 @@ TOP_K = 3
 
 
 async def retrieve_context(session: AsyncSession, question: str) -> list[SearchHit]:
-    """Нормализовать вопрос и найти контекст для общего промпта."""
     normalized = await to_thread(normalize_text, question)
     return await rank_chunks(session, normalized.split(), TOP_K)
 
 
 def build_prompt(question: str, hits: Sequence[SearchHit]) -> str:
-    """Собрать вопрос и исходные фрагменты с номерами для цитирования."""
     context = "\n\n".join(f"[CHUNK {number}] {hit.book_title}\n{hit.source_text}" for number, hit in enumerate(hits, start=1))
     return f"""Ты — ассистент по вузовским учебным материалам по математике.
 Ответь на вопрос по-русски. Используй только сведения из блока ИСТОЧНИКИ.
@@ -47,7 +43,6 @@ async def answer_question(
     hits: Sequence[SearchHit],
     settings: LLMConfig,
 ) -> str:
-    """Сгенерировать ответ либо вернуть отказ при пустой выдаче."""
     if not hits:
         return REFUSAL
 

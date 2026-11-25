@@ -46,11 +46,10 @@ class LLMStatisticsScraper:
             except InternalError as e:
                 logger.critical("can't save llm statistics in database", error=e)
 
-                # if batch size is significatn more than standart size, just drop new record
                 if len(self._batch) >= 3 * self._batch_size:
                     return
 
-                self._batch.append(None)  # add additional slot for new record, don't increment size
+                self._batch.append(None)
 
         self._batch[self._pos] = LLMResponseORM(
             response_id=uuid4(),

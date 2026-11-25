@@ -1,5 +1,3 @@
-"""Веса разреженного индекса Okapi BM25."""
-
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Iterator, Mapping
 from math import log1p
@@ -16,8 +14,6 @@ def term_coordinates(terms: Iterable[str]) -> dict[str, tuple[int, int]]:
 
 
 class BM25:
-    """Подсчитать статистику корпуса и веса только для ненулевых координат."""
-
     def __init__(self, documents: Iterable[tuple[UUID, str]]) -> None:
         self._counts: dict[UUID, Counter[str]] = {}
         document_frequency: Counter[str] = Counter()
@@ -36,11 +32,9 @@ class BM25:
 
     @property
     def coordinates(self) -> Mapping[str, tuple[int, int]]:
-        """Вернуть координаты словаря, использованные при расчёте весов."""
         return self._coordinates
 
     def weighted_blocks(self) -> Iterator[tuple[UUID, int, dict[int, float]]]:
-        """Выдать заполненные блоки векторов корпуса."""
         for chunk_id, counts in self._counts.items():
             if not counts:
                 continue

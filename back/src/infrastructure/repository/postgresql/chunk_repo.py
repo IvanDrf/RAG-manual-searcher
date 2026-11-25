@@ -1,5 +1,3 @@
-"""Доступ к сохранённым фрагментам книг."""
-
 from collections.abc import AsyncGenerator
 
 from sqlalchemy import select
@@ -17,7 +15,6 @@ async def get_all_chunks(
     *,
     with_source: bool = False,
 ) -> AsyncGenerator[ChunkORM, None]:
-    """Перебрать чанки в стабильном порядке."""
     query = select(ChunkORM).order_by(ChunkORM.chunk_id)
     if with_source:
         query = query.where(ChunkORM.source_text.is_not(None))

@@ -8,11 +8,13 @@ import pytest
 from fastapi import HTTPException, Response
 from hypothesis import given
 from hypothesis import strategies as st
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api import chat
 from src.core.exc import ExternalError
 from src.domain.models.postgresql import ChatORM, HistoryORM
+from src.domain.rules import get_current_time
 from src.domain.schemas import LLMPromtSchema
 from src.infrastructure.repository.postgresql.bm25_repo import SearchHit
 
@@ -197,3 +199,69 @@ async def test_empty_context_saves_refusal_without_llm(
     history = next(call.args[0] for call in session_mock.add.call_args_list if isinstance(call.args[0], HistoryORM))
     assert history.llm_response == rag_module.REFUSAL
     session_mock.commit.assert_awaited_once()
+
+
+async def test_history_response_exposes_stored_timestamp(session: AsyncSession, monkeypatch: pytest.MonkeyPatch) -> None:
+    user_id, chat_id = uuid4(), uuid4()
+    timestamp = get_current_time()
+    record = HistoryORM(
+        record_id=uuid4(), chat_id=chat_id, user_request="question", llm_response="answer", llm_model="model", dialog_at=timestamp
+    )
+    find = AsyncMock(return_value=[record])
+    monkeypatch.setattr(chat, "find_history_for_user", find)
+
+    result = await unwrap(chat.get_user_history)(None, Response(), chat_id, (3, 1), session, user_id)
+
+    find.assert_awaited_once_with(session, user_id=user_id, chat_id=chat_id, limit=3, offset=1)
+    assert len(result) == 1
+    assert result[0].dialog_time == timestamp
+    payload = result[0].model_dump(mode="json")
+    assert payload["dialog_time"] == timestamp.isoformat()
+    assert "dialog_at" not in payload
+    assert payload["user_request"] == "question"
+    assert payload["llm_response"] == "answer"
+    assert payload["llm_model"] == "model"
+
+
+@pytest.mark.parametrize("histories", [None, []])
+async def test_missing_history_returns_404(session: AsyncSession, monkeypatch: pytest.MonkeyPatch, histories: list | None) -> None:
+    monkeypatch.setattr(chat, "find_history_for_user", AsyncMock(return_value=histories))
+
+    with pytest.raises(HTTPException) as caught:
+        await unwrap(chat.get_user_history)(None, Response(), uuid4(), (10, 0), session, uuid4())
+
+    assert caught.value.status_code == 404
+
+
+@pytest.mark.parametrize("failure_stage", ["retrieval", "generation"])
+async def test_failed_prompt_does_not_save_history_or_commit(
+    session: AsyncSession, session_mock: MagicMock, monkeypatch: pytest.MonkeyPatch, failure_stage: str
+) -> None:
+    failure = SQLAlchemyError("search unavailable") if failure_stage == "retrieval" else ExternalError("LLM unavailable")
+    search = AsyncMock(return_value=[SearchHit(uuid4(), "Учебник", "Контекст", 1.0)])
+    send = AsyncMock(return_value=("answer", "model"))
+    if failure_stage == "retrieval":
+        search.side_effect = failure
+    else:
+        send.side_effect = failure
+
+    monkeypatch.setattr(chat, "retrieve_context", search)
+    monkeypatch.setattr(chat, "send_request_to_llm_fallback", send)
+
+    with pytest.raises(type(failure)) as caught:
+        await unwrap(chat.send_promt_to_llm)(
+            request=None,
+            promt=LLMPromtSchema(message="question"),
+            client=MagicMock(),
+            llm_url="https://llm.invalid",
+            llm_api_key="test-key",
+            session=session,
+            user_id=uuid4(),
+            scraper=MagicMock(),
+        )
+
+    assert caught.value is failure
+    assert not any(isinstance(call.args[0], HistoryORM) for call in session_mock.add.call_args_list)
+    session_mock.commit.assert_not_awaited()
+    if failure_stage == "retrieval":
+        send.assert_not_awaited()
