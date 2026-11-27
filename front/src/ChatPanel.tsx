@@ -1,5 +1,5 @@
 import { ArrowUp, BookOpen, Copy, ImagePlus, X } from 'lucide-react'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { MessagePhoto } from './ChatPhotos'
 import type { ChatPhoto } from './photoStore'
 import { MAX_QUESTION_LENGTH } from './chatApi'
@@ -97,6 +97,10 @@ export function ChatPanel({
   userId, chat, presentation, draft, quote, saving, sendError, pendingSince,
   onDraft, onClearQuote, onSend, onLibrary,
 }: ChatPanelProps) {
+  const stage = useRef<HTMLElement>(null)
+  const composer = useRef<HTMLDivElement>(null)
+  const composerForm = useRef<HTMLFormElement>(null)
+  const messageList = useRef<HTMLDivElement>(null)
   const timeline = useRef<HTMLDivElement>(null)
   const followLatest = useRef(true)
   const textarea = useRef<HTMLTextAreaElement>(null)
@@ -112,13 +116,43 @@ export function ChatPanel({
     ? Math.floor(writing.length * (time - presentation.thinkUntil) / (presentation.endAt - presentation.thinkUntil))
     : writing.length
 
+  const updateMessageClip = useCallback(() => {
+    if (!messageList.current || !composerForm.current) return
+    const messagesRect = messageList.current.getBoundingClientRect()
+    const composerRect = composerForm.current.getBoundingClientRect()
+    const composerStyle = getComputedStyle(composerForm.current)
+    const cornerHeight = Math.max(
+      parseFloat(composerStyle.borderBottomLeftRadius) || 0,
+      parseFloat(composerStyle.borderBottomRightRadius) || 0,
+    )
+    const header = stage.current?.previousElementSibling
+    const top = Math.max(0, (header?.getBoundingClientRect().bottom ?? 0) + 1 - messagesRect.top)
+    const bottom = Math.max(0, messagesRect.bottom - (composerRect.bottom - cornerHeight - 1))
+    messageList.current.style.clipPath = `inset(${top}px 0 ${bottom}px 0)`
+  }, [])
+
+  useLayoutEffect(() => {
+    if (!composer.current) return
+    const observer = new ResizeObserver(() => {
+      const height = composer.current?.getBoundingClientRect().height ?? 0
+      stage.current?.style.setProperty('--composer-height', `${height}px`)
+      if (followLatest.current && timeline.current) timeline.current.scrollTop = timeline.current.scrollHeight
+      updateMessageClip()
+    })
+    observer.observe(composer.current)
+    if (stage.current) observer.observe(stage.current)
+    if (messageList.current) observer.observe(messageList.current)
+    return () => observer.disconnect()
+  }, [empty, updateMessageClip])
+
   useLayoutEffect(() => {
     followLatest.current = true
   }, [messages])
 
   useLayoutEffect(() => {
     if (followLatest.current && timeline.current) timeline.current.scrollTop = timeline.current.scrollHeight
-  }, [messages, thinking, typing, count, pendingSince])
+    updateMessageClip()
+  }, [messages, thinking, typing, count, pendingSince, updateMessageClip])
 
   useEffect(() => { if (quote) textarea.current?.focus() }, [quote])
 
@@ -130,7 +164,7 @@ export function ChatPanel({
   }
 
   return (
-    <section className="chat-stage" aria-label="Чат по математике">
+    <section className="chat-stage" ref={stage} aria-label="Чат по математике">
       <div className="chat-smoke" aria-hidden="true"><span /><span /><span /><span /></div>
       <div className={'chat-panel' + (empty ? ' chat-panel-empty' : '')}>
           {empty && (
@@ -142,8 +176,9 @@ export function ChatPanel({
           )}
           {!empty && <div className="chat-timeline" ref={timeline} onScroll={({ currentTarget }) => {
             followLatest.current = currentTarget.scrollHeight - currentTarget.scrollTop - currentTarget.clientHeight < 75
+            updateMessageClip()
           }}>
-            <div className="messages" role="log" aria-label="Сообщения чата">
+            <div className="messages" ref={messageList} role="log" aria-label="Сообщения чата">
               {messages.map((message) => {
                 const active = presentation?.messageId === message.id
                 if (active && thinking) {
@@ -170,8 +205,8 @@ export function ChatPanel({
               {pendingSince !== undefined && <ThinkingAnimation startedAt={pendingSince} />}
             </div>
           </div>}
-        <div className="composer-area">
-          <form className="composer" onSubmit={submit}>
+        <div className="composer-area" ref={composer}>
+          <form className="composer" ref={composerForm} onSubmit={submit}>
             {quote && <QuoteCard quote={quote} onRemove={saving ? undefined : onClearQuote} />}
             <div className="composer-line">
               <textarea ref={textarea} rows={3} value={draft} maxLength={MAX_QUESTION_LENGTH} readOnly={saving} onChange={(event) => onDraft(event.target.value)} placeholder={quote ? 'Добавьте вопрос к цитате…' : 'Напишите вопрос…'} aria-label="Вопрос для чата"
@@ -193,8 +228,6 @@ export function ChatPanel({
               <button className="send-button icon-button" type="submit" disabled={!canSend} aria-label="Отправить вопрос"><ArrowUp size={20} /></button>
             </div>
           </form>
-          <p className="composer-hint">Enter — отправить · Shift + Enter — новая строка</p>
-          <p className="composer-hint">{saving ? 'Ожидаем ответ сервера…' : `До ${MAX_QUESTION_LENGTH} символов вместе с цитатой`}</p>
         </div>
       </div>
     </section>

@@ -134,22 +134,22 @@ h1, h2, p { margin: 0; }
 .sidebar-heading .icon-button { width: 28px; height: 28px; }
 .sidebar-overlay { display: none; }
 .brand-button { background: transparent; border: 0; padding: 0; text-align: left; }
-.new-chat, .admin-link {
+.admin-link {
   display: flex; align-items: center; gap: 10px; min-height: 38px; padding: 0 10px;
   border: 1px solid transparent; border-radius: 9px; background: transparent;
   text-align: left; color: var(--ink); font-size: .88rem;
 }
-.new-chat { margin: 19px 0 3px; background: var(--hover); border-color: var(--border); }
+.new-chat { margin: 19px 0 3px; }
 .new-chat:hover, .admin-link:hover, .sidebar-nav button:hover, .sidebar-history button:hover, .profile-button:hover { background: var(--hover-strong); }
 .sidebar-nav { display: grid; gap: 3px; }
-.sidebar-nav button, .sidebar-history button, .profile-link {
+.new-chat, .sidebar-nav button, .sidebar-history button, .profile-link {
   display: flex; align-items: center; gap: 10px; width: 100%; min-height: 36px; padding: 7px 10px;
   border: 0; border-radius: 8px; background: none; color: var(--muted); text-align: left; font-size: .86rem;
 }
 .sidebar-nav svg, .profile-link svg, .admin-link svg { flex: 0 0 auto; }
-.sidebar-nav .nav-active, .sidebar-history .history-active, .admin-link[aria-current] { background: var(--hover); color: var(--ink); }
+.new-chat[aria-current], .sidebar-nav .nav-active, .sidebar-history .history-active, .admin-link[aria-current] { background: var(--hover); color: var(--ink); }
 .sidebar-history { flex: 1; overflow-y: auto; min-height: 60px; margin: 19px 0 7px; }
-.sidebar-history h2 { padding: 2px 10px 7px; font-size: .81rem; color: var(--muted); font-weight: 560; }
+.sidebar-history h2 { padding: 2px 10px 7px; font-size: .81rem; color: color-mix(in srgb, var(--muted), var(--ink) 35%); font-weight: 560; }
 .sidebar-history button > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sidebar-empty { color: var(--muted); font-size: .81rem; line-height: 1.5; padding: 0 10px; }
 .profile-wrap { position: relative; padding-top: 9px; border-top: 1px solid var(--border); }
@@ -160,8 +160,7 @@ h1, h2, p { margin: 0; }
 .profile-avatar { width: 34px; height: 34px; display: grid; place-items: center; background: var(--hover-strong); border-radius: 9px; }
 .profile-name { display: grid; flex: 1; gap: 2px; }
 .profile-name strong { font-size: .83rem; font-weight: 640; }
-.profile-name small, .history-note { font-size: .75rem; color: var(--muted); }
-.history-note { padding: 11px 8px 2px; }
+.profile-name small { font-size: .75rem; color: var(--muted); }
 .admin-link { margin-top: 4px; }
 .profile-popover {
   position: absolute; z-index: 4; left: 0; right: 0; bottom: calc(100% + 6px); border-radius: 13px;
@@ -171,11 +170,18 @@ h1, h2, p { margin: 0; }
 .profile-popover .muted { margin-top: 3px; margin-bottom: 6px; font-size: .85rem; }
 .profile-link:hover { background: var(--hover); }
 .main-workspace { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.main-workspace-chat { position: relative; margin: -8px -8px -8px 0; }
+.main-workspace-chat > .workspace-header {
+  position: absolute; z-index: 3; top: 8px; left: 0; right: 20px;
+  background: linear-gradient(var(--base), transparent);
+}
 .workspace-header {
   min-height: 43px; padding: 0 7px 4px; display: flex; gap: 8px; align-items: center;
   color: var(--muted); font-size: .84rem;
 }
 .header-title { flex: 1; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.open-sidebar { display: none; }
+.sidebar-collapsed .open-sidebar { display: inline-grid; }
 .return-chat { justify-content: flex-start; }
 .demo-pill { display: inline-flex; align-items: center; min-height: 25px; width: fit-content; border-radius: 7px; padding: 3px 8px; border: 1px solid var(--border); color: var(--muted); background: var(--hover); font-size: .75rem; white-space: nowrap; }
 .theme-button {
@@ -208,8 +214,18 @@ h1, h2, p { margin: 0; }
   100% { transform: translate(-39%, -62%) rotate(-28deg) scale(.95); }
 }
 .chat-panel { display: flex; flex-direction: column; min-height: 0; overflow: hidden; position: relative; z-index: 1; }
-.chat-panel-empty { justify-content: center; overflow-y: auto; }
-.chat-timeline { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; }
+.chat-panel-empty { justify-content: center; overflow-y: auto; padding-top: 51px; }
+.chat-panel:not(.chat-panel-empty) { display: grid; grid-template-rows: minmax(0, 1fr); }
+.chat-timeline {
+  grid-area: 1 / 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
+  padding-top: 51px; padding-bottom: var(--composer-height, 250px);
+  scrollbar-width: thin; scrollbar-color: var(--muted) transparent;
+}
+.chat-timeline::-webkit-scrollbar { width: 8px; background: transparent; }
+.chat-timeline::-webkit-scrollbar-track { background: transparent; }
+.chat-timeline::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 8px; }
+.chat-timeline::-webkit-scrollbar-button { display: none; }
+.chat-panel:not(.chat-panel-empty) > .composer-area { grid-area: 1 / 1; align-self: end; z-index: 2; margin-right: 12px; }
 .chat-empty { padding: 22px 20px 22px; text-align: center; }
 .chat-symbol { display: block; color: var(--muted); font: italic 2.1rem / 1 var(--serif); }
 .chat-empty h1 { margin-top: 14px; font: 500 clamp(1.86rem, 3.05vw, 3.08rem) / 1.06 var(--serif); letter-spacing: -.042em; }
@@ -247,7 +263,6 @@ h1, h2, p { margin: 0; }
 .draft-photo span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: .83rem; }
 .draft-photo .icon-button { width: 28px; height: 28px; }
 .composer-error { margin: 0; }
-.composer-hint { text-align: center; color: var(--muted); font-size: .73rem; line-height: 1.45; margin-top: 3px; }
 .messages { padding: 24px 19px 14px; width: min(100%, 888px); margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
 .message { max-width: 100%; overflow-wrap: anywhere; }
 .message-user { align-self: flex-end; max-width: 87%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 12px 12px 3px 12px; background: var(--hover); }
@@ -408,6 +423,8 @@ h1, h2, p { margin: 0; }
   .sidebar.sidebar-open { transform: none; visibility: visible; }
   .sidebar-overlay { position: fixed; display: block; z-index: 5; inset: 0; border: 0; background: #0008; }
   .workspace-header { padding-inline: 0; }
+  .workspace .open-sidebar { display: inline-grid; }
+  .sidebar-open ~ .main-workspace .open-sidebar { display: none; }
   .page-scroll { padding: 15px 9px 24px; }
   .reader-header { padding-inline: 6px; }
   .composer textarea { min-height: 87px; }

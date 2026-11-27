@@ -1,5 +1,5 @@
 import {
-  BookOpen, ChartNoAxesColumnIncreasing, ChevronDown, LogOut, Menu,
+  BookOpen, ChartNoAxesColumnIncreasing, ChevronDown, LogOut,
   PanelLeft, PanelLeftClose, Plus, UserRound,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -206,7 +206,7 @@ export function Workspace({ session, onLogout, theme, onTheme }: WorkspaceProps)
           <button className="brand-button" onClick={() => navigate('chat')} aria-label="MathContext — к чату"><Brand /></button>
           <button className="icon-button sidebar-close" aria-label="Свернуть панель" onClick={toggleSidebar}><PanelLeftClose size={17} /></button>
         </div>
-        <button className="new-chat" onClick={() => selectChat(null)}><Plus size={19} /> Новый чат</button>
+        <button className="new-chat" aria-current={view === 'chat' && activeId === null ? 'page' : undefined} onClick={() => selectChat(null)}><Plus size={19} /> Новый чат</button>
         <nav className="sidebar-nav" aria-label="Разделы">
           <button className={view === 'library' ? 'nav-active' : undefined} aria-current={view === 'library' ? 'page' : undefined} onClick={() => navigate('library')}><BookOpen size={17} /> Каталог книг</button>
         </nav>
@@ -236,12 +236,11 @@ export function Workspace({ session, onLogout, theme, onTheme }: WorkspaceProps)
           </button>
         </div>
         {isAdmin && <button className="admin-link" aria-current={view === 'admin' ? 'page' : undefined} onClick={() => navigate('admin')}><ChartNoAxesColumnIncreasing size={17} /> Администрирование</button>}
-        <p className="history-note">История в этом браузере</p>
       </aside>
 
-      <main className="main-workspace">
+      <main className={'main-workspace' + (view === 'chat' ? ' main-workspace-chat' : '')}>
         <header className="workspace-header">
-          <button className="icon-button open-sidebar" aria-label="Переключить боковую панель" onClick={toggleSidebar}>{sidebarOpen ? <Menu size={18} /> : <PanelLeft size={18} />}</button>
+          <button className="icon-button open-sidebar" aria-label="Открыть боковую панель" onClick={toggleSidebar}><PanelLeft size={18} /></button>
           {view === 'chat'
             ? <span className="header-title">{title}</span>
             : <button className="text-button header-title return-chat" onClick={() => navigate('chat')}>Вернуться в чат</button>}
