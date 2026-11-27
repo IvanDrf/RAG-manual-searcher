@@ -1,5 +1,7 @@
 # Информация по разработке
 
+Запуск unit- и интеграционных тестов описан в [руководстве по тестированию backend](testing.md).
+
 ## Работа с Backend
 
 Создайте файл ```.env``` и создайте в нем переменные окрудения, необходимые для работы приложения
@@ -44,10 +46,16 @@ make back-dev-up
 cd back/
 ```
 
-Примените миграции
+Примените миграции для `PostgreSQL`
 
 ```bash
-uv run alembic upgrade head
+uv run alembic -c migrations/postgresql upgrade head
+```
+
+Примените миграции для `ClickHouse`
+
+```bash
+uv run alembic -c migrations/clickhouse upgrade head
 ```
 
 Запускать различные скрипты или сам backend сервер, нужно из директории `back/`:

@@ -7,9 +7,11 @@ authors = [{ name = "begsta", email = "s.begdash@gmail.com" }]
 requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.19.2",
+    "async-lru>=2.4.0",
     "asyncpg>=0.31.0",
     "bcrypt>=5.0.0",
     "bm25s>=0.3.11",
+    "clickhouse-connect[alembic,async,sqlalchemy-async]>=1.11.0",
     "fastapi>=0.141.1",
     "httpx>=0.28.1",
     "loguru>=0.7.3",
@@ -27,6 +29,7 @@ dependencies = [
     "redis>=8.1.0",
     "slowapi>=0.1.10",
     "sqlalchemy>=2.0.52",
+    "ty>=0.0.110",
     "uvicorn>=0.52.4",
 ]
 
@@ -34,11 +37,21 @@ dependencies = [
 line-length = 140
 exclude = ["alembic"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-m 'not integration' --strict-markers"
+markers = ["integration: requires isolated services from docker-compose.test.yml"]
+
 [dependency-groups]
 dev = [
+    "fakeredis>=2.40.0",
     "hypothesis>=6.168.0",
     "ipykernel>=7.3.0",
     "pre-commit>=4.6.2",
     "pytest>=9.1.1",
+    "pytest-asyncio>=1.5.0",
     "ruff>=0.16.6",
 ]

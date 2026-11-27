@@ -44,7 +44,8 @@ def downgrade() -> None:
     # WARNING: constraint name is None; this directive will fail as
     # rendered.  Add a name, or use a naming convention; see
     # https://alembic.sqlalchemy.org/en/latest/naming.html
-    op.drop_constraint(None, 'histories', type_='foreignkey')
+    # Сохраняем код исторической миграции; ограничение downgrade описано выше.
+    op.drop_constraint(None, 'histories', type_='foreignkey')  # ty: ignore[invalid-argument-type]
     op.create_foreign_key(op.f('histories_user_id_fkey'), 'histories', 'users', ['user_id'], ['user_id'], ondelete='CASCADE')
     op.drop_index(op.f('ix_histories_chat_id'), table_name='histories')
     op.create_index(op.f('ix_histories_user_id_dialog_time'), 'histories', ['user_id', 'dialog_time'], unique=False)

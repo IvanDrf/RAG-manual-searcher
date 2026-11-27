@@ -1,6 +1,8 @@
 COMPOSE	:= docker-compose 
 COMPOSE_BACK_DEV := $(COMPOSE) --env-file .env -f infrastructure/back/docker-compose.dev.yml
 COMPOSE_BACK_PROD := $(COMPOSE) --env-file .env -f infrastructure/back/docker-compose.prod.yml
+COMPOSE_BACK_TEST ?= docker compose -f infrastructure/back/docker-compose.test.yml
+UV ?= uv
 
 # BACK
 
@@ -41,3 +43,23 @@ back-prod-down-volumes:
 .PHONY: back-prod-app-logs
 back-prod-app-logs:
 	$(COMPOSE_BACK_PROD) logs rag_searcher_app 
+
+# TESTS
+.PHONY: run-test
+run-test:
+	@set -eu; \
+	$(UV) sync --project back --locked --dev; \
+	cleanup() { \
+		run_status=$$?; \
+		trap - EXIT; \
+		$(COMPOSE_BACK_TEST) down --remove-orphans || { \
+			if [ "$$run_status" -eq 0 ]; then run_status=1; fi; \
+		}; \
+		exit "$$run_status"; \
+	}; \
+	trap cleanup EXIT; \
+	trap 'exit 129' HUP; \
+	trap 'exit 130' INT; \
+	trap 'exit 143' TERM; \
+	$(COMPOSE_BACK_TEST) up -d --wait --wait-timeout 120; \
+	(cd back && $(UV) run --locked --no-sync pytest -m '' tests/)

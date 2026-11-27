@@ -3,7 +3,7 @@ from uuid import UUID
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.models import ChatORM, HistoryORM
+from src.domain.models.postgresql import ChatORM, HistoryORM
 
 
 async def add_history(session: AsyncSession, history: HistoryORM, commit: bool = False) -> None:
@@ -25,7 +25,7 @@ async def find_history_for_user(
         select(HistoryORM)
         .join(ChatORM, ChatORM.chat_id == HistoryORM.chat_id)
         .where(and_(ChatORM.user_id == user_id, HistoryORM.chat_id == chat_id))
-        .order_by(HistoryORM.dialog_time.desc())
+        .order_by(HistoryORM.dialog_at.desc())
         .limit(limit)
         .offset(offset)
     )

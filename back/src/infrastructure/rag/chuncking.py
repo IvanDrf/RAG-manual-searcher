@@ -6,7 +6,6 @@ from nltk.tokenize import word_tokenize
 
 
 def lemman_text_and_write_to_bd() -> None:
-    """Лемматизация чанков"""
     nltk.download("punkt_tab")
     nltk.download("stopwords")
 
@@ -15,18 +14,18 @@ def lemman_text_and_write_to_bd() -> None:
     morph = pymorphy3.MorphAnalyzer()
     df: pd.DataFrame = pd.read_csv("database.csv")
 
-    df["chunc_text"] = df["chunc_text"].str.replace("\n", " ")  # заменяем переходы на пробелы
-    df["chunc_text"] = df["chunc_text"].str.casefold()  # опускаем в нижний регистр
+    df["chunc_text"] = df["chunc_text"].str.replace("\n", " ")
+    df["chunc_text"] = df["chunc_text"].str.casefold()
 
-    cache: dict[str, str] = {}  # кэш для леммантизированных слов
-    lemmen_text: list[str] = []  # массив лемантизированных слов
+    cache: dict[str, str] = {}
+    lemmen_text: list[str] = []
     for idx in range(len(df)):
         chunk = df.iloc[idx]["chunc_text"]
         chunk: list[str] = word_tokenize(chunk, language="russian")
         new_string = [word for word in chunk if word.isalpha() and word not in stopwords_russian]
 
         for i, word in enumerate(new_string):
-            if word not in cache:  # если слово уже приведенно в начальную форму
+            if word not in cache:
                 cache[word] = morph.parse(word)[0].normal_form
             new_string[i] = cache[word]
 
@@ -37,13 +36,11 @@ def lemman_text_and_write_to_bd() -> None:
 
 
 def tokinizing_text_from_LLM(text: str) -> str:
-    """Лемматизация слов для запроса в LLM"""
     if not isinstance(text, str):
         raise TypeError("text must be string")
 
     morph = pymorphy3.MorphAnalyzer()
     stop_words: set[str] = set(stopwords.words("russian"))
-    # привидение к нижнему регистру, и токенизируя
     tokinized_words: list[str] = word_tokenize(text.casefold(), language="russian")
     tokinized_words = [word for word in tokinized_words if word.isalpha() and word not in stop_words]
 

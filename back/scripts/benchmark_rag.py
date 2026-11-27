@@ -17,8 +17,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.config import CONFIG
 from src.core.exc import ExternalError
-from src.domain.models import BookORM, ChunkORM
-from src.infrastructure.clients.llm_clients import send_request_to_llm
+from src.domain.models.postgresql import BookORM, ChunkORM
+from src.infrastructure.clients.llm_clients import request_completion
 from src.infrastructure.rag.normalization import normalize_text
 from src.infrastructure.rag.rag import REFUSAL, TOP_K, answer_question, retrieve_context
 from src.infrastructure.repository.postgresql.bm25_repo import (
@@ -31,8 +31,6 @@ _DATASET = Path(__file__).resolve().parents[2] / "data" / "benchmark" / "math.js
 
 
 class Fragment(BaseModel):
-    """Фрагмент и его место в оригинальном PDF."""
-
     id: str
     book: str
     page: int
@@ -49,13 +47,10 @@ class Question(BaseModel):
 
 
 class Dataset(BaseModel):
-    """Фиксированный корпус и разметка для прогона."""
-
     fragments: list[Fragment]
     questions: list[Question]
 
     def check_labels(self) -> None:
-        """Проверить объём набора и ссылки на фрагменты."""
         fragment_ids = {fragment.id for fragment in self.fragments}
         question_ids = {question.id for question in self.questions}
         normal_count = sum(bool(question.relevant_ids) for question in self.questions)
@@ -71,16 +66,12 @@ class Dataset(BaseModel):
 
 
 class Verdict(BaseModel):
-    """Структурированная оценка ответа моделью-судьёй."""
-
     model_config = ConfigDict(strict=True, extra="forbid", str_strip_whitespace=True)
     correct: bool
     reason: str
 
 
 class Evaluation(BaseModel):
-    """Данные по одному вопросу, включая отказ и ошибку выполнения."""
-
     question: Question
     hits: list[dict[str, str | int | float]]
     answer: str | None = None
@@ -95,7 +86,6 @@ def retrieval_scores(
     retrieved_ids: list[str],
     relevant_ids: list[str],
 ) -> tuple[float, float]:
-    """Вернуть Recall@3 и reciprocal rank для обычного вопроса."""
     relevant = set(relevant_ids)
     top_ids = retrieved_ids[:TOP_K]
     recall = len(relevant.intersection(top_ids)) / len(relevant)
@@ -159,7 +149,7 @@ async def _judge_answer(client: AsyncClient, question: Question, answer: str) ->
 Верни JSON с двумя полями: correct (true или false) и reason (краткая причина).
 {data}
 """
-    result = await send_request_to_llm(
+    result = await request_completion(
         client,
         settings=CONFIG,
         prompt=prompt,
@@ -218,12 +208,20 @@ async def _evaluate(
 def _summarize(evaluations: list[Evaluation]) -> dict:
     ordinary = [item for item in evaluations if item.question.relevant_ids]
     traps = [item for item in evaluations if not item.question.relevant_ids]
+    recalls: list[float] = []
+    reciprocal_ranks: list[float] = []
+    verdicts: list[Verdict] = []
+    for item in ordinary:
+        if item.recall_at_3 is None or item.reciprocal_rank_at_3 is None:
+            raise ValueError(f"{item.question.id}: отсутствуют метрики поиска")
+        recalls.append(item.recall_at_3)
+        reciprocal_ranks.append(item.reciprocal_rank_at_3)
+        if item.verdict is not None:
+            verdicts.append(item.verdict)
     return {
-        "recall_at_3": mean(item.recall_at_3 for item in ordinary),
-        "mrr_at_3": mean(item.reciprocal_rank_at_3 for item in ordinary),
-        "accuracy": (
-            sum(item.verdict.correct for item in ordinary) / len(ordinary) if all(item.verdict is not None for item in ordinary) else None
-        ),
+        "recall_at_3": mean(recalls),
+        "mrr_at_3": mean(reciprocal_ranks),
+        "accuracy": (sum(verdict.correct for verdict in verdicts) / len(ordinary) if len(verdicts) == len(ordinary) else None),
         "correct_rejection_rate": (
             sum(item.refusal is not None for item in traps) / len(traps) if all(item.error is None for item in traps) else None
         ),
@@ -234,7 +232,6 @@ def _summarize(evaluations: list[Evaluation]) -> dict:
 
 
 async def run_benchmark(dataset: Dataset, dataset_hash: str) -> dict:
-    """Прогнать размеченные вопросы последовательно и собрать отчёт."""
     started = datetime.now(UTC).isoformat()
     fragments, results = await _retrieve_all(dataset)
     evaluations = []
@@ -257,7 +254,6 @@ async def run_benchmark(dataset: Dataset, dataset_hash: str) -> dict:
 
 
 def main() -> int:
-    """Загрузить набор, выполнить прогон и записать отчёт."""
     parser = ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, default=_DATASET)
     parser.add_argument("--output", type=Path, required=True)

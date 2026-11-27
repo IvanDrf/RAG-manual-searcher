@@ -1,5 +1,3 @@
-"""Хранение индекса и ранжирование чанков в PostgreSQL."""
-
 from dataclasses import dataclass
 from itertools import batched
 from uuid import UUID
@@ -9,7 +7,7 @@ from sqlalchemy import Text, bindparam, delete, insert, text
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.models import BM25BlockORM, BM25TermORM
+from src.domain.models.postgresql import BM25BlockORM, BM25TermORM
 from src.infrastructure.rag.bm25 import BLOCK_SIZE, BM25
 from src.infrastructure.repository.postgresql.chunk_repo import get_all_chunks
 
@@ -47,8 +45,6 @@ _RANK_CHUNKS = text(
 
 @dataclass(frozen=True)
 class SearchHit:
-    """Оценка, текст и источник найденного фрагмента."""
-
     chunk_id: UUID
     book_title: str
     source_text: str
@@ -92,7 +88,6 @@ async def rank_chunks(
     terms: list[str],
     limit: int,
 ) -> list[SearchHit]:
-    """Найти документы по сохранённым весам за один SQL-запрос."""
     if not terms or limit <= 0:
         return []
 

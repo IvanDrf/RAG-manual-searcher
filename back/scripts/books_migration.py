@@ -2,7 +2,7 @@ from asyncio import run
 from uuid import uuid4
 
 from src.core.config import CONFIG
-from src.domain.models import BookORM
+from src.domain.models.postgresql import BookORM
 from src.infrastructure.repository.postgresql.chunk_repo import add_books
 from src.infrastructure.repository.postgresql.connection import connect_to_postgresql
 

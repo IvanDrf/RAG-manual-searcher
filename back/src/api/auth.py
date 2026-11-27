@@ -2,15 +2,17 @@ from typing import Annotated
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.dependencies import get_session
+from src.api.dependencies import get_redis, get_session
 from src.api.limiter import limiter
 from src.api.utils import create_jwt_tokens, handle_errors, set_jwt_in_cookies
-from src.domain.models import UserORM
+from src.domain.models.postgresql import UserORM
 from src.domain.rules import UserRole, decode_jwt, hash_password, is_passwords_are_same
 from src.domain.schemas import LoginUserSchema, RegisterUserSchema, UserInfoSchema
 from src.infrastructure.repository.postgresql.user_repo import add_user, find_user_by_user_id, find_user_by_username
+from src.infrastructure.repository.redis.block_repo import remove_user_from_block_list
 
 auth_router = APIRouter(prefix="/api/v1/auth", tags=["authorization"])
 
@@ -45,7 +47,11 @@ async def register_user(
 @limiter.limit("10/minute")
 @handle_errors
 async def login_user(
-    request: Request, user: LoginUserSchema, response: Response, session: Annotated[AsyncSession, Depends(get_session)]
+    request: Request,
+    user: LoginUserSchema,
+    response: Response,
+    session: Annotated[AsyncSession, Depends(get_session)],
+    redis: Annotated[Redis, Depends(get_redis)],
 ) -> None:
     u = await find_user_by_username(session, user.username)
     if u is None or not is_passwords_are_same(password=user.password, hashed_password=u.hashed_password):
@@ -53,6 +59,10 @@ async def login_user(
 
     if u.is_blocked:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="вы были заблокированы, обратитесь к администратору")
+
+    # если пользователь не заблокирован: u.is_blocked = False, но ему меняли роль,
+    # значит он в блок листе и его нужно удалить
+    await remove_user_from_block_list(redis, str(u.user_id))
 
     payload = {"user_id": str(u.user_id), "user_role": u.user_role.value}
     access, refresh = create_jwt_tokens(payload)
@@ -69,7 +79,7 @@ async def logout_user(request: Request, response: Response) -> None:
 @auth_router.get("/me", status_code=status.HTTP_200_OK, description="Информация о пользователе")
 @limiter.limit("60/minute")
 @handle_errors
-async def get_user_info(request: Request, access_token: Annotated[str, Cookie(alias="access-token")]) -> UserInfoSchema:
+async def get_user_info(request: Request, response: Response, access_token: Annotated[str, Cookie(alias="access-token")]) -> UserInfoSchema:
     if not access_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="отсутствует access токен")
 

@@ -21,13 +21,13 @@
 Backend: Python 3.12+, FastAPI, Pydantic, SQLAlchemy и Alembic.
 Хранение данных: PostgreSQL с расширением pgvector и Redis.
 Поиск выполняет собственная реализация BM25 с разреженными весами в pgvector.
-Ответы генерирует и оценивает локальная Qwen 2.5 3B через Ollama.
+Чат использует внешний LLM API с fallback моделей; бенчмарк — Qwen 2.5 3B через Ollama.
 Окружение: uv, Docker Compose, Prometheus и Grafana.
 
 | Путь | Содержимое |
 | --- | --- |
 | `back/src/` | API, доменные модели, поиск и работа с хранилищами |
-| `back/alembic/` | Миграции схемы PostgreSQL |
+| `back/migrations/postgresql/alembic/` | Миграции схемы PostgreSQL |
 | `back/scripts/` | Подготовка и импорт учебных материалов |
 | `back/tests/` | Тесты backend |
 | `data/` | PDF, текстовые материалы и промежуточные данные |
@@ -49,9 +49,9 @@ uv sync --dev
 
 Заполните `.env` в корне репозитория:
 
-- `LLM_URL` — адрес API chat completions. В примере это Ollama на
-  `http://127.0.0.1:11434/v1/chat/completions`. Для локального запуска
-  используйте `LLM_MODEL=qwen2.5:3b` и `LLM_API_KEY=ollama`.
+- `LLM_URL` — адрес API chat completions, `LLM_API_KEY` — ключ провайдера.
+  Модели чата и fallback задаются в `back/src/api/chat.py`.
+  `LLM_MODEL` задаёт модель автономного RAG и бенчмарка.
 - `JWT_SECRET` — собственный секрет подписи токенов.
 - `APP_PASSWORD_SALT` — корректная bcrypt-соль. Сгенерировать её из `back/`:
   `uv run python -c 'import bcrypt; print(bcrypt.gensalt().decode())'`.
@@ -66,7 +66,7 @@ uv sync --dev
 cd ..
 make back-dev-up
 cd back
-uv run alembic upgrade head
+uv run alembic -c migrations/postgresql/alembic.ini upgrade head
 ```
 
 Для импорта и поиска нужны русские ресурсы NLTK. Импорт из `back/`
@@ -123,9 +123,9 @@ uv run -m src.app.main
 Понадобятся Python 3.12+, uv, Docker Compose и Ollama. В корне репозитория
 создайте `.env` из `.env.example`, если своего файла ещё нет. В Bash это
 `cp .env.example .env`, в PowerShell — `Copy-Item .env.example .env`.
-Проверьте, что `POSTGRES_PORT` совпадает с `POSTGRES_OUTPUT_PORT`,
-а `LLM_URL` и `LLM_MODEL` указывают на ваш Ollama и `qwen2.5:3b`.
-Для локального Ollama подойдут значения из примера.
+Для бенчмарка задайте `LLM_URL=http://127.0.0.1:11434/v1/chat/completions`,
+`LLM_MODEL=qwen2.5:3b`, `LLM_API_KEY=ollama` и `LLM_REQUEST_TIMEOUT=120`.
+Проверьте, что `POSTGRES_PORT` совпадает с `POSTGRES_OUTPUT_PORT`.
 
 Из корня репозитория запустите PostgreSQL. Если Ollama ещё не работает,
 откройте приложение Ollama или выполните `ollama serve` в отдельном терминале.
@@ -135,7 +135,7 @@ docker compose --env-file .env -f infrastructure/back/docker-compose.dev.yml up 
 ollama pull qwen2.5:3b
 cd back
 uv sync --locked --no-install-project
-uv run --no-sync alembic upgrade head
+uv run --no-sync alembic -c migrations/postgresql/alembic.ini upgrade head
 uv run --no-sync python -m nltk.downloader stopwords punkt punkt_tab
 uv run --no-sync -m scripts.benchmark_rag --output benchmark-result.json
 ```
@@ -183,8 +183,9 @@ Accuracy отражает её автоматическую оценку. При
   нулевого вектора в Q02 и формулу первообразной в Q05. Диапазон 0–20%
   отражает нестабильность автоматической оценки на этом наборе.
 
-Интеграционные тесты BM25 запускаются с `RUN_POSTGRES_TESTS=1` после миграций
-командой `uv run -m pytest tests/`. Без переменной запускаются модульные тесты.
+Интеграционные тесты BM25 входят в `make run-test` и используют тестовую БД
+из `infrastructure/back/docker-compose.test.yml`. Дополнительные переменные
+окружения и ручное применение миграций для этих тестов не нужны.
 
 ## Документация
 

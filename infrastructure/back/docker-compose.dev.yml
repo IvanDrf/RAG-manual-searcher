@@ -42,6 +42,30 @@ services:
       retries: 5
       start_period: 5s
 
+  clickhouse:
+    container_name: rag_search_clickhouse_db
+    image: clickhouse:26.6
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB}
+
+    ports:
+      - "${CLICKHOUSE_PORT}:8123"
+      - "${CLICKHOUSE_OUTPUT_PORT}:9000"
+
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks:
+      - rag_search_network
+
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--query", "SELECT 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s 
+
 networks:
   rag_search_network:
     name: rag_search_network
@@ -51,3 +75,4 @@ networks:
 volumes:
   pgdata:
   redis_data:
+  clickhouse_data:

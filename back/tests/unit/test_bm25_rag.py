@@ -8,7 +8,7 @@ import pytest
 from httpx import AsyncClient, MockTransport, Request, Response
 from pydantic import ValidationError
 
-from scripts.benchmark_rag import Verdict, retrieval_scores
+from scripts.benchmark_rag import Evaluation, Question, Verdict, _summarize, retrieval_scores
 from src.core.config import LLMConfig
 from src.infrastructure.rag.bm25 import BM25
 from src.infrastructure.rag.normalization import normalize_text
@@ -91,3 +91,39 @@ def test_judge_requires_boolean() -> None:
     """Строку со словом true нельзя засчитать как корректный вердикт."""
     with pytest.raises(ValidationError):
         Verdict.model_validate_json('{"correct":"true","reason":"yes"}')
+
+
+@pytest.mark.parametrize("missing_verdict", [False, True])
+def test_summary_preserves_incomplete_judging(missing_verdict: bool) -> None:
+    ordinary = Evaluation(
+        question=Question(id="Q01", text="Вопрос", reference="Ответ", relevant_ids=["D01"]),
+        hits=[],
+        recall_at_3=0.0,
+        reciprocal_rank_at_3=0.0,
+        verdict=None if missing_verdict else Verdict(correct=True, reason="Верно"),
+        error="judge: offline" if missing_verdict else None,
+    )
+    trap = Evaluation(
+        question=Question(id="T01", text="Ловушка", reference="", relevant_ids=[]),
+        hits=[],
+        refusal="empty_retrieval",
+    )
+    metrics = _summarize([ordinary, trap])
+    assert metrics["recall_at_3"] == 0.0
+    assert metrics["mrr_at_3"] == 0.0
+    assert metrics["accuracy"] == (None if missing_verdict else 1.0)
+    assert metrics["correct_rejection_rate"] == 1.0
+    assert metrics["failed_questions"] == int(missing_verdict)
+
+
+@pytest.mark.parametrize("missing_field", ["recall_at_3", "reciprocal_rank_at_3"])
+def test_summary_rejects_missing_retrieval_metrics(missing_field: str) -> None:
+    evaluation = Evaluation(
+        question=Question(id="Q01", text="Вопрос", reference="Ответ", relevant_ids=["D01"]),
+        hits=[],
+        recall_at_3=1.0,
+        reciprocal_rank_at_3=1.0,
+    )
+    setattr(evaluation, missing_field, None)
+    with pytest.raises(ValueError, match="Q01: отсутствуют метрики поиска"):
+        _summarize([evaluation])

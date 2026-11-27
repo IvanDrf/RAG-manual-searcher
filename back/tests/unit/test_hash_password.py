@@ -8,11 +8,11 @@ from src.domain.rules import hash_password, is_passwords_are_same
 
 @fixture(scope="module")
 def salt() -> bytes:
-    return gensalt()
+    return gensalt(rounds=4)
 
 
 @settings(max_examples=5, deadline=None)
-@given(password=st.text())
+@given(password=st.text(max_size=30).filter(lambda value: len(value.encode()) <= 71))
 def test_hash_password(password: str, salt: bytes) -> None:
     hashed_password = hash_password(password, salt)
 

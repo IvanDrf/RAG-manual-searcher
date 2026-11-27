@@ -12,7 +12,7 @@ async def add_user_in_block_list(redis: Redis, user_id: str, ttl: timedelta) -> 
 async def is_user_in_block_list(redis: Redis, user_id: str) -> bool:
     res = await redis.get(user_id)
 
-    return res is not None and res == EXISTS_VALUE
+    return res in (EXISTS_VALUE, EXISTS_VALUE.encode())
 
 
 async def remove_user_from_block_list(redis: Redis, user_id: str) -> None:
