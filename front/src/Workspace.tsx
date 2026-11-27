@@ -5,10 +5,10 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { AdminDashboard } from './AdminDashboard'
 import { Brand } from './AuthScreen'
-import { ChatPanel, type Chat, type Quote, demoReply } from './ChatPanel'
+import { ChatPanel, type Chat, type Quote } from './ChatPanel'
 import { Library } from './library/Library'
 import type { Session } from './auth'
-import { saveChatPhoto, type ChatPhoto } from './photoStore'
+import { questionText, sendQuestion } from './chatApi'
 import { createReplyPresentation, type ReplyPresentation } from './replyPresentation'
 import { ThemeButton, type ThemeControl } from './ThemeButton'
 
@@ -16,10 +16,11 @@ type View = 'chat' | 'library' | 'admin'
 
 function readChats(userId: string): Chat[] {
   try {
-    const stored: unknown = JSON.parse(localStorage.getItem('mathdesk.chats.' + userId) ?? '[]')
+    const stored: unknown = JSON.parse(localStorage.getItem('mathdesk.backend-chats.' + userId) ?? '[]')
     if (!Array.isArray(stored)) return []
     return stored.filter((entry): entry is Chat =>
-      typeof entry?.id === 'string' && typeof entry?.title === 'string' && Array.isArray(entry?.messages),
+      typeof entry?.id === 'string' && typeof entry?.title === 'string' &&
+      typeof entry?.serverId === 'string' && Array.isArray(entry?.messages),
     )
   } catch {
     return []
@@ -42,11 +43,11 @@ export function Workspace({ session, onLogout, theme, onTheme }: WorkspaceProps)
   const [activeId, setActiveId] = useState<string | null>(null)
   const [draft, setDraft] = useState('')
   const [quote, setQuote] = useState<Quote | null>(null)
-  const [photo, setPhoto] = useState<File | null>(null)
   const [saving, setSaving] = useState(false)
+  const [pending, setPending] = useState<{ chatId: string; startedAt: number } | null>(null)
   const [sendError, setSendError] = useState('')
   const draftRevision = useRef(0)
-  const savingPhoto = useRef(false)
+  const sending = useRef(false)
   const [presentations, setPresentations] = useState<Record<string, ReplyPresentation>>({})
   const replyTimers = useRef(new Map<string, number>())
   const profile = useRef<HTMLDivElement>(null)
@@ -64,7 +65,7 @@ export function Workspace({ session, onLogout, theme, onTheme }: WorkspaceProps)
 
   useEffect(() => {
     try {
-      localStorage.setItem('mathdesk.chats.' + session.user_id, JSON.stringify(chats))
+      localStorage.setItem('mathdesk.backend-chats.' + session.user_id, JSON.stringify(chats))
     } catch {
       // The chat still works if the browser disables local storage.
     }
@@ -104,72 +105,79 @@ export function Workspace({ session, onLogout, theme, onTheme }: WorkspaceProps)
       setActiveId(id)
       setDraft('')
       setQuote(null)
-      setPhoto(null)
       setSendError('')
     }
     navigate('chat')
   }
 
   async function sendMessage(text: string) {
-    const message = text.trim()
-    if ((!message && !photo) || savingPhoto.current || (activeId && replyTimers.current.has(activeId))) return
+    if (sending.current || (activeId && replyTimers.current.has(activeId))) return
+    setSendError('')
+    let message: string
+    try {
+      message = questionText(text, quote)
+    } catch (error) {
+      setSendError(error instanceof Error ? error.message : 'Проверьте вопрос.')
+      return
+    }
 
     const id = currentChat?.id ?? crypto.randomUUID()
     const revision = draftRevision.current
-    let attachment: ChatPhoto | undefined
-    setSendError('')
-    if (photo) {
-      attachment = { id: crypto.randomUUID(), name: photo.name }
-      savingPhoto.current = true
-      setSaving(true)
-      try {
-        await saveChatPhoto(session.user_id, attachment, photo)
-      } catch {
-        if (revision === draftRevision.current) setSendError('Не удалось сохранить фото в браузере. Попробуйте отправить его ещё раз.')
-        return
-      } finally {
-        savingPhoto.current = false
-        setSaving(false)
-      }
-    }
-
-    const subject = message || attachment?.name || 'Фото'
-    const title = subject.length > 42 ? subject.slice(0, 41) + '…' : subject
-    const reply = { id: crypto.randomUUID(), role: 'assistant' as const, text: demoReply(message, quote, !!attachment) }
-    const updated: Chat = {
+    const capturedQuote = quote
+    const userMessage = { id: crypto.randomUUID(), role: 'user' as const, text: text.trim(), quote: capturedQuote ?? undefined }
+    const optimistic: Chat = {
       id,
-      title: currentChat?.title ?? title,
-      messages: [
-        ...(currentChat?.messages ?? []),
-        { id: crypto.randomUUID(), role: 'user', text: message, quote: quote ?? undefined, photo: attachment },
-        reply,
-      ],
+      serverId: currentChat?.serverId,
+      title: currentChat?.title ?? message.slice(0, 42),
+      messages: [...(currentChat?.messages ?? []), userMessage],
     }
-    // Persist the completed demo exchange independently of its onscreen playback.
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const playback = createReplyPresentation(reply.id, reply.text)
-      setPresentations((previous) => ({ ...previous, [id]: playback }))
-      const timer = window.setTimeout(() => {
-        replyTimers.current.delete(id)
-        setPresentations((previous) => {
-          const next = { ...previous }
-          delete next[id]
-          return next
-        })
-      }, Math.max(0, playback.endAt - performance.now()))
-      replyTimers.current.set(id, timer)
-    }
-    setChats((previous) => [updated, ...previous.filter((chat) => chat.id !== id)])
-    if (photo) setPhoto((current) => current === photo ? null : current)
-    if (revision === draftRevision.current) {
-      setActiveId(id)
-      setDraft('')
-      setQuote(null)
+    sending.current = true
+    setSaving(true)
+    setPending({ chatId: id, startedAt: performance.now() })
+    setChats((previous) => [optimistic, ...previous.filter((chat) => chat.id !== id)])
+    setActiveId(id)
+    setDraft('')
+    setQuote(null)
+
+    try {
+      const answer = await sendQuestion(message, session.user_id, currentChat?.serverId)
+      const reply = { id: crypto.randomUUID(), role: 'assistant' as const, text: answer.response }
+      setChats((previous) => previous.map((chat) => chat.id === id
+        ? { ...chat, serverId: answer.chat_id, messages: [...chat.messages, reply] }
+        : chat))
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const playback = createReplyPresentation(reply.id, reply.text)
+        setPresentations((previous) => ({ ...previous, [id]: playback }))
+        const timer = window.setTimeout(() => {
+          replyTimers.current.delete(id)
+          setPresentations((previous) => {
+            const next = { ...previous }
+            delete next[id]
+            return next
+          })
+        }, Math.max(0, playback.endAt - performance.now()))
+        replyTimers.current.set(id, timer)
+      }
+    } catch (error) {
+      setChats((previous) => previous.map((chat) => chat.id === id
+        ? { ...chat, messages: chat.messages.filter((item) => item.id !== userMessage.id) }
+        : chat).filter((chat) => chat.messages.length > 0 || chat.serverId))
+      if (revision === draftRevision.current) {
+        setActiveId(currentChat?.id ?? null)
+        setDraft(text)
+        setQuote(capturedQuote)
+        setSendError(error instanceof Error ? error.message : 'Не удалось отправить вопрос.')
+      }
+    } finally {
+      sending.current = false
+      setSaving(false)
+      setPending(null)
     }
   }
 
   async function logout() {
-    if (savingPhoto.current) return
+    if (sending.current) return
     setLogoutError('')
     setLoggingOut(true)
     try {
@@ -237,7 +245,6 @@ export function Workspace({ session, onLogout, theme, onTheme }: WorkspaceProps)
           {view === 'chat'
             ? <span className="header-title">{title}</span>
             : <button className="text-button header-title return-chat" onClick={() => navigate('chat')}>Вернуться в чат</button>}
-          {view === 'chat' && <span className="demo-pill">Демо</span>}
           <ThemeButton theme={theme} onTheme={onTheme} />
         </header>
         {view === 'chat' && (
@@ -247,18 +254,17 @@ export function Workspace({ session, onLogout, theme, onTheme }: WorkspaceProps)
             presentation={presentation}
             draft={draft}
             quote={quote}
-            photo={photo}
             saving={saving}
+            pendingSince={pending?.chatId === activeId ? pending.startedAt : undefined}
             sendError={sendError}
             onDraft={setDraft}
-            onPhoto={(file) => { setPhoto(file); setSendError('') }}
             onClearQuote={() => setQuote(null)}
             onSend={sendMessage}
             onLibrary={() => navigate('library')}
           />
         )}
         {view === 'library' && <Library onQuote={(item) => {
-          if (savingPhoto.current) draftRevision.current += 1
+          if (sending.current) draftRevision.current += 1
           setQuote(item)
           navigate('chat')
         }} />}

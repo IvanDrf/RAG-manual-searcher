@@ -71,8 +71,8 @@ docs/_build/
 target/
 
 # Virtual environment
-.venv/
-venv/
+**/.venv/
+**/venv/
 
 # PyCharm
 .idea
@@ -94,3 +94,6 @@ student_book_txt/
 .pytest_cache/
 .hypothesis/
 
+.env
+.env.*
+!.env.example

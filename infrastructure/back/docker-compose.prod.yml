@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.8'
 
 services:
   database:
@@ -42,6 +42,24 @@ services:
       retries: 5
       start_period: 5s
 
+  clickhouse:
+    image: clickhouse:26.6
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB}
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: ${CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT}
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks:
+      - rag_search_network
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --user \"$$CLICKHOUSE_USER\" --password \"$$CLICKHOUSE_PASSWORD\" --query 'SELECT 1'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
   prometheus:
     image: prom/prometheus:v3
     container_name: rag_searcher_prometheus_prod
@@ -72,12 +90,29 @@ services:
     build:
       context: ../..
       dockerfile: infrastructure/back/Dockerfile
+    env_file:
+      - ../../.env
+    volumes:
+      - type: bind
+        source: ${BOOKS_SOURCE_DIR}
+        target: ${BOOKS_DIR}
+        read_only: true
+        bind:
+          create_host_path: false
+    healthcheck:
+      test: ["CMD", "/app/.venv/bin/python", "-c", "import os; from urllib.request import urlopen; urlopen('http://127.0.0.1:' + os.environ['APP_PORT'] + '/health', timeout=5).close()"]
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 15m
     ports:
-      - "${APP_OUTPUT_PORT}:8080"
+      - "${APP_OUTPUT_PORT}:${APP_PORT}"
     depends_on:
       redis_db:
         condition: service_healthy
       database:
+        condition: service_healthy
+      clickhouse:
         condition: service_healthy
 
     networks:
@@ -93,3 +128,4 @@ volumes:
   pgdata:
   redis_data:
   grafana-storage:
+  clickhouse_data:

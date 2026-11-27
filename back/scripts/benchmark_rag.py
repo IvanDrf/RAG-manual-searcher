@@ -1,7 +1,5 @@
-"""Проверка поиска BM25 и ответов Qwen на размеченном корпусе."""
-
 from argparse import ArgumentParser
-from asyncio import run
+from asyncio import Semaphore, create_task, gather, run
 from datetime import UTC, datetime
 from hashlib import sha256
 from json import dumps
@@ -54,8 +52,10 @@ class Dataset(BaseModel):
         fragment_ids = {fragment.id for fragment in self.fragments}
         question_ids = {question.id for question in self.questions}
         normal_count = sum(bool(question.relevant_ids) for question in self.questions)
+
         if len(self.fragments) != 30 or len(fragment_ids) != 30:
             raise ValueError("Нужно 30 фрагментов с уникальными ID")
+
         if len(self.questions) != 15 or len(question_ids) != 15 or normal_count != 10:
             raise ValueError("Нужно 10 вопросов и 5 ловушек с уникальными ID")
 
@@ -110,6 +110,7 @@ async def load_fragments(
     titles = sorted({fragment.book for fragment in fragments})
     books = {title: BookORM(book_id=UUID(int=number), book_title=title) for number, title in enumerate(titles, start=1)}
     session.add_all(books.values())
+
     by_uuid = {UUID(int=number): fragment for number, fragment in enumerate(sorted(fragments, key=lambda item: item.id), 1)}
     session.add_all(
         ChunkORM(
@@ -139,8 +140,10 @@ async def _retrieve_all(dataset: Dataset) -> tuple[dict[UUID, Fragment], list[li
 async def _judge_answer(client: AsyncClient, question: Question, answer: str) -> Verdict:
     data = dumps(
         {"question": question.text, "reference": question.reference, "answer": answer},
+        indent=4,
         ensure_ascii=False,
     )
+
     prompt = f"""Оцени ответ ученика по эталону для указанного вопроса.
 Сравни смысл и математическую корректность, а не дословное совпадение.
 Требуй все существенные условия и части ответа.
@@ -149,6 +152,7 @@ async def _judge_answer(client: AsyncClient, question: Question, answer: str) ->
 Верни JSON с двумя полями: correct (true или false) и reason (краткая причина).
 {data}
 """
+
     result = await request_completion(
         client,
         settings=CONFIG,
@@ -208,16 +212,21 @@ async def _evaluate(
 def _summarize(evaluations: list[Evaluation]) -> dict:
     ordinary = [item for item in evaluations if item.question.relevant_ids]
     traps = [item for item in evaluations if not item.question.relevant_ids]
+
     recalls: list[float] = []
     reciprocal_ranks: list[float] = []
     verdicts: list[Verdict] = []
+
     for item in ordinary:
         if item.recall_at_3 is None or item.reciprocal_rank_at_3 is None:
             raise ValueError(f"{item.question.id}: отсутствуют метрики поиска")
+
         recalls.append(item.recall_at_3)
         reciprocal_ranks.append(item.reciprocal_rank_at_3)
+
         if item.verdict is not None:
             verdicts.append(item.verdict)
+
     return {
         "recall_at_3": mean(recalls),
         "mrr_at_3": mean(reciprocal_ranks),
@@ -231,16 +240,33 @@ def _summarize(evaluations: list[Evaluation]) -> dict:
     }
 
 
-async def run_benchmark(dataset: Dataset, dataset_hash: str) -> dict:
+async def run_benchmark(dataset: Dataset, dataset_hash: str, *, concurrency: int = 8) -> dict:
+    if concurrency < 1:
+        raise ValueError("concurrency должна быть больше нуля")
+
     started = datetime.now(UTC).isoformat()
     fragments, results = await _retrieve_all(dataset)
-    evaluations = []
+    semaphore = Semaphore(concurrency)
+    pairs = list(zip(dataset.questions, results, strict=True))
+
     async with AsyncClient(timeout=CONFIG.llm_timeout) as client:
-        for question, hits in zip(dataset.questions, results, strict=True):
-            print(question.id, flush=True)
-            evaluations.append(await _evaluate(client, question, hits, fragments))
+
+        async def evaluate_one(question: Question, hits: list[SearchHit]) -> Evaluation:
+            async with semaphore:
+                print(question.id, flush=True)
+                return await _evaluate(client, question, hits, fragments)
+
+        tasks = [create_task(evaluate_one(question, hits)) for question, hits in pairs]
+        try:
+            evaluations = await gather(*tasks)
+        finally:
+            for task in tasks:
+                if not task.done():
+                    task.cancel()
+            await gather(*tasks, return_exceptions=True)
 
     metrics = _summarize(evaluations)
+
     return {
         "started_at": started,
         "dataset_sha256": dataset_hash,
@@ -257,15 +283,22 @@ def main() -> int:
     parser = ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, default=_DATASET)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--concurrency", type=int, default=7, help="Число параллельно обрабатываемых вопросов (по умолчанию 4)")
     args = parser.parse_args()
+
+    if args.concurrency < 1:
+        parser.error("--concurrency должна быть больше нуля")
 
     source = args.dataset.read_bytes()
     dataset = Dataset.model_validate_json(source)
     dataset.check_labels()
-    report = run(run_benchmark(dataset, sha256(source).hexdigest()))
+
+    report = run(run_benchmark(dataset, sha256(source).hexdigest(), concurrency=args.concurrency))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
     print(dumps(report["metrics"], ensure_ascii=False, indent=2))
+
     return 0 if report["complete"] else 1
 
 

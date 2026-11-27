@@ -25,6 +25,7 @@ async def send_request_to_llm(
 ) -> str:
     if scraper is not None:
         scraper.measure_time()
+
     payload = {"model": model, "messages": [{"role": "user", "content": promt}]}
     if deterministic:
         payload["temperature"] = 0
@@ -45,8 +46,9 @@ async def send_request_to_llm(
                 scraper.save(model=model, promt=promt, is_success=False, error_type=ExternalError.__name__, error_message=response.text)
             )
 
-        logger.error("invalid LLM status code", status_code=response.status_code, content=response.text)
-        raise ExternalError("LLM не вернула ответ")
+        error_message = f"LLM не вернула ответ: HTTP {response.status_code} ({response.reason_phrase})"
+        logger.error("{}", error_message)
+        raise ExternalError(error_message)
 
     try:
         content = ChatCompletion.model_validate_json(response.text)
