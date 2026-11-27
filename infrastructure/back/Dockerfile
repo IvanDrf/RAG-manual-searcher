@@ -4,6 +4,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV UV_NO_DEV=1
+ENV NLTK_DATA=/usr/local/share/nltk_data
 
 WORKDIR /app
 
@@ -12,11 +13,8 @@ RUN uv sync --locked --no-dev
 
 COPY back/ .
 
-COPY data/ ./data/
-
-COPY .env .
-
-RUN chmod +x shell/entry.sh shell/dependencies.sh
+RUN chmod +x shell/entry.sh shell/dependencies.sh \
+    && sh shell/dependencies.sh
 
 EXPOSE 8080
 

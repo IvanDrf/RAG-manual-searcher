@@ -7,9 +7,11 @@ export default defineConfig(({ mode }) => {
   const project = fileURLToPath(new URL('.', import.meta.url))
   const pdfDirectory = fileURLToPath(new URL('../data/student_book_pdf', import.meta.url))
   const proxy = {
-    '/api/v1/auth': {
+    '/api/v1': {
       target: env.AUTH_API_TARGET || 'http://127.0.0.1:8080',
       changeOrigin: true,
+      timeout: 600000,
+      proxyTimeout: 600000,
     },
   }
 

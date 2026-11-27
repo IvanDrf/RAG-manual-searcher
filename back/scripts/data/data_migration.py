@@ -77,6 +77,8 @@ async def migrate_books(books_path: Path) -> None:
                 print(f"[{book_number}/{len(paths)}] {book.book_title}")
 
             count = await rebuild_index(session)
+            if count == 0:
+                raise ValueError("После импорта нет фрагментов с исходным текстом для BM25")
         print(f"BM25: проиндексировано {count} фрагментов")
     finally:
         await engine.dispose()

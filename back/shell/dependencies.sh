@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e 
+set -eu
 
-echo "Install deps for nltk"
-uv run -m nltk.downloader punkt_tab
-uv run -m nltk.downloader stopwords
+uv run --locked --no-sync python -m nltk.downloader --exit-on-error -d /usr/local/share/nltk_data stopwords punkt punkt_tab

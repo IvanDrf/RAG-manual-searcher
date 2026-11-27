@@ -146,3 +146,31 @@ async def test_benchmark_completion_uses_configured_model_and_json_mode() -> Non
             json_response=True,
         )
     assert answer == "answer"
+
+
+@pytest.mark.parametrize("status", [400, 401, 402, 403, 404, 429, 503])
+async def test_llm_http_error_includes_status_without_response_secrets(status: int, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(utils, "sleep", AsyncMock())
+    messages: list[str] = []
+    sink = llm_clients.logger.add(lambda message: messages.append(str(message)), format="{message}")
+
+    def respond(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(status, text="sensitive-provider-error", headers={"Set-Cookie": "secret-cookie"})
+
+    try:
+        async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:
+            with pytest.raises(ExternalError, match=f"HTTP {status}") as caught:
+                await llm_clients.request_completion(
+                    client,
+                    settings=LLMConfig(LLM_URL="https://llm.invalid", LLM_API_KEY="secret-api-key"),
+                    prompt="private-prompt",
+                )
+    finally:
+        llm_clients.logger.remove(sink)
+
+    output = "\n".join(messages) + str(caught.value)
+    assert f"HTTP {status}" in output
+    assert "sensitive-provider-error" not in output
+    assert "secret-cookie" not in output
+    assert "secret-api-key" not in output
+    assert "private-prompt" not in output

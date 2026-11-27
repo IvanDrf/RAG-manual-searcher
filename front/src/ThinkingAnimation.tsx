@@ -163,7 +163,7 @@ export function ThinkingAnimation({ startedAt }: { startedAt: number }) {
     let shownLabel = ''
     function paint(now: number) {
       if (!context || !surface) return
-      const elapsed = (now - startedAt) / SHAPE_INTERVAL_MS
+      const elapsed = Math.max(0, now - startedAt) / SHAPE_INTERVAL_MS
       const step = Math.floor(elapsed)
       const index = step % drawings.length
       const fraction = elapsed - step
